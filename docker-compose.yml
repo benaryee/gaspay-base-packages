@@ -7,7 +7,7 @@ services:
     image: postgres
     environment:
       POSTGRES_DB: order-service
-      POSTGRES_USER: ptechie
+      POSTGRES_USER: rancard
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
@@ -24,7 +24,7 @@ services:
     image: postgres
     environment:
       POSTGRES_DB: inventory-service
-      POSTGRES_USER: ptechie
+      POSTGRES_USER: rancard
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
     volumes:
@@ -56,6 +56,13 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
+      KC_HOSTNAME_ADMIN_URL: https://keycloak-gaspay.rancardmobility.com
+      KC_HOSTNAME_URL: https://keycloak-gaspay.rancardmobility.com
+      KC_HOSTNAME_STRICT_HTTPS: "true"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KC_PROXY: edge
+      KEYCLOAK_FRONTEND_URL: https://keycloak-gaspay.rancardmobility.com
+      PROXY_ADDRESS_FORWARDING: "true"
 
   keycloak:
     container_name: keycloak
