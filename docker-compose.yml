@@ -60,7 +60,7 @@ services:
       KC_HOSTNAME_URL: https://keycloak-gaspay.rancardmobility.com
       KC_HOSTNAME_STRICT_HTTPS: "true"
       KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
-      KC_PROXY: edge
+      KC_PROXY: passthrough
       KEYCLOAK_FRONTEND_URL: https://keycloak-gaspay.rancardmobility.com
       PROXY_ADDRESS_FORWARDING: "true"
 
