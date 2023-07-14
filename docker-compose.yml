@@ -153,6 +153,16 @@ services:
       - discovery-server
       - api-gateway
 
+  ussd-app:
+    container_name: product-service
+    image: bernardaryee/ussd-app:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+      - api-gateway
+
+
   ## Order-Service Docker Compose Config
   order-service:
     container_name: order-service
