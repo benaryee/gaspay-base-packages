@@ -6,7 +6,7 @@ _pwd="$(pwd)"
 PROJECT_NAME="Notification Service"
 PROJECT_DIR="$_pwd/target"
 pid_file="$PROJECT_DIR/app.pid"
-PROJECT_JAR="$_pwd/target/notification-service.jar"
+PROJECT_JAR="$_pwd/target/notification-service-1.0.jar"
 PROJECT_LOG="/var/log/codebase/notification-service.log"
 
 

@@ -6,7 +6,7 @@ _pwd="$(pwd)"
 PROJECT_NAME="Product Service"
 PROJECT_DIR="$_pwd/target"
 pid_file="$PROJECT_DIR/app.pid"
-PROJECT_JAR="$_pwd/target/product-service.jar"
+PROJECT_JAR="$_pwd/target/product-service-1.0.jar"
 PROJECT_LOG="/var/log/codebase/product-service.log"
 
 

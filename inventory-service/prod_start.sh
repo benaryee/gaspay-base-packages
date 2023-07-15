@@ -6,7 +6,7 @@ _pwd="$(pwd)"
 PROJECT_NAME="Inventory Service"
 PROJECT_DIR="$_pwd/target"
 pid_file="$PROJECT_DIR/app.pid"
-PROJECT_JAR="$_pwd/target/inventory-service.jar"
+PROJECT_JAR="$_pwd/target/inventory-service-1.0.jar"
 PROJECT_LOG="/var/log/codebase/inventory-service.log"
 
 

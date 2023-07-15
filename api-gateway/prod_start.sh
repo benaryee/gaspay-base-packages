@@ -6,7 +6,7 @@ _pwd="$(pwd)"
 PROJECT_NAME="Api Gateway"
 PROJECT_DIR="$_pwd/target"
 pid_file="$PROJECT_DIR/app.pid"
-PROJECT_JAR="$_pwd/target/api-gateway.jar"
+PROJECT_JAR="$_pwd/target/api-gateway-1.0.jar"
 PROJECT_LOG="/var/log/codebase/api-gateway.log"
 
 

@@ -6,7 +6,7 @@ _pwd="$(pwd)"
 PROJECT_NAME="Discovery Server"
 PROJECT_DIR="$_pwd/target"
 pid_file="$PROJECT_DIR/app.pid"
-PROJECT_JAR="$_pwd/target/discovery-server.jar"
+PROJECT_JAR="$_pwd/target/discovery-server-1.0.jar"
 PROJECT_LOG="/var/log/codebase/discovery-server.log"
 
 
