@@ -154,8 +154,8 @@ services:
       - api-gateway
 
   ussd-app:
-    container_name: product-service
-    image: bernardaryee/ussd-app:latest
+    container_name: ussd
+    image: bernardaryee/ussd:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
