@@ -22,7 +22,7 @@
         <module>discovery-server</module>
         <module>api-gateway</module>
         <module>notification-service</module>
-        <module>ussd-app</module>
+        <module>ussd</module>
     </modules>
 
     <properties>

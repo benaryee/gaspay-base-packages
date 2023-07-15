@@ -7,8 +7,8 @@ import com.rancard.ussdapp.model.payload.Option;
 import com.rancard.ussdapp.services.UssdMenuService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.apache.commons.lang3.text.WordUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
