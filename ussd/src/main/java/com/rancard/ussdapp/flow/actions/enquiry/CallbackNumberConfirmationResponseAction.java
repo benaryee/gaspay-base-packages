@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.CALLBACK_PHONE_NUMBER_CONFIRMATION;
+import static com.rancard.ussdapp.model.enums.SubMenuLevel.CALLBACK_PHONE_NUMBER_ENTRY;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -34,12 +35,13 @@ public class CallbackNumberConfirmationResponseAction extends BotletActions {
             case "2":
                 log.info("[{}] user wants different number to be called ", sessionId);
                 response.setContinueSession(true);
-                response.setMessage(menuUtils.getResponse(ENQUIRY_NO_CALLBACK_REQUEST_RESPONSE,dispatchObject,sessionId));
+                response.setMessage(menuUtils.getResponse(ENQUIRY_ALTERNATIVE_CALLBACK_NUMBER_RESPONSE,dispatchObject,sessionId));
+                dispatchObject.getSession().setSubMenuLevel(CALLBACK_PHONE_NUMBER_ENTRY);
+
                 break;
         }
 
         log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
-        dispatchObject.getSession().setSubMenuLevel(CALLBACK_PHONE_NUMBER_CONFIRMATION);
         return response;
 
     }

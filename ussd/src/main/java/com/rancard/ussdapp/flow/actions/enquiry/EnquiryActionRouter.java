@@ -56,6 +56,14 @@ public class EnquiryActionRouter extends BotletActions {
                 return callbackNumberConfirmationResponseAction.call();
             }
 
+            case CALLBACK_PHONE_NUMBER_ENTRY -> {
+                CallbackNumberEntryAction callbackNumberEntryAction = beanFactory.getBean(CallbackNumberEntryAction.class);
+                callbackNumberEntryAction.setDispatchObject(dispatchObject);
+                callbackNumberEntryAction.setSessionId(sessionId);
+                callbackNumberEntryAction.setResponse(response);
+                return callbackNumberEntryAction.call();
+            }
+
 
         }
         return null;
