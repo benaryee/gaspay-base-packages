@@ -1,4 +1,4 @@
-package com.rancard.ussdapp.botlets.actions;
+package com.rancard.ussdapp.flow.actions;
 
 
 import com.rancard.ussdapp.model.response.UssdResponse;
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import static com.rancard.ussdapp.model.enums.MenuLevel.INVALID_USER_SELECTION_RESPONSE;
+import static com.rancard.ussdapp.model.enums.MenuKey.INVALID_USER_SELECTION_RESPONSE;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)

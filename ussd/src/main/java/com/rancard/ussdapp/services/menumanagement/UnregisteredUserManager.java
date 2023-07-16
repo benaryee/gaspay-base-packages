@@ -1,6 +1,7 @@
 package com.rancard.ussdapp.services.menumanagement;
 
 
+import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.payload.DispatchObject;
 import com.rancard.ussdapp.model.response.UssdResponse;
@@ -18,7 +19,8 @@ public class UnregisteredUserManager {
 
     public UssdResponse handleInitialRequest(DispatchObject dispatchObject,UssdResponse response , String sessionId){
         dispatchObject.getSession().setMenuLevel(MenuLevel.UNREGISTERED_USER_INITIAL_REQUEST);
-        log.info("[{}] found unregistered user about to return new user menu :" , sessionId);
+        dispatchObject.getSession().setMenuKey(MenuKey.UNREGISTERED_USER_INITIAL_RESPONSE);
+        log.info("[{}] found unregistered user about to return new user menu " , sessionId);
         response.setMessage(menuUtils.getResponse(dispatchObject,sessionId));
         response.setContinueSession(true);
         return response;

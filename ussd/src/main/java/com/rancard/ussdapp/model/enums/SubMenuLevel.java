@@ -1,0 +1,12 @@
+package com.rancard.ussdapp.model.enums;
+
+public enum SubMenuLevel {
+
+    //ENQUIRY
+    MAIN_ENQUIRY,
+    REQUEST_CALLBACK_QUESTION,
+    REQUEST_CALLBACK_RESPONSE,
+    CALLBACK_PHONE_NUMBER_CONFIRMATION,
+    CALLBACK_PHONE_NUMBER_ENTRY
+
+}

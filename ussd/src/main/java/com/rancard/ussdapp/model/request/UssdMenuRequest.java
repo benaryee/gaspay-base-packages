@@ -1,5 +1,6 @@
 package com.rancard.ussdapp.model.request;
 
+import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.payload.Option;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UssdMenuRequest {
-    private MenuLevel menuLevel;
+    private MenuKey menuKey;
     private String response;
     private List<Option> options;
 }

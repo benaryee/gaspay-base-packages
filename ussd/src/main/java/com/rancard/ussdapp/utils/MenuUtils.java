@@ -1,5 +1,6 @@
 package com.rancard.ussdapp.utils;
 
+import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.mongo.UssdMenu;
 import com.rancard.ussdapp.model.payload.DispatchObject;
@@ -31,24 +32,26 @@ public class MenuUtils {
         return response;
     }
 
-    public String getResponse(MenuLevel menuLevel , DispatchObject dispatchObject , String sessionId){
-        UssdMenu menu = getMenu(menuLevel , sessionId);
+    public String getResponse(MenuKey menuKey , DispatchObject dispatchObject , String sessionId){
+        UssdMenu menu = getMenu(menuKey , sessionId);
         String response = menu.getResponse();
         if(menu.getOptions() != null && menu.getOptions().size() > 0){
             String optionList = stringifyOptionsList(menu.getOptions() , dispatchObject , sessionId);
             response += "\n" + optionList;
+        }else{
+            dispatchObject.getSession().setOptions(null);
         }
 
         return response;
     }
 
-    private UssdMenu getMenu(MenuLevel menuLevel , String sessionId){
-        log.info("[{}] about to get menu response for level : {}", sessionId , menuLevel);
-        return ussdMenuService.getMenuByLevel(menuLevel , sessionId);
+    private UssdMenu getMenu(MenuKey menuKey , String sessionId){
+        log.info("[{}] about to get menu response for level : {}", sessionId , menuKey);
+        return ussdMenuService.getMenuByLevel(menuKey , sessionId);
     }
     private UssdMenu getMenu(DispatchObject dispatchObject , String sessionId){
       log.info("[{}] about to get menu response for level : {}", sessionId , dispatchObject.getSession().getMenuLevel());
-      return ussdMenuService.getMenuByLevel(dispatchObject.getSession().getMenuLevel() , sessionId);
+      return ussdMenuService.getMenuByLevel(dispatchObject.getSession().getMenuKey() , sessionId);
     }
 
     private String stringifyOptionsList(List<Option> options, DispatchObject dispatchObject, String sessionId){

@@ -1,5 +1,7 @@
 package com.rancard.ussdapp.services;
 
+import com.rancard.ussdapp.model.dao.mongo.UssdMenuDao;
+import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.mongo.UssdMenu;
 import com.rancard.ussdapp.model.request.UssdMenuRequest;
@@ -14,9 +16,11 @@ public class UssdMenuService {
 
     private final UssdMenuDao ussdMenuDao;
 
-    public UssdMenu getMenuByLevel(MenuLevel menuLevel, String sessionId) {
-        log.info("[{} fetching menu with level : {} ]", sessionId, menuLevel);
-        return ussdMenuDao.findByMenuLevel(menuLevel);
+    public UssdMenu getMenuByLevel(MenuKey menuKey, String sessionId) {
+        log.info("[{} fetching menu with level : {} ]", sessionId, menuKey);
+        UssdMenu menu = ussdMenuDao.findByMenuKey(menuKey);
+        log.info("[{}] returned menu: {} ", sessionId, menu.toString());
+        return menu;
     }
 
     public UssdMenu addMenu(UssdMenuRequest ussdMenuRequest,String sessionId) {
@@ -24,7 +28,7 @@ public class UssdMenuService {
         UssdMenu menu = UssdMenu.builder()
                 .response(ussdMenuRequest.getResponse())
                 .options(ussdMenuRequest.getOptions())
-                .menuLevel(ussdMenuRequest.getMenuLevel())
+                .menuKey(ussdMenuRequest.getMenuKey())
                 .build();
 
         return ussdMenuDao.save(menu);

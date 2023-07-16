@@ -1,7 +1,9 @@
 package com.rancard.ussdapp.model.redis;
 
 
+import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
+import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.mongo.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,8 @@ public class Session implements Serializable {
     private String id;
     private User user;
     private MenuLevel menuLevel;
+    private SubMenuLevel subMenuLevel;
+    private MenuKey menuKey;
     private String pendingCode;
     private String uniqueCode;
     private String previousSelection;

@@ -1,4 +1,4 @@
-package com.rancard.ussdapp.botlets.actions;
+package com.rancard.ussdapp.flow.actions;
 
 
 import com.rancard.ussdapp.model.mongo.User;
