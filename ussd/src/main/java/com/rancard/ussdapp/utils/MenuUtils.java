@@ -30,7 +30,6 @@ public class MenuUtils {
             String optionList = stringifyOptionsList(menu.getOptions() , dispatchObject , sessionId);
             response += "\n" + optionList;
         }
-
         return response;
     }
 
@@ -38,10 +37,19 @@ public class MenuUtils {
         UssdMenu menu = getMenu(menuKey , sessionId);
         String response = menu.getResponse();
         if(menu.getOptions() != null && menu.getOptions().size() > 0){
+
+            if(dispatchObject.getSession().getOptions() != null && dispatchObject.getSession().getOptions().size() > 0){
+                dispatchObject.getSession().setPreviousOptions(dispatchObject.getSession().getOptions());
+            }
+
             String optionList = stringifyOptionsList(menu.getOptions() , dispatchObject , sessionId);
             response += "\n" + optionList;
         }else{
             if(menuKey != INVALID_USER_SELECTION_RESPONSE){
+                if(dispatchObject.getSession().getOptions() != null && dispatchObject.getSession().getOptions().size() > 0){
+                    dispatchObject.getSession().setPreviousOptions(dispatchObject.getSession().getOptions());
+                }
+
                 dispatchObject.getSession().setOptions(null);
             }
         }

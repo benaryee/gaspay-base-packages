@@ -53,13 +53,13 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
 
 
             case REGISTRATION_CURRENT_FUEL_SOURCE -> {
-                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getOptions()
+                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getPreviousOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
                 break;
             }
 
             case REGISTRATION_FAMILY_SIZE -> {
-                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getOptions()
+                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getPreviousOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
                 user = userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
 

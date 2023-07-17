@@ -36,6 +36,7 @@ public class Session implements Serializable {
     private String itemPrice;
     private boolean initialRequest;
     private Map<Integer, String> options = new HashMap<>();
+    private Map<Integer, String> previousOptions = new HashMap<>();
     private boolean hasNext;
     private boolean hasBack;
 
