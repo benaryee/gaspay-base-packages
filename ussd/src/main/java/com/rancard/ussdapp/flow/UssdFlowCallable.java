@@ -39,7 +39,6 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
         this.httpServletRequest = httpServletRequest;
         this.dispatchObject = dispatchObject;
         this.response = response;
-
         return call();
     }
 
@@ -109,6 +108,7 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
                 mainMenuAction.setDispatchObject(dispatchObject);
                 mainMenuAction.setSessionId(sessionId);
                 mainMenuAction.setResponse(response);
+                mainMenuAction.setUser(dispatchObject.getSession().getUser());
                 return mainMenuAction.call();
             }
 
