@@ -24,6 +24,7 @@ public class Session implements Serializable {
     private User user;
     private MenuLevel menuLevel;
     private SubMenuLevel subMenuLevel;
+    private SubMenuLevel previousSubMenuLevel;
     private MenuKey menuKey;
     private String pendingCode;
     private String uniqueCode;

@@ -32,6 +32,7 @@ public class CallbackNumberEntryAction extends BotletActions {
             response.setMessage(menuUtils.getResponse(ENQUIRY_END_ENQUIRY_RESPONSE_CALLBACK,dispatchObject,sessionId));
             log.info("[{}] User entered valid number for callback : {}", sessionId , response);
             dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.REQUEST_CALLBACK_RESPONSE);
+            dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.CALLBACK_PHONE_NUMBER_ENTRY);
             return response;
         }else{
             response.setContinueSession(true);
@@ -39,6 +40,7 @@ public class CallbackNumberEntryAction extends BotletActions {
             response.setMessage("Invalid Phone Number entered\n"+response.getMessage());
             log.info("[{}] User entered invalid number for callback : {}", sessionId , response);
             dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.CALLBACK_PHONE_NUMBER_ENTRY);
+            dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.CALLBACK_PHONE_NUMBER_ENTRY);
             return response;
         }
     }

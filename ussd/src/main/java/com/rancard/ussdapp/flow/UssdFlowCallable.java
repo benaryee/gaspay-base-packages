@@ -2,6 +2,8 @@ package com.rancard.ussdapp.flow;
 
 
 import com.rancard.ussdapp.flow.actions.InvalidOptionAction;
+import com.rancard.ussdapp.flow.actions.main.MainMenuActionRouter;
+import com.rancard.ussdapp.flow.actions.account.registration.RegistrationActionRouter;
 import com.rancard.ussdapp.flow.actions.enquiry.MainEnquiryAction;
 import com.rancard.ussdapp.flow.actions.enquiry.EnquiryActionRouter;
 import com.rancard.ussdapp.model.payload.DispatchObject;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.Callable;
 
 import static com.rancard.ussdapp.model.enums.MenuLevel.ENQUIRY;
+import static com.rancard.ussdapp.model.enums.MenuLevel.REGISTRATION;
+import static com.rancard.ussdapp.model.enums.SubMenuLevel.REGISTRATION_FIRST_NAME;
 
 @Slf4j
 @Component
@@ -62,12 +66,13 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
                 switch (dispatchObject.getUssdRequest().getMessage()){
                     case "1"->{
                         log.info("[{}] user has opted for for account creation process", sessionId);
-                        dispatchObject.getSession().setMenuLevel(ENQUIRY);
-                        MainEnquiryAction mainEnquiryAction = beanFactory.getBean(MainEnquiryAction.class);
-                        mainEnquiryAction.setDispatchObject(dispatchObject);
-                        mainEnquiryAction.setSessionId(sessionId);
-                        mainEnquiryAction.setResponse(response);
-                        return mainEnquiryAction.call();
+                        dispatchObject.getSession().setMenuLevel(REGISTRATION);
+                        dispatchObject.getSession().setSubMenuLevel(REGISTRATION_FIRST_NAME);
+                        RegistrationActionRouter registrationActionRouter = beanFactory.getBean(RegistrationActionRouter.class);
+                        registrationActionRouter.setDispatchObject(dispatchObject);
+                        registrationActionRouter.setSessionId(sessionId);
+                        registrationActionRouter.setResponse(response);
+                        return registrationActionRouter.call();
                     }
                     case "2"->{
                         log.info("[{}] user has opted to make enquiry" , sessionId);
@@ -92,11 +97,19 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
                     }
 
             case REGISTRATION -> {
-                EnquiryActionRouter enquiryActionRouter = beanFactory.getBean(EnquiryActionRouter.class);
-                enquiryActionRouter.setDispatchObject(dispatchObject);
-                enquiryActionRouter.setSessionId(sessionId);
-                enquiryActionRouter.setResponse(response);
-                return enquiryActionRouter.call();
+                RegistrationActionRouter registrationActionRouter = beanFactory.getBean(RegistrationActionRouter.class);
+                registrationActionRouter.setDispatchObject(dispatchObject);
+                registrationActionRouter.setSessionId(sessionId);
+                registrationActionRouter.setResponse(response);
+                return registrationActionRouter.call();
+            }
+
+            case MAIN -> {
+                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
+                mainMenuAction.setDispatchObject(dispatchObject);
+                mainMenuAction.setSessionId(sessionId);
+                mainMenuAction.setResponse(response);
+                return mainMenuAction.call();
             }
 
 

@@ -37,7 +37,7 @@ public class CallbackNumberConfirmationResponseAction extends BotletActions {
                 response.setContinueSession(true);
                 response.setMessage(menuUtils.getResponse(ENQUIRY_ALTERNATIVE_CALLBACK_NUMBER_RESPONSE,dispatchObject,sessionId));
                 dispatchObject.getSession().setSubMenuLevel(CALLBACK_PHONE_NUMBER_ENTRY);
-
+                dispatchObject.getSession().setPreviousSubMenuLevel(CALLBACK_PHONE_NUMBER_CONFIRMATION);
                 break;
         }
 

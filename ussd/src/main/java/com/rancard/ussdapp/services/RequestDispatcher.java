@@ -2,6 +2,7 @@ package com.rancard.ussdapp.services;
 
 
 import com.rancard.ussdapp.flow.UssdFlowCallable;
+import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.mongo.User;
 import com.rancard.ussdapp.model.payload.DispatchObject;
 import com.rancard.ussdapp.model.response.UssdResponse;
@@ -32,7 +33,14 @@ public class RequestDispatcher {
         if(user == null){
          return unregisteredUserManager.handleInitialRequest(dispatchObject,response , sessionId);
         }else{
-          return null;
+            try {
+                dispatchObject.getSession().setMenuLevel(MenuLevel.MAIN);
+                dispatchObject.getSession().setUser(user);
+              return  response = ussdFlowCallable.execute(dispatchObject,servletRequest, response,sessionId);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 

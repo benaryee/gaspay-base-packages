@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.CALLBACK_PHONE_NUMBER_CONFIRMATION;
+import static com.rancard.ussdapp.model.enums.SubMenuLevel.REQUEST_CALLBACK_RESPONSE;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -40,6 +41,7 @@ public class CallbackResponseAction extends BotletActions {
 
         log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
         dispatchObject.getSession().setSubMenuLevel(CALLBACK_PHONE_NUMBER_CONFIRMATION);
+        dispatchObject.getSession().setPreviousSubMenuLevel(REQUEST_CALLBACK_RESPONSE);
         return response;
 
     }

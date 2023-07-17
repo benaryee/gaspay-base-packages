@@ -6,5 +6,6 @@ public enum MenuLevel {
     INVALID_USER_SELECTION_RESPONSE,
 
     ENQUIRY,
-    REGISTRATION
+    REGISTRATION,
+    MAIN
 }

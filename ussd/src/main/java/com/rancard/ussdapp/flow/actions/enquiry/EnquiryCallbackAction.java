@@ -30,6 +30,7 @@ public class EnquiryCallbackAction extends BotletActions {
 
         log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
         dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.REQUEST_CALLBACK_RESPONSE);
+        dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.REQUEST_CALLBACK_QUESTION);
         return response;
 
     }

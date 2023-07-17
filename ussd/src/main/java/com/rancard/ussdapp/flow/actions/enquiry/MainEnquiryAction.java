@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.MAIN_ENQUIRY_RESPONSE;
+import static com.rancard.ussdapp.model.enums.SubMenuLevel.MAIN_ENQUIRY;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.REQUEST_CALLBACK_QUESTION;
 
 @Component
@@ -29,6 +30,7 @@ public class MainEnquiryAction extends BotletActions {
         response.setMessage(menuUtils.getResponse(MAIN_ENQUIRY_RESPONSE,dispatchObject,sessionId));
         log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
         dispatchObject.getSession().setSubMenuLevel(REQUEST_CALLBACK_QUESTION);
+        dispatchObject.getSession().setPreviousSubMenuLevel(MAIN_ENQUIRY);
         return response;
 
     }

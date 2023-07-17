@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.rancard.ussdapp.model.enums.MenuKey.INVALID_USER_SELECTION_RESPONSE;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -39,7 +41,9 @@ public class MenuUtils {
             String optionList = stringifyOptionsList(menu.getOptions() , dispatchObject , sessionId);
             response += "\n" + optionList;
         }else{
-            dispatchObject.getSession().setOptions(null);
+            if(menuKey != INVALID_USER_SELECTION_RESPONSE){
+                dispatchObject.getSession().setOptions(null);
+            }
         }
 
         return response;
