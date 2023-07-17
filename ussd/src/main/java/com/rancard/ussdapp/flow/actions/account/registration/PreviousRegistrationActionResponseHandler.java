@@ -69,7 +69,6 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
                         .replace("{{msisdn}}", user.getMsisdn())
                         .replace("{{firstname}}", user.getFirstname())
                         .replace("{{lastname}}", user.getLastname())
-                        .replace("{{fuelSource}}", user.getCurrentFuelSource())
                         .replace("{{totalAccounts}}", String.valueOf(userService.getTotalNumberOfUsers(true)));
 
                 MailUtils.sendNotification("bernard.aryee@rancard.com", "New Registration", htmlContent);
@@ -98,7 +97,6 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
                 "    <ul>\n" +
                 "        <li><strong>Phone Number:</strong> {{msisdn}}</li>\n" +
                 "        <li><strong>Name:</strong> {{firstname}} {{lastname}}</li>\n" +
-                "        <li><strong>Previous Fuel Source:</strong> {{fuelSource}}</li>\n" +
                 "    </ul>\n" +
                 "    <p>Let's celebrate this achievement together!</p>\n" +
                 "    <p>Thank you for your continuous support.</p>\n" +
