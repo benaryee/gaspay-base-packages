@@ -3,8 +3,8 @@ package com.rancard.ussdapp.flow.actions.account.registration;
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.model.mongo.User;
-import com.rancard.ussdapp.model.response.UssdResponse;
 import com.rancard.ussdapp.services.UserService;
+import com.rancard.ussdapp.utils.MailUtils;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -15,12 +15,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
-public class PreviousActionResponseHandler extends BotletActions {
+public class PreviousRegistrationActionResponseHandler extends BotletActions {
 
     protected final UserService userService;
 
 
-    public PreviousActionResponseHandler(BeanFactory beanFactory, MenuUtils menuUtils, UserService userService) {
+    public PreviousRegistrationActionResponseHandler(BeanFactory beanFactory, MenuUtils menuUtils, UserService userService) {
         super(beanFactory, menuUtils);
         this.userService = userService;
     }
@@ -62,6 +62,15 @@ public class PreviousActionResponseHandler extends BotletActions {
                 dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
                 userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
+
+
+                String htmlContent = getNewAccountEmailTemplate()
+                        .replace("{{msisdn}}", user.getMsisdn())
+                        .replace("{{firstname}}", user.getFirstname())
+                        .replace("{{lastname}}", user.getLastname())
+                        .replace("{{fuelSource}}", user.getCurrentFuelSource());
+
+                MailUtils.sendNotification("bernard.aryee@rancard.com", "New Registration", htmlContent);
                 break;
             }
 
@@ -70,6 +79,31 @@ public class PreviousActionResponseHandler extends BotletActions {
             }
 
         }
+    }
+
+    private String getNewAccountEmailTemplate(){
+        return "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title>New Account Created</title>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <h1>New Account Created</h1>\n" +
+                "    <p>Great news! We have a new user!</p>\n" +
+                "    <p>We now have a total of {{totalAccounts}} accounts registered on the platform.</p>\n" +
+                "    <p>Here are the details of the newly created account:</p>\n" +
+                "    <ul>\n" +
+                "        <li><strong>Phone Number:</strong> {{msisdn}}</li>\n" +
+                "        <li><strong>Name:</strong> {{firstname}} {{lastname}}</li>\n" +
+                "        <li><strong>Previous Fuel Source:</strong> {{fuelSource}}</li>\n" +
+                "    </ul>\n" +
+                "    <p>Let's celebrate this achievement together!</p>\n" +
+                "    <p>Thank you for your continuous support.</p>\n" +
+                "    <p>Best regards,</p>\n" +
+                "    <p>Your Application Team</p>\n" +
+                "</body>\n" +
+                "</html>\n";
     }
 
 }

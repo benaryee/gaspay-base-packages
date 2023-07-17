@@ -33,6 +33,14 @@ public class CallbackNumberEntryAction extends BotletActions {
             log.info("[{}] User entered valid number for callback : {}", sessionId , response);
             dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.REQUEST_CALLBACK_RESPONSE);
             dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.CALLBACK_PHONE_NUMBER_ENTRY);
+
+
+            PreviousEnquiryActionResponseHandler previousEnquiryActionResponseHandler = beanFactory.getBean(PreviousEnquiryActionResponseHandler.class);
+            previousEnquiryActionResponseHandler.setDispatchObject(dispatchObject);
+            previousEnquiryActionResponseHandler.setSessionId(sessionId);
+            previousEnquiryActionResponseHandler.call();
+
+
             return response;
         }else{
             response.setContinueSession(true);

@@ -3,6 +3,8 @@ package com.rancard.ussdapp.flow.actions.enquiry;
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.model.response.UssdResponse;
+import com.rancard.ussdapp.services.EnquiryService;
+import com.rancard.ussdapp.utils.MailUtils;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -19,9 +21,11 @@ import static com.rancard.ussdapp.model.enums.SubMenuLevel.REQUEST_CALLBACK_RESP
 @Slf4j
 public class CallbackResponseAction extends BotletActions {
 
+    protected final EnquiryService enquiryService;
 
-    public CallbackResponseAction(BeanFactory beanFactory, MenuUtils menuUtils) {
+    public CallbackResponseAction(BeanFactory beanFactory, MenuUtils menuUtils, EnquiryService enquiryService) {
         super(beanFactory, menuUtils);
+        this.enquiryService = enquiryService;
     }
 
     public UssdResponse call(){
@@ -36,6 +40,12 @@ public class CallbackResponseAction extends BotletActions {
                 log.info("[{}] user DOES NOT want callback ", sessionId);
                 response.setContinueSession(false);
                 response.setMessage(menuUtils.getResponse(ENQUIRY_END_ENQUIRY_RESPONSE_NO_CALLBACK,dispatchObject,sessionId));
+                enquiryService.makeEnquiry(dispatchObject.getSession().getEnquiry(), sessionId);
+                String htmlContent = PreviousEnquiryActionResponseHandler.getNewEnquiryEmailTemplate()
+                        .replace("{{msisdn}}", dispatchObject.getSession().getEnquiry().getAlternativeNumber() != null ? dispatchObject.getSession().getEnquiry().getAlternativeNumber() : dispatchObject.getUssdRequest().getMsisdn())
+                        .replace("{{message}}", dispatchObject.getSession().getEnquiry().getRequest())
+                        .replace("{{callback}}", dispatchObject.getSession().getEnquiry().isCallback() ? "true" : "false");
+                MailUtils.sendNotification("bernard.aryee@rancard.com", "New Enquiry", htmlContent);
                 break;
         }
 

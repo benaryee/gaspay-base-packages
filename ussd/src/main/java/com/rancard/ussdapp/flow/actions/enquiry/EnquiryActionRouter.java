@@ -2,6 +2,7 @@ package com.rancard.ussdapp.flow.actions.enquiry;
 
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
+import com.rancard.ussdapp.flow.actions.account.registration.PreviousRegistrationActionResponseHandler;
 import com.rancard.ussdapp.model.response.UssdResponse;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,13 @@ public class EnquiryActionRouter extends BotletActions {
     }
 
     public UssdResponse call() {
+
+        PreviousEnquiryActionResponseHandler previousEnquiryActionResponseHandler = beanFactory.getBean(PreviousEnquiryActionResponseHandler.class);
+        previousEnquiryActionResponseHandler.setDispatchObject(dispatchObject);
+        previousEnquiryActionResponseHandler.setSessionId(sessionId);
+        previousEnquiryActionResponseHandler.call();
+
+
 
         log.info("[{}] enquiry request router received request to route enquiry request : {} ", sessionId, dispatchObject.toString());
         switch (dispatchObject.getSession().getSubMenuLevel()) {

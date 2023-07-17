@@ -29,7 +29,7 @@ public class RegistrationActionRouter extends BotletActions {
         log.info("[{}] received request to route registration request : {} ", sessionId, dispatchObject.toString());
 
         //Handle Previous Action
-        PreviousActionResponseHandler previousActionResponseHandler = beanFactory.getBean(PreviousActionResponseHandler.class);
+        PreviousRegistrationActionResponseHandler previousActionResponseHandler = beanFactory.getBean(PreviousRegistrationActionResponseHandler.class);
         previousActionResponseHandler.setDispatchObject(dispatchObject);
         previousActionResponseHandler.setSessionId(sessionId);
         previousActionResponseHandler.call();
