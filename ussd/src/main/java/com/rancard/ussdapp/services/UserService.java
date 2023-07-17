@@ -33,4 +33,8 @@ public class UserService {
 
         return userDao.save(newUser);
     }
+
+    public int getTotalNumberFfUsers(){
+        return userDao.countAllByMsisdnExists();
+    }
 }

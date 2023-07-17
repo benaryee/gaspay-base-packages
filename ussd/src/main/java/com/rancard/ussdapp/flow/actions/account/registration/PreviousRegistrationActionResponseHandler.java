@@ -61,14 +61,16 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
             case REGISTRATION_FAMILY_SIZE -> {
                 dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
-                userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
+                user = userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
+
 
 
                 String htmlContent = getNewAccountEmailTemplate()
                         .replace("{{msisdn}}", user.getMsisdn())
                         .replace("{{firstname}}", user.getFirstname())
                         .replace("{{lastname}}", user.getLastname())
-                        .replace("{{fuelSource}}", user.getCurrentFuelSource());
+                        .replace("{{fuelSource}}", user.getCurrentFuelSource())
+                        .replace("{{totalAccounts}}", String.valueOf(userService.getTotalNumberFfUsers()));
 
                 MailUtils.sendNotification("bernard.aryee@rancard.com", "New Registration", htmlContent);
                 break;
