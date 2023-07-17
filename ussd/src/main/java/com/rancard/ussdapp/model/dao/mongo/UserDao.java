@@ -11,5 +11,5 @@ public interface UserDao extends MongoRepository<User,String> {
 
 
     Optional<User> findByMsisdn(String s);
-    int countAllByMsisdnExists();
+    int countAllByMsisdnExists(boolean exists);
 }

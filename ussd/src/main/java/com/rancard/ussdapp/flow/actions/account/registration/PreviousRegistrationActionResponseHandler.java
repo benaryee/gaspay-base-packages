@@ -70,7 +70,7 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
                         .replace("{{firstname}}", user.getFirstname())
                         .replace("{{lastname}}", user.getLastname())
                         .replace("{{fuelSource}}", user.getCurrentFuelSource())
-                        .replace("{{totalAccounts}}", String.valueOf(userService.getTotalNumberFfUsers()));
+                        .replace("{{totalAccounts}}", String.valueOf(userService.getTotalNumberOfUsers(true)));
 
                 MailUtils.sendNotification("bernard.aryee@rancard.com", "New Registration", htmlContent);
                 break;
