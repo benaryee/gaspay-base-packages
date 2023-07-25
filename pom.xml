@@ -12,9 +12,9 @@
     </parent>
 
     <groupId>com.rancard</groupId>
-    <artifactId>microservices-new</artifactId>
+    <artifactId>microservices</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <modules>
         <module>product-service</module>
         <module>order-service</module>
@@ -85,14 +85,14 @@
                         <image>eclipse-temurin:17.0.4.1_1-jre</image>
                     </from>
                     <to>
-                        <image>registry.hub.docker.com/bernardaryee/${artifactId}</image>
+                        <image>registry.hub.docker.com/bernardaryee/${project.artifactId}</image>
                     </to>
                 </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>dockerBuild</goal>
+                            <goal>build</goal>
                         </goals>
                     </execution>
                 </executions>
