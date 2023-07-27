@@ -122,7 +122,7 @@ services:
       - discovery-server
       - api-gateway
 
-  ussd-app:
+  ussd:
     container_name: ussd
     image: bernardaryee/ussd:latest
     environment:
@@ -133,9 +133,9 @@ services:
 
 
   ## Order-Service Docker Compose Config
-  order:
-    container_name: order
-    image: bernardaryee/order:latest
+  order-service:
+    container_name: order-service
+    image: bernardaryee/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -148,9 +148,9 @@ services:
 
 
   ## Inventory-Service Docker Compose Config
-  inventory:
-    container_name: inventory
-    image: bernardaryee/inventory:latest
+  inventory-service:
+    container_name: inventory-service
+    image: bernardaryee/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:

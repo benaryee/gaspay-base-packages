@@ -21,8 +21,8 @@
         <module>api-gateway</module>
         <module>notification-service</module>
         <module>ussd</module>
-        <module>order</module>
-        <module>inventory</module>
+        <module>order-service</module>
+        <module>inventory-service</module>
     </modules>
 
     <properties>
