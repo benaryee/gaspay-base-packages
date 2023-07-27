@@ -133,9 +133,9 @@ services:
 
 
   ## Order-Service Docker Compose Config
-  order-service:
-    container_name: order-service
-    image: bernardaryee/order-service:latest
+  order:
+    container_name: order
+    image: bernardaryee/order:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -148,9 +148,9 @@ services:
 
 
   ## Inventory-Service Docker Compose Config
-  inventory-service:
-    container_name: inventory-service
-    image: bernardaryee/inventory-service:latest
+  inventory:
+    container_name: inventory
+    image: bernardaryee/inventory:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
