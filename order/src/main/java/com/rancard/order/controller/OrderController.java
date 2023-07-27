@@ -1,7 +1,8 @@
 package com.rancard.order.controller;
 
-import com.rancard.orderservice.dto.OrderRequest;
-import com.rancard.orderservice.service.OrderService;
+
+import com.rancard.order.dto.OrderRequest;
+import com.rancard.order.service.OrderService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;

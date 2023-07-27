@@ -1,12 +1,13 @@
 package com.rancard.order.service;
 
-import com.rancard.orderservice.dto.InventoryResponse;
-import com.rancard.orderservice.dto.OrderLineItemsDto;
-import com.rancard.orderservice.dto.OrderRequest;
-import com.rancard.orderservice.event.OrderPlacedEvent;
-import com.rancard.orderservice.model.Order;
-import com.rancard.orderservice.model.OrderLineItems;
-import com.rancard.orderservice.repository.OrderRepository;
+
+import com.rancard.order.dto.InventoryResponse;
+import com.rancard.order.dto.OrderLineItemsDto;
+import com.rancard.order.dto.OrderRequest;
+import com.rancard.order.event.OrderPlacedEvent;
+import com.rancard.order.model.Order;
+import com.rancard.order.model.OrderLineItems;
+import com.rancard.order.repository.OrderRepository;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
