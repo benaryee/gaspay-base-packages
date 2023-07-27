@@ -1,4 +1,4 @@
-package com.rancard.inventoryservice.dto;
+package com.rancard.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
-package com.rancard.inventoryservice.service;
+package com.rancard.service;
 
-import com.rancard.inventoryservice.dto.InventoryResponse;
-import com.rancard.inventoryservice.repository.InventoryRepository;
+import com.rancard.dto.InventoryResponse;
+import com.rancard.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

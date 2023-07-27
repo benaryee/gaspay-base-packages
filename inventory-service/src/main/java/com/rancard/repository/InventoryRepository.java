@@ -1,7 +1,8 @@
-package com.rancard.inventoryservice.repository;
+package com.rancard.repository;
 
 
-import com.rancard.inventoryservice.model.Inventory;
+
+import com.rancard.model.Inventory;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

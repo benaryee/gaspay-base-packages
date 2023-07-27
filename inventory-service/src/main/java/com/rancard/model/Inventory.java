@@ -1,17 +1,17 @@
-package com.rancard.orderservice.dto;
+package com.rancard.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.math.BigDecimal;
 
-@Data
+@Document
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderLineItemsDto {
-    private Long id;
+@Data
+public class Inventory {
+
     private String skuCode;
-    private BigDecimal price;
     private Integer quantity;
 }

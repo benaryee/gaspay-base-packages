@@ -1,7 +1,8 @@
-package com.rancard.inventoryservice.controller;
+package com.rancard.controller;
 
-import com.rancard.inventoryservice.dto.InventoryResponse;
-import com.rancard.inventoryservice.service.InventoryService;
+
+import com.rancard.dto.InventoryResponse;
+import com.rancard.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

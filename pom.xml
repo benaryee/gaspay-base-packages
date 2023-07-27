@@ -17,13 +17,12 @@
     <version>1.0</version>
     <modules>
         <module>product-service</module>
-<!--        <module>order-service</module>-->
-        <module>inventory-service</module>
         <module>discovery-server</module>
         <module>api-gateway</module>
         <module>notification-service</module>
         <module>ussd</module>
-        <module>order</module>
+        <module>order-service</module>
+        <module>inventory-service</module>
     </modules>
 
     <properties>

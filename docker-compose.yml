@@ -145,18 +145,7 @@ services:
       - discovery-server
       - api-gateway
 
-  ## Order-Service Docker Compose Config
-  order:
-    container_name: order
-    image: bernardaryee/order:latest
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      - mongo
-      - broker
-      - zipkin
-      - discovery-server
-      - api-gateway
+
 
   ## Inventory-Service Docker Compose Config
   inventory-service:
