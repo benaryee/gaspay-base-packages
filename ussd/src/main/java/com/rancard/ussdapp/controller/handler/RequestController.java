@@ -21,7 +21,7 @@ import java.util.Date;
 import static com.rancard.ussdapp.model.enums.MenuLevel.START;
 
 @Slf4j
-@RequestMapping("/api/v1/ussd")
+@RequestMapping("/api/ussd")
 @RestController
 @RequiredArgsConstructor
 public class RequestController {
