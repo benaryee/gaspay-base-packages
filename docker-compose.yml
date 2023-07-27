@@ -169,9 +169,8 @@ services:
     image: bernardaryee/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-order:5431/order-service
     depends_on:
-      - postgres-order
+      - mongo
       - broker
       - zipkin
       - discovery-server

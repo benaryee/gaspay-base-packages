@@ -4,4 +4,4 @@
   \___/  |_|   \__,_| \___| |_|     |___/ \___| |_|    \_/  |_| \__| \___|
 
 ${application.title} ${application.version}
-Powered by Spring Boot ${spring-boot.version
+Powered by Spring Boot ${spring-boot.version}
