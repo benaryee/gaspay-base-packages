@@ -181,8 +181,8 @@ services:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
       - product-service
-      - inventory-service
-      - order-service
+      - inventory
+      - order
       - notification-service
 
   grafana:
