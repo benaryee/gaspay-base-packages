@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/ussd/menu")
+@RequestMapping("/api/ussd/menu")
 public class MenuController {
 
     private final UssdMenuService ussdMenuService;
