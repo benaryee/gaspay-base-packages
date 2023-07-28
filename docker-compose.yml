@@ -122,6 +122,18 @@ services:
       - discovery-server
       - api-gateway
 
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    expose:
+      - '6379'
+    command: redis-server --save 20 1 --loglevel warning --logfile /data/redis.log
+    volumes:
+      - cache:/data
+
   ussd:
     container_name: ussd
     image: bernardaryee/ussd:latest
@@ -130,6 +142,8 @@ services:
     depends_on:
       - mongo
       - api-gateway
+      - redis
+
 
 
   ## Order-Service Docker Compose Config
