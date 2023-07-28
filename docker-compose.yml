@@ -132,7 +132,7 @@ services:
       - '6379'
     command: redis-server --save 20 1 --loglevel warning --logfile /data/redis.log
     volumes:
-      - cache:/data
+      - ./redis-data:/data
 
   ussd:
     container_name: ussd
