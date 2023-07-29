@@ -23,6 +23,7 @@
         <module>ussd</module>
         <module>order-service</module>
         <module>inventory-service</module>
+        <module>auth</module>
     </modules>
 
     <properties>

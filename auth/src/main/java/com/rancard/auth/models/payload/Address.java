@@ -1,4 +1,4 @@
-package com.rancard.ussdapp.model.payload;
+package com.rancard.auth.models.payload;
 
 import lombok.Data;
 
