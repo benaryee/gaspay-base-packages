@@ -1,8 +1,8 @@
 package com.rancard.auth.utils;
 
-import com.rancard.auth.models.enums.ResponseMessage;
-import com.rancard.auth.models.response.response.ApiResponse;
-import com.rancard.auth.models.response.response.PagedContent;
+import com.rancard.auth.model.enums.ResponseMessage;
+import com.rancard.auth.model.response.response.ApiResponse;
+import com.rancard.auth.model.response.response.PagedContent;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

@@ -1,11 +1,12 @@
 package com.rancard.auth.controller.advise;
 
 
+
 import com.rancard.auth.exception.AuthException;
 import com.rancard.auth.exception.ServiceException;
-import com.rancard.auth.models.enums.ResponseMessage;
-import com.rancard.auth.models.response.response.ApiResponse;
-import com.rancard.auth.models.response.response.BaseError;
+import com.rancard.auth.model.enums.ResponseMessage;
+import com.rancard.auth.model.response.response.ApiResponse;
+import com.rancard.auth.model.response.response.BaseError;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -16,8 +17,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.RollbackException;
@@ -38,7 +36,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionAdvice.class);
 
-    @ExceptionHandler(value = {AuthException.class, InvalidGrantException.class})
+    @ExceptionHandler(value = {AuthException.class})
     public final ResponseEntity<Object> handleDeliveryException(AuthException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.OK;
@@ -57,26 +55,26 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = InvalidTokenException.class)
-    public final ResponseEntity<Object> handleInvalidTokenException(AuthException ex, WebRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-
-        BaseError baseError = new BaseError();
-        baseError.setUrl(getUrl(request));
-        baseError.setErrorCode(ex.getCode());
-        baseError.setErrorMessage(ex.getMessage());
-
-        InvalidTokenException e400 = new InvalidTokenException(ex.getMessage()) {
-            @Override
-            public int getHttpErrorCode() {
-                return 400;
-            }
-        };
-
-        return handleExceptionInternal(ex, e400, headers, status, request);
-    }
-
+//    @ExceptionHandler(value = InvalidTokenException.class)
+//    public final ResponseEntity<Object> handleInvalidTokenException(AuthException ex, WebRequest request) {
+//        HttpHeaders headers = new HttpHeaders();
+//        HttpStatus status = HttpStatus.BAD_REQUEST;
+//
+//        BaseError baseError = new BaseError();
+//        baseError.setUrl(getUrl(request));
+//        baseError.setErrorCode(ex.getCode());
+//        baseError.setErrorMessage(ex.getMessage());
+//
+//        InvalidTokenException e400 = new InvalidTokenException(ex.getMessage()) {
+//            @Override
+//            public int getHttpErrorCode() {
+//                return 400;
+//            }
+//        };
+//
+//        return handleExceptionInternal(ex, e400, headers, status, request);
+//    }
+//
 
     @ExceptionHandler(value = ServiceException.class)
     public final ResponseEntity<Object> handleServiceException(ServiceException ex, WebRequest request) {

@@ -1,7 +1,8 @@
 package com.rancard.auth.interfaces;
 
-import com.rancard.auth.models.domain.PasswordMatchesValidator;
+import com.rancard.auth.model.domain.PasswordMatchesValidator;
 import jakarta.validation.Constraint;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
