@@ -1,22 +1,23 @@
-package com.rancard.auth.model.dto;
+package com.rancard.ussdapp.model.dto;
 
-import com.rancard.auth.model.enums.Channel;
-import com.rancard.auth.model.enums.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.rancard.ussdapp.model.enums.Channel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SignupDto implements Serializable {
 
         private String username;
 
-        @Email
         private String email;
 
         private String phone;
@@ -24,8 +25,7 @@ public class SignupDto implements Serializable {
         private String lastName;
         private String otherNames;
 
-        @NotNull
-        @Size(min = 4, max = 32)
+
         private String password;
         private String confirmPassword;
 
@@ -37,6 +37,8 @@ public class SignupDto implements Serializable {
         private String longitude;
         private String latitude;
         private String ghanaPostGps;
+        private String currentFuelSource;
+        private int familySize;
         private Channel channel;
 
         private List<RoleDto> roles = new ArrayList<>();

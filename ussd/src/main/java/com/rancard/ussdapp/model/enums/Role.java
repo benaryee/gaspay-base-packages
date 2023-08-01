@@ -1,7 +1,7 @@
 package com.rancard.ussdapp.model.enums;
 
 public enum Role {
-    CUSTOMER,
+    USER,
     ADMIN,
     DELIVERY,
     SUPER_ADMIN,

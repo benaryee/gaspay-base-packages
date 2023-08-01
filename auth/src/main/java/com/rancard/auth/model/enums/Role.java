@@ -1,6 +1,6 @@
 package com.rancard.auth.model.enums;
 
-public enum UserType {
+public enum Role {
     ADMIN,
     USER,
     VENDOR

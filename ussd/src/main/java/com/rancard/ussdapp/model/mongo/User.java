@@ -20,5 +20,5 @@ public class User {
     private String msisdn;
     private String email;
     private Address address = new Address();
-    private Role role;
+    private String password;
 }

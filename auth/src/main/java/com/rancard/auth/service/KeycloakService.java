@@ -46,6 +46,14 @@ public class KeycloakService {
 
         // Create a new UserRepresentation
         UserRepresentation user = new UserRepresentation();
+
+        switch (signupDto.getChannel()){
+            case APP, USSD -> {
+                user.setRealmRoles(List.of("user"));
+                user.setUsername(signupDto.getPhone());
+            }
+        }
+
         user.setUsername(signupDto.getUsername());
         user.setEmail(signupDto.getEmail());
         user.setFirstName(signupDto.getFirstName());

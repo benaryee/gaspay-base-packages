@@ -112,6 +112,7 @@ public class AuthService {
         user.setOthernames(signUpUserDto.getOtherNames());
         user.setKeycloakUserId(keycloakUser.getId());
 
+
         user.setUserStatus(UserStatus.CLEARED);
         user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
         user.setLastLogin(LocalDateTime.now());
