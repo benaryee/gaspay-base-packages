@@ -1,7 +1,5 @@
 package com.rancard.ussdapp.model.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serial;
@@ -15,24 +13,14 @@ public class EditUserDto implements Serializable {
     @Serial
     private static final long serialVersionUID = -4549766876017551019L;
 
-    @NotNull
-    @NotEmpty
     private String id;
 
-    @NotNull
-    @NotEmpty
     private String phone;
 
-    @NotNull
-    @NotEmpty
     private String firstName;
 
-    @NotNull
-    @NotEmpty
     private String lastName;
 
     private String otherNames;
-
-    @NotNull
     private Set<RoleDto> roles = new HashSet<>();
 }

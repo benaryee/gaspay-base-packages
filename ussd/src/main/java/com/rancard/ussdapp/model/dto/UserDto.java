@@ -1,6 +1,5 @@
 package com.rancard.ussdapp.model.dto;
 
-import com.rancard.auth.model.enums.UserStatus;
 import lombok.Data;
 
 import java.io.Serializable;
