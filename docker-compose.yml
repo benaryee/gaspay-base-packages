@@ -212,7 +212,7 @@ services:
       - notification-service
 
   grafana:
-    image: grafana/grafana-oss:8.5.2
+    image: grafana/grafana:latest
     container_name: grafana
     restart: always
     ports:
@@ -221,6 +221,7 @@ services:
       - prometheus:prometheus
     volumes:
       - ./grafana:/var/lib/grafana
+      - /var/lib/grafana/plugins:/var/lib/grafana/plugins
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=password
