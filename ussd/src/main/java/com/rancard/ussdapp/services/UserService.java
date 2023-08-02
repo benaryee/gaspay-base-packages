@@ -37,7 +37,7 @@ public class UserService {
                 .build();
 
         ApiResponse signUpResponse = webClientBuilder.build().post()
-                .uri("http://auth/api/signup")
+                .uri("http://auth/api/auth/signup")
                 .body(Mono.just(signupDto) , SignupDto.class)
                 .exchangeToMono(clientResponse -> {
                     if(clientResponse.statusCode().is2xxSuccessful()){

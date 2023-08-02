@@ -16,6 +16,4 @@ public class ApiResponse<T> implements Serializable {
     private String message;
     private String requestId;
     private T data;
-    private BaseError error;
-
 }
