@@ -48,6 +48,7 @@ public class UserService {
                 })
                 .block();
 
+        log.info("[{}] response from auth service : {}", sessionId , signUpResponse != null ? signUpResponse.toString() : null);
         return user;
     }
 

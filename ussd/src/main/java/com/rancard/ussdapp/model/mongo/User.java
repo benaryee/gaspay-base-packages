@@ -16,7 +16,7 @@ public class User {
     private String firstname;
     private String lastname;
     private String currentFuelSource;
-    private int familySize;
+    private String familySize;
     private String msisdn;
     private String email;
     private Address address = new Address();

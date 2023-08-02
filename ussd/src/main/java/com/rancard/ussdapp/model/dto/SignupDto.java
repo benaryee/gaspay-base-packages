@@ -38,7 +38,7 @@ public class SignupDto implements Serializable {
         private String latitude;
         private String ghanaPostGps;
         private String currentFuelSource;
-        private int familySize;
+        private String familySize;
         private Channel channel;
 
         private List<RoleDto> roles = new ArrayList<>();
