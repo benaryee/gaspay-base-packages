@@ -1,4 +1,4 @@
-package com.rancard.order.model;
+package com.rancard.order.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderLineItems {
-
+public class OrderItemDto {
     private Long id;
     private String skuCode;
     private BigDecimal price;

@@ -88,12 +88,12 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
 
 
             case ENQUIRY -> {
-                        EnquiryActionRouter enquiryActionRouter = beanFactory.getBean(EnquiryActionRouter.class);
-                        enquiryActionRouter.setDispatchObject(dispatchObject);
-                        enquiryActionRouter.setSessionId(sessionId);
-                        enquiryActionRouter.setResponse(response);
-                        return enquiryActionRouter.call();
-                    }
+                EnquiryActionRouter enquiryActionRouter = beanFactory.getBean(EnquiryActionRouter.class);
+                enquiryActionRouter.setDispatchObject(dispatchObject);
+                enquiryActionRouter.setSessionId(sessionId);
+                enquiryActionRouter.setResponse(response);
+                return enquiryActionRouter.call();
+            }
 
             case REGISTRATION -> {
                 RegistrationActionRouter registrationActionRouter = beanFactory.getBean(RegistrationActionRouter.class);
@@ -104,6 +104,51 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
             }
 
             case MAIN -> {
+                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
+                mainMenuAction.setDispatchObject(dispatchObject);
+                mainMenuAction.setSessionId(sessionId);
+                mainMenuAction.setResponse(response);
+                mainMenuAction.setUser(dispatchObject.getSession().getUser());
+                return mainMenuAction.call();
+            }
+
+            case PURCHASE_MAIN -> {
+                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
+                mainMenuAction.setDispatchObject(dispatchObject);
+                mainMenuAction.setSessionId(sessionId);
+                mainMenuAction.setResponse(response);
+                mainMenuAction.setUser(dispatchObject.getSession().getUser());
+                return mainMenuAction.call();
+            }
+
+            case WALLET -> {
+                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
+                mainMenuAction.setDispatchObject(dispatchObject);
+                mainMenuAction.setSessionId(sessionId);
+                mainMenuAction.setResponse(response);
+                mainMenuAction.setUser(dispatchObject.getSession().getUser());
+                return mainMenuAction.call();
+            }
+
+            case ORDER_HISTORY -> {
+                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
+                mainMenuAction.setDispatchObject(dispatchObject);
+                mainMenuAction.setSessionId(sessionId);
+                mainMenuAction.setResponse(response);
+                mainMenuAction.setUser(dispatchObject.getSession().getUser());
+                return mainMenuAction.call();
+            }
+
+            case ACCOUNT -> {
+                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
+                mainMenuAction.setDispatchObject(dispatchObject);
+                mainMenuAction.setSessionId(sessionId);
+                mainMenuAction.setResponse(response);
+                mainMenuAction.setUser(dispatchObject.getSession().getUser());
+                return mainMenuAction.call();
+            }
+
+            case REPORT_INCIDENT -> {
                 MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
                 mainMenuAction.setDispatchObject(dispatchObject);
                 mainMenuAction.setSessionId(sessionId);

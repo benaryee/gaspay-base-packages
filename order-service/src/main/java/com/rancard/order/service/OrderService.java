@@ -2,11 +2,12 @@ package com.rancard.order.service;
 
 
 import com.rancard.order.dto.InventoryResponse;
-import com.rancard.order.dto.OrderLineItemsDto;
+import com.rancard.order.dto.OrderItemDto;
 import com.rancard.order.dto.OrderRequest;
 import com.rancard.order.event.OrderPlacedEvent;
 import com.rancard.order.model.Order;
-import com.rancard.order.model.OrderLineItems;
+import com.rancard.order.model.OrderItem;
+import com.rancard.order.model.response.ApiResponse;
 import com.rancard.order.repository.OrderRepository;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -34,17 +35,17 @@ public class OrderService {
 
     public String placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
-        order.setOrderNumber(UUID.randomUUID().toString());
+        order.setOrderId(UUID.randomUUID().toString());
 
-        List<OrderLineItems> orderLineItems = orderRequest.getOrderLineItemsDtoList()
+        List<OrderItem> orderLineItems = orderRequest.getOrderItemsDtoList()
                 .stream()
                 .map(this::mapToDto)
                 .toList();
 
-        order.setOrderLineItemsList(orderLineItems);
+        order.setItems(orderLineItems);
 
-        List<String> skuCodes = order.getOrderLineItemsList().stream()
-                .map(OrderLineItems::getSkuCode)
+        List<String> skuCodes = order.getItems().stream()
+                .map(OrderItem::getSkuCode)
                 .toList();
 
         // Call Inventory Service, and place order if product is in
@@ -66,7 +67,7 @@ public class OrderService {
             if (allProductsInStock) {
                 orderRepository.save(order);
                 // publish Order Placed Event
-                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderNumber()));
+                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderId()));
                 return "Order Placed";
             } else {
                 throw new IllegalArgumentException("Product is not in stock, please try again later");
@@ -75,11 +76,26 @@ public class OrderService {
 
     }
 
-    private OrderLineItems mapToDto(OrderLineItemsDto orderLineItemsDto) {
-        OrderLineItems orderLineItems = new OrderLineItems();
+    private OrderItem mapToDto(OrderItemDto orderLineItemsDto) {
+        OrderItem orderLineItems = new OrderItem();
         orderLineItems.setPrice(orderLineItemsDto.getPrice());
         orderLineItems.setQuantity(orderLineItemsDto.getQuantity());
         orderLineItems.setSkuCode(orderLineItemsDto.getSkuCode());
         return orderLineItems;
+    }
+
+    public ApiResponse<?> getOrdersByCustomer(String customerMsisdn) {
+        log.info("Getting Orders By Customer");
+        List<Order> orders = orderRepository.findByCustomerMsisdn(customerMsisdn);
+        return ApiResponse.builder()
+                .data(orders)
+                .message("Orders Retrieved Successfully")
+                .code(200)
+                .build();
+    }
+
+    public Order getOrder(String orderId) {
+        log.info("Getting Order");
+        return orderRepository.findById(orderId).orElseThrow();
     }
 }

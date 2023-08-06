@@ -6,4 +6,5 @@ import lombok.Data;
 public class Option {
     private int id;
     private String content;
+    private String handler;
 }

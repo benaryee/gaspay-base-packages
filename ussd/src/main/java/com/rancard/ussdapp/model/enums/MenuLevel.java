@@ -7,5 +7,11 @@ public enum MenuLevel {
 
     ENQUIRY,
     REGISTRATION,
-    MAIN
+    MAIN,
+
+    PURCHASE_MAIN,
+    WALLET,
+    ORDER_HISTORY,
+    ACCOUNT,
+    REPORT_INCIDENT
 }

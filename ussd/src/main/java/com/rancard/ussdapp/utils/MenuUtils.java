@@ -57,6 +57,29 @@ public class MenuUtils {
         return response;
     }
 
+    public String getResponse(MenuKey menuKey , DispatchObject dispatchObject , String sessionId, List<Option> options){
+        UssdMenu menu = getMenu(menuKey , sessionId);
+        String response = menu.getResponse();
+        if(options != null && options.size() > 0){
+            if(dispatchObject.getSession().getOptions() != null && dispatchObject.getSession().getOptions().size() > 0){
+                dispatchObject.getSession().setPreviousOptions(dispatchObject.getSession().getOptions());
+            }
+
+            String optionList = stringifyOptionsList(options , dispatchObject , sessionId);
+            response += "\n" + optionList;
+        }else{
+            if(menuKey != INVALID_USER_SELECTION_RESPONSE){
+                if(dispatchObject.getSession().getOptions() != null && dispatchObject.getSession().getOptions().size() > 0){
+                    dispatchObject.getSession().setPreviousOptions(dispatchObject.getSession().getOptions());
+                }
+
+                dispatchObject.getSession().setOptions(null);
+            }
+        }
+
+        return response;
+    }
+
     private UssdMenu getMenu(MenuKey menuKey , String sessionId){
         log.info("[{}] about to get menu response for level : {}", sessionId , menuKey);
         return ussdMenuService.getMenuByLevel(menuKey , sessionId);
