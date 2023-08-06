@@ -2,6 +2,7 @@ package com.rancard.ussdapp.services;
 
 
 import com.rancard.ussdapp.flow.UssdFlowCallable;
+import com.rancard.ussdapp.model.dto.UserDto;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.mongo.User;
@@ -29,7 +30,7 @@ public class RequestDispatcher {
     public UssdResponse handleInitialRequest(DispatchObject dispatchObject,HttpServletRequest servletRequest , String sessionId){
 
         log.info("[{}] checking if user with msisdn {} is existing customer", sessionId , dispatchObject.getUssdRequest().getMsisdn());
-        User user = userService.findUserByMsisdn(dispatchObject.getUssdRequest().getMsisdn(), sessionId);
+        UserDto user = userService.findUserByMsisdn(dispatchObject.getUssdRequest().getMsisdn(), sessionId);
 
         if(user == null){
          return unregisteredUserManager.handleInitialRequest(dispatchObject,response , sessionId);

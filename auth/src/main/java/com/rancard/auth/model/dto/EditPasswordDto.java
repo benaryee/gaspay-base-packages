@@ -3,12 +3,15 @@ package com.rancard.auth.model.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class EditPasswordDto implements Serializable {
 
     @Serial

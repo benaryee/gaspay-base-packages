@@ -1,5 +1,7 @@
 package com.rancard.auth.exception;
 
+import com.rancard.auth.model.enums.ServiceError;
+
 public class ServiceException extends RuntimeException {
 
     private int code;
@@ -9,6 +11,12 @@ public class ServiceException extends RuntimeException {
         this.code = code;
         this.message = message;
     }
+
+    public ServiceException(ServiceError error){
+        this.code = error.getCode();
+        this.message = error.getMessage();
+    }
+
 
     public int getCode() {
         return code;

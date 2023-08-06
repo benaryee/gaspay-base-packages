@@ -26,7 +26,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<UserDto> signUpUser(@RequestBody SignupDto signupDto,
+    public ApiResponse<?> signUpUser(@RequestBody SignupDto signupDto,
                                            HttpServletRequest httpServletRequest) {
 
         String sessionId = httpServletRequest.getSession().getId();
@@ -44,7 +44,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<User> signIn(@RequestBody SignInDto signInDto,
+    public ApiResponse<?> signIn(@RequestBody SignInDto signInDto,
                                            HttpServletRequest httpServletRequest) {
 
         String sessionId = httpServletRequest.getSession().getId();

@@ -1,6 +1,7 @@
 package com.rancard.ussdapp.model.dto;
 
 import com.rancard.ussdapp.model.enums.Channel;
+import com.rancard.ussdapp.model.payload.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,11 +34,8 @@ public class SignupDto implements Serializable {
         private String city;
         private String state;
         private String postalCode;
-        private String location;
-        private String longitude;
-        private String latitude;
-        private String ghanaPostGps;
         private String currentFuelSource;
+        private Address address = new Address();
         private String familySize;
         private Channel channel;
 

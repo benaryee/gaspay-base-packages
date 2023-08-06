@@ -1,6 +1,6 @@
 package com.rancard.auth.controller;
 
-import com.querydsl.core.types.Predicate;
+
 import com.rancard.auth.model.dto.RoleDto;
 import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.response.response.ApiResponse;
@@ -28,15 +28,13 @@ public class RolesController {
     private final ModelMapper modelMapper;
 
     @GetMapping("/all")
-    public ApiResponse<PagedContent<RoleDto>> getAllRRoles(Predicate roleSpec,
-                                                           Pageable pageable,
-                                                           HttpServletRequest httpServletRequest){
+    public ApiResponse<?> getAllRRoles(Pageable pageable, HttpServletRequest httpServletRequest){
 
         String sessionId = httpServletRequest.getSession().getId();
 
         log.info("[{}] http request: getAllRRoles",sessionId);
 
-        Page<Role> allRoles = roleService.getAllRoles(roleSpec, pageable);
+        Page<Role> allRoles = roleService.getAllRoles(pageable);
         List<RoleDto> roleDtos = allRoles
                 .stream().
                 map(role -> modelMapper.map(role, RoleDto.class))
@@ -51,7 +49,7 @@ public class RolesController {
     }
 
     @PostMapping
-    public ApiResponse<RoleDto> createRole(@RequestBody RoleDto roleDto, HttpServletRequest httpServletRequest) {
+    public ApiResponse<?> createRole(@RequestBody RoleDto roleDto, HttpServletRequest httpServletRequest) {
 
         String sessionId = httpServletRequest.getSession().getId();
 
@@ -68,7 +66,7 @@ public class RolesController {
     }
 
     @GetMapping(value = "/{code}")
-    public ApiResponse<RoleDto> getRoleByCode(@PathVariable int code,
+    public ApiResponse<?> getRoleByCode(@PathVariable int code,
                                               HttpServletRequest httpServletRequest) {
 
         String sessionId = httpServletRequest.getSession().getId();

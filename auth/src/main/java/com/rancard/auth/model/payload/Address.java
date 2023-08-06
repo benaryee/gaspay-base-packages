@@ -1,8 +1,11 @@
 package com.rancard.auth.model.payload;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class Address {
     private String street;
     private String city;

@@ -1,10 +1,12 @@
 package com.rancard.auth.model.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleDto implements Serializable {
 
     private int code;

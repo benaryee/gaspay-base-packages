@@ -1,14 +1,21 @@
 package com.rancard.ussdapp.services;
 
 import com.rancard.ussdapp.model.dao.mongo.UserDao;
+import com.rancard.ussdapp.model.dto.RoleDto;
 import com.rancard.ussdapp.model.dto.SignupDto;
+import com.rancard.ussdapp.model.dto.UserDto;
+import com.rancard.ussdapp.model.enums.Channel;
 import com.rancard.ussdapp.model.mongo.User;
 import com.rancard.ussdapp.model.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Service
 @Slf4j
@@ -19,25 +26,42 @@ public class UserService {
     private final WebClient.Builder webClientBuilder;
 
 
-    public User findUserByMsisdn(String msisdn, String sessionId){
+    public UserDto findUserByMsisdn(String msisdn, String sessionId){
         log.info("[{}] about to fetch user with msisdn : {}",sessionId , msisdn );
-        return userDao.findByMsisdn(msisdn).orElse(null);
+
+        ApiResponse<?> signInResponse = webClientBuilder.build().get()
+                .uri("lb://auth/api/auth/users/{msisdn}", msisdn)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<UserDto>>() {})
+                .block();
+
+        if(signInResponse != null && signInResponse.getData() != null){
+            return (UserDto) signInResponse.getData();
+        }
+        return null;
     }
 
-    public User registerUser(User user, String sessionId){
+    public UserDto registerUser(UserDto user, String sessionId){
         log.info("[{}] about to register user on platform user with details : {}",sessionId , user.toString() );
+        RoleDto roleDto = RoleDto.builder()
+                .name("USER")
+                .code(100)
+                .build();
+
         SignupDto signupDto = SignupDto.builder()
                 .firstName(user.getFirstname())
                 .lastName(user.getLastname())
-                .phone(user.getMsisdn())
+                .phone(user.getPhone())
                 .currentFuelSource(user.getCurrentFuelSource())
-                .ghanaPostGps(user.getAddress().getGhanaPostGps())
+                .address(user.getAddress())
                 .password(user.getPassword())
+                .roles(Collections.singletonList(roleDto))
                 .familySize(user.getFamilySize())
+                .channel(Channel.USSD)
                 .build();
 
-        ApiResponse signUpResponse = webClientBuilder.build().post()
-                .uri("http://auth/api/auth/signup")
+        ApiResponse<?> signUpResponse = webClientBuilder.build().post()
+                .uri("lb://auth/api/auth/signup")
                 .body(Mono.just(signupDto) , SignupDto.class)
                 .exchangeToMono(clientResponse -> {
                     if(clientResponse.statusCode().is2xxSuccessful()){

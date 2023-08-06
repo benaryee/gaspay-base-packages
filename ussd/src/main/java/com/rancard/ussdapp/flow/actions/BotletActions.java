@@ -1,6 +1,7 @@
 package com.rancard.ussdapp.flow.actions;
 
 
+import com.rancard.ussdapp.model.dto.UserDto;
 import com.rancard.ussdapp.model.mongo.User;
 import com.rancard.ussdapp.model.payload.DispatchObject;
 import com.rancard.ussdapp.model.response.UssdResponse;
@@ -20,17 +21,7 @@ public abstract class BotletActions {
 
     protected final BeanFactory beanFactory;
 
-//
-//    @Value("${rgw.base.url}")
-//    protected String RGW_BASE_URL;
-//
-//    @Value("${email.to.exceptions}")
-//    protected String exceptionsTo;
-//
-//    @Value("${sms.url}")
-//    protected String SEND_SMS_URL;
-
-    protected User user;
+    protected UserDto user;
     protected HttpServletRequest httpServletRequest;
     protected String message;
     protected String payload;

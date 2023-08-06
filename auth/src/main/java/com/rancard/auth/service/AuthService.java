@@ -4,29 +4,36 @@ import com.rancard.auth.exception.AuthException;
 import com.rancard.auth.exception.ServiceException;
 import com.rancard.auth.model.UserRepository;
 import com.rancard.auth.model.domain.AuthUserDetail;
-import com.rancard.auth.model.dto.EditPasswordDto;
-import com.rancard.auth.model.dto.EditUserDto;
-import com.rancard.auth.model.dto.SignInDto;
-import com.rancard.auth.model.dto.SignupDto;
+import com.rancard.auth.model.dto.*;
+import com.rancard.auth.model.dto.wallet.CreateWalletDto;
+import com.rancard.auth.model.dto.wallet.WalletDto;
 import com.rancard.auth.model.enums.UserStatus;
 import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
+import com.rancard.auth.model.response.response.ApiResponse;
+import com.rancard.auth.model.response.response.BaseError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.keycloak.representations.idm.UserRepresentation;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static com.rancard.auth.model.enums.ServiceError.USER_ALREADY_EXISTS;
+import static com.rancard.auth.model.enums.ServiceError.WALLET_CREATION_EXCEPTION;
 
 
 @Service
@@ -38,6 +45,11 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final KeycloakService keycloakService;
+
+    private final WebClient.Builder webClientBuilder;
+
+    private final ModelMapper modelMapper;
+
     private final RoleService roleService;
     public User getUser(String id) {
         return userRepository.findById(id).orElseThrow(() ->
@@ -92,16 +104,17 @@ public class AuthService {
             throw new ServiceException(100,
                     "password do not match");
 
-        Optional<User> optionalUser = userRepository.findUserByEmail(signUpUserDto.getEmail());
+        Optional<User> optionalUser = signUpUserDto.getEmail() != null ? userRepository.findUserByEmail(signUpUserDto.getEmail()) : userRepository.findByMsisdn(signUpUserDto.getPhone());
 
         if (optionalUser.isPresent())
-            throw new ServiceException(100,
-                    "user email already exist");
+            throw new ServiceException(USER_ALREADY_EXISTS);
 
         List<Role> userRoles = new ArrayList<>();
         signUpUserDto.getRoles().forEach(roleDto -> userRoles.add(roleService.getRole(roleDto.getCode())));
 
-        UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
+//        UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
+
+        WalletDto walletDto = createWallet(signUpUserDto);
 
         User user = new User();
         user.setUsername(signUpUserDto.getUsername());
@@ -110,15 +123,15 @@ public class AuthService {
         user.setFirstname(signUpUserDto.getFirstName());
         user.setLastname(signUpUserDto.getLastName());
         user.setOthernames(signUpUserDto.getOtherNames());
-        user.setKeycloakUserId(keycloakUser.getId());
-
-
+//        user.setKeycloakUserId(keycloakUser.getId());
         user.setUserStatus(UserStatus.CLEARED);
-        user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
+//        user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
         user.setLastLogin(LocalDateTime.now());
         user.setLastSeen(LocalDateTime.now());
-        user.getAddress().setGhanaPostGps(signUpUserDto.getGhanaPostGps());
-
+        user.setAddress(signUpUserDto.getAddress());
+        user.setFamilySize(signUpUserDto.getFamilySize());
+        user.setCurrentFuelSource(signUpUserDto.getCurrentFuelSource());
+        user.setWalletId(walletDto.getId());
         user.setUserStatus(UserStatus.CLEARED);
         user.setRoles(new HashSet<>(userRoles));
 
@@ -234,5 +247,28 @@ public class AuthService {
             return user;
         }
         return null;
+    }
+
+    private WalletDto createWallet(SignupDto signupDto) {
+
+        CreateWalletDto createWalletDto = CreateWalletDto.builder()
+                .walletId(signupDto.getPhone())
+                .password(signupDto.getPassword())
+                .balance(BigDecimal.valueOf(0.0))
+                .currency("GHS")
+                .build();
+
+        ApiResponse<?> createWalletResponse = webClientBuilder.build().post()
+                .uri("lb://payment-service/api/payment/wallet")
+                .body(Mono.just(createWalletDto) , CreateWalletDto.class)
+                .exchangeToMono(clientResponse -> {
+                    if(clientResponse.statusCode().is2xxSuccessful()){
+                        return clientResponse.bodyToMono(new ParameterizedTypeReference<ApiResponse<WalletDto>>() {});
+                    }else{
+                        throw new ServiceException(WALLET_CREATION_EXCEPTION);
+                    }
+                })
+                .block();
+       return (WalletDto) Objects.requireNonNull(createWalletResponse).getData();
     }
 }

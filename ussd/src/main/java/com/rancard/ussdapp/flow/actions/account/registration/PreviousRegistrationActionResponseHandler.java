@@ -2,6 +2,7 @@ package com.rancard.ussdapp.flow.actions.account.registration;
 
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
+import com.rancard.ussdapp.model.dto.UserDto;
 import com.rancard.ussdapp.model.mongo.User;
 import com.rancard.ussdapp.services.UserService;
 import com.rancard.ussdapp.utils.MailUtils;
@@ -35,44 +36,38 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
         switch(dispatchObject.getSession().getPreviousSubMenuLevel()) {
 
             case REGISTRATION_FIRST_NAME -> {
-                dispatchObject.getSession().setUser(new User());
-                dispatchObject.getSession().getUser().setMsisdn(dispatchObject.getUssdRequest().getMsisdn());
+                dispatchObject.getSession().setUser(new UserDto());
+                dispatchObject.getSession().getUser().setPhone(dispatchObject.getUssdRequest().getMsisdn());
                 dispatchObject.getSession().getUser().setFirstname(dispatchObject.getUssdRequest().getMessage());
-                break;
             }
 
             case REGISTRATION_LAST_NAME -> {
                 dispatchObject.getSession().getUser().setLastname(dispatchObject.getUssdRequest().getMessage());
-                break;
             }
 
             case REGISTRATION_ADDRESS -> {
-                dispatchObject.getSession().getUser().getAddress().setLocation(dispatchObject.getUssdRequest().getMessage());
-                break;
+                dispatchObject.getSession().getUser().getAddress().setGhanaPostGps(dispatchObject.getUssdRequest().getMessage());
             }
 
 
             case REGISTRATION_CURRENT_FUEL_SOURCE -> {
-                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getPreviousOptions()
+                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
-                break;
             }
 
             case REGISTRATION_FAMILY_SIZE -> {
-                dispatchObject.getSession().getUser().setFamilySize(dispatchObject.getSession().getPreviousOptions()
+                dispatchObject.getSession().getUser().setFamilySize(dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
                 user = userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
 
 
 
                 String htmlContent = getNewAccountEmailTemplate()
-                        .replace("{{msisdn}}", user.getMsisdn())
+                        .replace("{{msisdn}}", user.getPhone())
                         .replace("{{firstname}}", user.getFirstname())
-                        .replace("{{lastname}}", user.getLastname())
-                        .replace("{{totalAccounts}}", String.valueOf(userService.getTotalNumberOfUsers(true)));
+                        .replace("{{lastname}}", user.getLastname());
 
                 MailUtils.sendNotification("bernard.aryee@rancard.com", "New Registration", htmlContent);
-                break;
             }
 
             case REGISTRATION_COMPLETE -> {
@@ -92,7 +87,6 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
                 "<body>\n" +
                 "    <h1>New Account Created</h1>\n" +
                 "    <p>Great news! We have a new user!</p>\n" +
-                "    <p>We now have a total of {{totalAccounts}} accounts registered on the platform.</p>\n" +
                 "    <p>Here are the details of the newly created account:</p>\n" +
                 "    <ul>\n" +
                 "        <li><strong>Phone Number:</strong> {{msisdn}}</li>\n" +

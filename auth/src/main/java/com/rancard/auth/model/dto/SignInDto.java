@@ -1,10 +1,13 @@
 package com.rancard.auth.model.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class SignInDto implements Serializable {
     private String username;
     private String password;

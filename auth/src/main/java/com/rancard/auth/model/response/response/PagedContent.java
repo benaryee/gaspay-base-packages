@@ -1,11 +1,14 @@
 package com.rancard.auth.model.response.response;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class PagedContent<T> {
 
     private long totalElements;

@@ -1,6 +1,5 @@
 package com.rancard.auth.service;
 
-import com.querydsl.core.types.Predicate;
 import com.rancard.auth.exception.ServiceException;
 import com.rancard.auth.model.RoleRepository;
 import com.rancard.auth.model.dto.RoleDto;
@@ -26,8 +25,8 @@ public class RoleService {
     }
 
     @Transactional
-    public Page<Role> getAllRoles(Predicate spec, Pageable pageable) {
-        return roleRepository.findAll(spec, pageable);
+    public Page<Role> getAllRoles(Pageable pageable) {
+        return roleRepository.findAll(pageable);
     }
 
     public Role createRole(RoleDto roleDto) {

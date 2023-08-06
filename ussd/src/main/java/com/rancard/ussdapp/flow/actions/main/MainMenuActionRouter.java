@@ -32,7 +32,7 @@ public class MainMenuActionRouter extends BotletActions {
 
             case MAIN -> {
                 response.setContinueSession(true);
-                response.setMessage(menuUtils.getResponse(MAIN_MENU_RESPONSE, dispatchObject, sessionId).replace("[name]" , user.getFirstname()));
+                response.setMessage(menuUtils.getResponse(MAIN_MENU_RESPONSE, dispatchObject, sessionId).replace("[name]", user.getFirstname()));
                 log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
                 dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
                 dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
@@ -41,6 +41,7 @@ public class MainMenuActionRouter extends BotletActions {
 
 
             case MAIN_MENU_RESPONSE -> {
+
                 response.setContinueSession(false);
                 response.setMessage(menuUtils.getResponse(UNDER_CONSTRUCTION_RESPONSE, dispatchObject, sessionId));
                 log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
@@ -49,14 +50,7 @@ public class MainMenuActionRouter extends BotletActions {
                 return response;
             }
 
-
         }
-
-        response.setContinueSession(false);
-        response.setMessage(menuUtils.getResponse(UNDER_CONSTRUCTION_RESPONSE, dispatchObject, sessionId));
-        log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
-        dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
-        dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
-        return response;
+        return null;
     }
 }

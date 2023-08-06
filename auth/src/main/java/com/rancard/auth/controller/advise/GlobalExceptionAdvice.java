@@ -37,7 +37,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionAdvice.class);
 
     @ExceptionHandler(value = {AuthException.class})
-    public final ResponseEntity<Object> handleDeliveryException(AuthException ex, WebRequest request) {
+    public final ResponseEntity<?> handleDeliveryException(AuthException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.OK;
 
@@ -46,7 +46,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         baseError.setErrorCode(ex.getCode());
         baseError.setErrorMessage(ex.getMessage());
 
-        ApiResponse<Object> errorResponse = new ApiResponse<>();
+        ApiResponse<?> errorResponse = new ApiResponse<>();
         errorResponse.setCode(100);
         errorResponse.setMessage("failed");
         errorResponse.setError(baseError);
@@ -77,7 +77,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 //
 
     @ExceptionHandler(value = ServiceException.class)
-    public final ResponseEntity<Object> handleServiceException(ServiceException ex, WebRequest request) {
+    public final ResponseEntity<?> handleServiceException(ServiceException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.OK;
 
@@ -96,7 +96,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
-    public final ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+    public final ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.CONFLICT;
 
@@ -109,7 +109,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = IncorrectResultSizeDataAccessException.class)
-    public final ResponseEntity<Object> handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException ex, WebRequest request) throws Exception{
+    public final ResponseEntity<?> handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException ex, WebRequest request) throws Exception{
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -122,7 +122,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = NonUniqueResultException.class)
-    public final ResponseEntity<Object> handleNonUniqueResultException(NonUniqueResultException ex, WebRequest request) throws Exception{
+    public final ResponseEntity<?> handleNonUniqueResultException(NonUniqueResultException ex, WebRequest request) throws Exception{
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -135,7 +135,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = RollbackException.class)
-    public final ResponseEntity<Object> handleRollbackException(RollbackException ex, WebRequest request) {
+    public final ResponseEntity<?> handleRollbackException(RollbackException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         if (ex.getCause() instanceof ConstraintViolationException){
             HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
@@ -151,7 +151,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = InvalidDataAccessApiUsageException.class)
-    public final ResponseEntity<Object> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex, WebRequest request) {
+    public final ResponseEntity<?> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex, WebRequest request) {
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -170,7 +170,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -191,7 +191,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, errorResponse, headers, status, request);
     }
 
-    private ResponseEntity<Object> handleConstraintException(ConstraintViolationException ex, HttpHeaders headers, HttpStatus
+    private ResponseEntity<?> handleConstraintException(ConstraintViolationException ex, HttpHeaders headers, HttpStatus
             status, WebRequest webRequest) {
 
         BaseError baseError = new BaseError();

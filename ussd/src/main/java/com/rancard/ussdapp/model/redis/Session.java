@@ -1,6 +1,7 @@
 package com.rancard.ussdapp.model.redis;
 
 
+import com.rancard.ussdapp.model.dto.UserDto;
 import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
@@ -22,7 +23,7 @@ import java.util.Map;
 public class Session implements Serializable {
 
     private String id;
-    private User user;
+    private UserDto user;
     private Enquiry enquiry;
     private MenuLevel menuLevel;
     private SubMenuLevel subMenuLevel;

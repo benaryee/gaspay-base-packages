@@ -12,14 +12,14 @@ import java.util.Set;
 
 @Data
 @Document
-public class User extends BaseMongoModel {
+public class User {
     private String username;
     private String firstname;
     private String othernames;
     private UserStatus userStatus;
     private String lastname;
     private String email;
-    private int familySize;
+    private String familySize;
     private String currentFuelSource;
     private String password;
     private boolean isActive;
@@ -29,6 +29,7 @@ public class User extends BaseMongoModel {
     private String postalCode;
     private String msisdn;
     private int successiveFailedAttempts;
+    private String walletId;
 
     private boolean resetPassword;
     private LocalDateTime lastLogin;
