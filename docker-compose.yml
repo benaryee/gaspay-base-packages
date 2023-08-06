@@ -124,6 +124,17 @@ services:
       - discovery-server
       - api-gateway
 
+  ## Payment-Service Docker Compose Config
+  payment-service:
+    container_name: payment-service
+    image: bernardaryee/payment-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+      - discovery-server
+      - api-gateway
+
   redis:
     container_name: redis
     image: redis:6.2-alpine
