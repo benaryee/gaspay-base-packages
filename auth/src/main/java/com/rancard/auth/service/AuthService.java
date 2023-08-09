@@ -10,6 +10,7 @@ import com.rancard.auth.model.dto.wallet.WalletDto;
 import com.rancard.auth.model.enums.UserStatus;
 import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
+import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.model.response.response.BaseError;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,8 @@ public class AuthService {
     private final KeycloakService keycloakService;
 
     private final WebClient.Builder webClientBuilder;
+
+    private final UserService userService;
 
     private final ModelMapper modelMapper;
 
@@ -116,6 +119,14 @@ public class AuthService {
 
         WalletDto walletDto = createWallet(signUpUserDto);
 
+        if(signUpUserDto.getAddress() != null && signUpUserDto.getAddress().getGhanaPostGps() != null){
+            Address address = userService.getUserAddressByGps(signUpUserDto.getAddress().getGhanaPostGps());
+
+            if(address != null){
+
+            }
+        }
+
         User user = new User();
         user.setUsername(signUpUserDto.getUsername());
         user.setEmail(signUpUserDto.getEmail());
@@ -125,7 +136,7 @@ public class AuthService {
         user.setOthernames(signUpUserDto.getOtherNames());
 //        user.setKeycloakUserId(keycloakUser.getId());
         user.setUserStatus(UserStatus.CLEARED);
-//        user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
+        user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
         user.setLastLogin(LocalDateTime.now());
         user.setLastSeen(LocalDateTime.now());
         user.setAddress(signUpUserDto.getAddress());
@@ -138,6 +149,8 @@ public class AuthService {
         log.info("user: {}", user);
         return userRepository.save(user);
     }
+
+
 
     public User updateUser(EditUserDto editUserDto) {
 
@@ -271,4 +284,6 @@ public class AuthService {
                 .block();
        return (WalletDto) Objects.requireNonNull(createWalletResponse).getData();
     }
+
+
 }

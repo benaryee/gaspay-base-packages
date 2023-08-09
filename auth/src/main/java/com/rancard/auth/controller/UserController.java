@@ -2,6 +2,7 @@ package com.rancard.auth.controller;
 
 import com.rancard.auth.model.dto.UserDto;
 import com.rancard.auth.model.mongo.User;
+import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.service.UserService;
 import com.rancard.auth.utils.ApiUtils;
@@ -35,4 +36,18 @@ public class UserController {
 
         return apiResponse;
     }
+
+    @GetMapping("/gps/{ghanaPostGps}")
+    public ApiResponse<?> getUserAddress(@PathVariable String ghanaPostGps, HttpServletRequest request){
+        String sessionId = request.getSession().getId();
+        Address address = userService.getUserAddressByGps(ghanaPostGps);
+
+        Address userAddress = modelMapper.map(address, Address.class);
+        ApiResponse<Address> apiResponse = ApiUtils.wrapInApiResponse(userAddress, sessionId);
+
+        log.info("[{}] http response: getRoleByCode: {}", sessionId, apiResponse);
+
+        return apiResponse;
+    }
+
 }

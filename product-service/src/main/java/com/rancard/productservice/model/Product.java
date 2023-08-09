@@ -1,5 +1,6 @@
 package com.rancard.productservice.model;
 
+import com.rancard.productservice.model.payload.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,5 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal price;
+    private Address address;
 }

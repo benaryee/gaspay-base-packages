@@ -1,5 +1,6 @@
 package com.rancard.productservice.dto;
 
+import com.rancard.productservice.model.payload.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,6 @@ public class ProductRequest {
     private String name;
     private String description;
     private BigDecimal price;
+    private User user;
+
 }

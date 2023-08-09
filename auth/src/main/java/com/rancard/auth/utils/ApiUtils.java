@@ -23,11 +23,11 @@ public class ApiUtils {
         return response;
     }
 
-    public static <T> ApiResponse<T> wrapInApiResponse(T data, String resquestId) {
+    public static <T> ApiResponse<T> wrapInApiResponse(T data, String requestId) {
         ApiResponse<T> response = new ApiResponse<>();
         response.setCode(ResponseMessage.SUCCESS.getCode());
         response.setMessage(ResponseMessage.SUCCESS.toString());
-        response.setRequestId(resquestId);
+        response.setRequestId(requestId);
         response.setData(data);
         return response;
     }
