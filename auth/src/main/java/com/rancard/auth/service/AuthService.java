@@ -123,7 +123,7 @@ public class AuthService {
             Address address = userService.getUserAddressByGps(signUpUserDto.getAddress().getGhanaPostGps());
 
             if(address != null){
-
+                signUpUserDto.setAddress(address);
             }
         }
 

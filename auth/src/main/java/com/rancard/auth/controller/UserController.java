@@ -43,11 +43,8 @@ public class UserController {
         Address address = userService.getUserAddressByGps(ghanaPostGps);
 
         Address userAddress = modelMapper.map(address, Address.class);
-        ApiResponse<Address> apiResponse = ApiUtils.wrapInApiResponse(userAddress, sessionId);
 
-        log.info("[{}] http response: getRoleByCode: {}", sessionId, apiResponse);
-
-        return apiResponse;
+        return ApiUtils.wrapInApiResponse(userAddress, sessionId);
     }
 
 }
