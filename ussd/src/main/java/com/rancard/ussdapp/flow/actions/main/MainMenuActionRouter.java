@@ -3,6 +3,7 @@ package com.rancard.ussdapp.flow.actions.main;
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.flow.actions.orderhistory.OrderHistoryAction;
+import com.rancard.ussdapp.flow.actions.wallet.WalletActionRouter;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.response.UssdResponse;
 import com.rancard.ussdapp.utils.MenuUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
 import static com.rancard.ussdapp.model.enums.MenuKey.MAIN_MENU_RESPONSE;
 import static com.rancard.ussdapp.model.enums.MenuLevel.MAIN;
+import static com.rancard.ussdapp.model.enums.MenuLevel.WALLET;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.*;
 
 @Component
@@ -52,6 +54,16 @@ public class MainMenuActionRouter extends BotletActions {
                         return response;
                     }
                     case "2" -> {
+                        WalletActionRouter walletActionRouter = beanFactory.getBean(WalletActionRouter.class);
+                        dispatchObject.getSession().setSubMenuLevel(TOPUP_AMOUNT);
+                        dispatchObject.getSession().setMenuLevel(WALLET);
+                        walletActionRouter.setDispatchObject(dispatchObject);
+                        walletActionRouter.setSessionId(sessionId);
+                        walletActionRouter.setResponse(response);
+                        walletActionRouter.setUser(dispatchObject.getSession().getUser());
+                        return walletActionRouter.call();
+                    }
+                    case "3" -> {
                         response.setContinueSession(true);
                         response.setMessage(menuUtils.getResponse(UNDER_CONSTRUCTION_RESPONSE, dispatchObject, sessionId));
                         log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
@@ -59,7 +71,7 @@ public class MainMenuActionRouter extends BotletActions {
                         dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
                         return response;
                     }
-                    case "3" -> {
+                    case "4" -> {
                         OrderHistoryAction orderHistoryAction = beanFactory.getBean(OrderHistoryAction.class);
                         dispatchObject.getSession().setSubMenuLevel(VIEW_FULL_ORDER_HISTORY);
                         orderHistoryAction.setDispatchObject(dispatchObject);
@@ -67,14 +79,6 @@ public class MainMenuActionRouter extends BotletActions {
                         orderHistoryAction.setResponse(response);
                         orderHistoryAction.setUser(dispatchObject.getSession().getUser());
                         return orderHistoryAction.call();
-                    }
-                    case "4" -> {
-                        response.setContinueSession(true);
-                        response.setMessage(menuUtils.getResponse(UNDER_CONSTRUCTION_RESPONSE, dispatchObject, sessionId));
-                        log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
-                        dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
-                        dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
-                        return response;
                     }
                     case "5" -> {
                         response.setContinueSession(true);

@@ -7,6 +7,7 @@ import com.rancard.auth.model.domain.AuthUserDetail;
 import com.rancard.auth.model.dto.*;
 import com.rancard.auth.model.dto.wallet.CreateWalletDto;
 import com.rancard.auth.model.dto.wallet.WalletDto;
+import com.rancard.auth.model.enums.Channel;
 import com.rancard.auth.model.enums.UserStatus;
 import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
@@ -33,8 +34,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.*;
 
-import static com.rancard.auth.model.enums.ServiceError.USER_ALREADY_EXISTS;
-import static com.rancard.auth.model.enums.ServiceError.WALLET_CREATION_EXCEPTION;
+import static com.rancard.auth.model.enums.ServiceError.*;
 
 
 @Service
@@ -119,11 +119,13 @@ public class AuthService {
 
         WalletDto walletDto = createWallet(signUpUserDto);
 
-        if(signUpUserDto.getAddress() != null && signUpUserDto.getAddress().getGhanaPostGps() != null){
+        if(signUpUserDto.getChannel() != Channel.USSD && signUpUserDto.getAddress() != null && signUpUserDto.getAddress().getGhanaPostGps() != null){
             Address address = userService.getUserAddressByGps(signUpUserDto.getAddress().getGhanaPostGps());
 
             if(address != null){
                 signUpUserDto.setAddress(address);
+            }else{
+                throw new ServiceException(ADDRESS_NOT_FOUND_EXCEPTION);
             }
         }
 

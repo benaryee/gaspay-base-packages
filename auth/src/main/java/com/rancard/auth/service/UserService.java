@@ -23,6 +23,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 
+import static com.rancard.auth.model.enums.ServiceError.ADDRESS_NOT_FOUND_EXCEPTION;
 import static com.rancard.auth.model.enums.ServiceError.USER_NOT_FOUND;
 
 @Service
@@ -58,6 +59,7 @@ public class UserService {
                     LocationInfo locationInfo = locationResponse.getData().getTable().get(0);
                     return mapToFormattedAddress(locationInfo);
                 }
+                throw new ServiceException(ADDRESS_NOT_FOUND_EXCEPTION);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

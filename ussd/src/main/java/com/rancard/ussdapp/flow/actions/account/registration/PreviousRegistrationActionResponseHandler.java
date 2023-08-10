@@ -4,14 +4,18 @@ package com.rancard.ussdapp.flow.actions.account.registration;
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.model.dto.UserDto;
 import com.rancard.ussdapp.model.mongo.User;
+import com.rancard.ussdapp.model.payload.Address;
 import com.rancard.ussdapp.services.UserService;
 import com.rancard.ussdapp.utils.MailUtils;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import static com.rancard.ussdapp.model.enums.MenuKey.*;
 
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -42,11 +46,19 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
             }
 
             case REGISTRATION_LAST_NAME -> {
+
                 dispatchObject.getSession().getUser().setLastname(dispatchObject.getUssdRequest().getMessage());
             }
 
             case REGISTRATION_ADDRESS -> {
-                dispatchObject.getSession().getUser().getAddress().setGhanaPostGps(dispatchObject.getUssdRequest().getMessage());
+                Address address = userService.findAddressByGps(dispatchObject.getUssdRequest().getMessage(), sessionId);
+
+                if(address != null && !StringUtils.isAnyBlank(address.getLatitude() , address.getLongitude())){
+                    dispatchObject.getSession().getUser().setAddress(address);
+                }else{
+                    dispatchObject.getSession().setThrowPreviousMenuError(true);
+                    dispatchObject.getSession().setMenuKey(REGISTRATION_ADDRESS_INVALID);
+                }
             }
 
 
@@ -58,8 +70,25 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
             case REGISTRATION_FAMILY_SIZE -> {
                 dispatchObject.getSession().getUser().setFamilySize(dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
-                user = userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
 
+            }
+
+            case REGISTRATION_SET_PIN -> {
+                if(dispatchObject.getUssdRequest().getMessage().matches("\\d{4}") && dispatchObject.getUssdRequest().getMessage().length() == 4){
+                    dispatchObject.getSession().getUser().setPassword(dispatchObject.getUssdRequest().getMessage());
+                }else{
+                    dispatchObject.getSession().setThrowPreviousMenuError(true);
+                    dispatchObject.getSession().setMenuKey(REGISTRATION_PIN_INVALID);
+                }
+            }
+
+            case REGISTRATION_CONFIRM_PIN -> {
+                if(!dispatchObject.getUssdRequest().getMessage().matches(dispatchObject.getSession().getUser().getPassword())){
+                    dispatchObject.getSession().setThrowPreviousMenuError(true);
+                    dispatchObject.getSession().setMenuKey(REGISTRATION_CONFIRM_PIN_INVALID);
+                }
+                dispatchObject.getSession().getUser().setConfirmPassword(dispatchObject.getUssdRequest().getMessage());
+                user = userService.registerUser(dispatchObject.getSession().getUser(), sessionId);
 
 
                 String htmlContent = getNewAccountEmailTemplate()

@@ -34,6 +34,13 @@ public class RegistrationActionRouter extends BotletActions {
         previousActionResponseHandler.setSessionId(sessionId);
         previousActionResponseHandler.call();
 
+        if (dispatchObject.getSession().isThrowPreviousMenuError()){
+            response.setMessage(menuUtils.getResponse(dispatchObject.getSession().getMenuKey(),dispatchObject,sessionId));
+            response.setContinueSession(true);
+            dispatchObject.getSession().setThrowPreviousMenuError(false);
+            return response;
+        }
+
         switch (dispatchObject.getSession().getSubMenuLevel()) {
 
             case REGISTRATION_FIRST_NAME -> {
@@ -76,8 +83,26 @@ public class RegistrationActionRouter extends BotletActions {
                 response.setContinueSession(true);
                 response.setMessage(menuUtils.getResponse(REGISTRATION_FAMILY_SIZE_RESPONSE,dispatchObject,sessionId));
                 log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
-                dispatchObject.getSession().setSubMenuLevel(REGISTRATION_COMPLETE);
+                dispatchObject.getSession().setSubMenuLevel(REGISTRATION_SET_PIN);
                 dispatchObject.getSession().setPreviousSubMenuLevel(REGISTRATION_FAMILY_SIZE);
+                return response;
+            }
+
+            case REGISTRATION_SET_PIN -> {
+                response.setContinueSession(true);
+                response.setMessage(menuUtils.getResponse(REGISTRATION_SET_PIN_RESPONSE,dispatchObject,sessionId));
+                log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
+                dispatchObject.getSession().setSubMenuLevel(REGISTRATION_CONFIRM_PIN);
+                dispatchObject.getSession().setPreviousSubMenuLevel(REGISTRATION_SET_PIN);
+                return response;
+            }
+
+            case REGISTRATION_CONFIRM_PIN -> {
+                response.setContinueSession(true);
+                response.setMessage(menuUtils.getResponse(REGISTRATION_CONFIRM_PIN_RESPONSE,dispatchObject,sessionId));
+                log.info("[{}] Main enquiry submenuLevel response : {}", sessionId , response);
+                dispatchObject.getSession().setSubMenuLevel(REGISTRATION_COMPLETE);
+                dispatchObject.getSession().setPreviousSubMenuLevel(REGISTRATION_CONFIRM_PIN);
                 return response;
             }
 

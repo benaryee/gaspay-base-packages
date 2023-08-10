@@ -20,6 +20,7 @@ public class UserDto implements Serializable {
     private String lastSeen;
     private String walletId;
     private String password;
+    private String confirmPassword;
     private String currentFuelSource;
     private String familySize;
     private UserStatus userStatus;

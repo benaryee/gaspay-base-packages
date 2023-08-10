@@ -36,7 +36,8 @@ public class ProductController {
     }
 
     @GetMapping("/in-radius")
-    public List<ProductResponse> getProductsInRadius(@RequestParam double longitude, @RequestParam double latitude, @RequestParam double radius) {
+    public List<ProductResponse> getProductsInRadius(@RequestParam double longitude, @RequestParam double latitude,
+                                                     @RequestParam(required = false, defaultValue = "1000D") double radius) {
 
         List<Product> products = productService.getAllInRadiusProducts(longitude, latitude , radius);
 

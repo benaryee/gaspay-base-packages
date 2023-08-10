@@ -6,6 +6,7 @@ import com.rancard.ussdapp.flow.actions.main.MainMenuActionRouter;
 import com.rancard.ussdapp.flow.actions.account.registration.RegistrationActionRouter;
 import com.rancard.ussdapp.flow.actions.enquiry.MainEnquiryAction;
 import com.rancard.ussdapp.flow.actions.enquiry.EnquiryActionRouter;
+import com.rancard.ussdapp.flow.actions.wallet.WalletActionRouter;
 import com.rancard.ussdapp.model.payload.DispatchObject;
 import com.rancard.ussdapp.model.response.UssdResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
     private String sessionId;
 
     private HttpServletRequest httpServletRequest;
-    private UssdResponse response;
+    private UssdResponse response = new UssdResponse();
     private DispatchObject dispatchObject;
 
     private final BeanFactory beanFactory;
@@ -122,12 +123,12 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
             }
 
             case WALLET -> {
-                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
-                mainMenuAction.setDispatchObject(dispatchObject);
-                mainMenuAction.setSessionId(sessionId);
-                mainMenuAction.setResponse(response);
-                mainMenuAction.setUser(dispatchObject.getSession().getUser());
-                return mainMenuAction.call();
+                WalletActionRouter walletActionRouter = beanFactory.getBean(WalletActionRouter.class);
+                walletActionRouter.setDispatchObject(dispatchObject);
+                walletActionRouter.setSessionId(sessionId);
+                walletActionRouter.setResponse(response);
+                walletActionRouter.setUser(dispatchObject.getSession().getUser());
+                return walletActionRouter.call();
             }
 
             case ORDER_HISTORY -> {

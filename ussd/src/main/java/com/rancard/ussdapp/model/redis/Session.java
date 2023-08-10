@@ -33,6 +33,7 @@ public class Session implements Serializable {
     private String uniqueCode;
     private String previousSelection;
     private String starCode;
+    private String topUpAmount;
 
     private String itemPrice;
     private boolean initialRequest;
@@ -41,6 +42,7 @@ public class Session implements Serializable {
     private boolean hasNext;
     private boolean hasBack;
 
+    private boolean throwPreviousMenuError;
 
     private int optionsCurrentPage;
     private int pageSize;
