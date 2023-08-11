@@ -233,8 +233,9 @@ services:
     links:
       - prometheus:prometheus
     volumes:
-      - ./grafana:/var/lib/grafana
-      - /var/lib/grafana/plugins:/var/lib/grafana/plugins
+      - grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=password
+volumes:
+  grafana_data: {}
