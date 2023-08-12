@@ -45,6 +45,12 @@ scrape_configs:
       - targets: [ 'auth:8080' ]
         labels:
           application: 'Auth Application'
+  - job_name: 'prometheus'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'prometheus:9090' ]
+        labels:
+          application: 'Prometheus Application'
   - job_name: 'redis_exporter'
     metrics_path: '/metrics'
     static_configs:
