@@ -146,6 +146,17 @@ services:
     command: redis-server --save 20 1 --loglevel warning --logfile /data/redis.log
     volumes:
       - ./redis-data:/data
+  redis-exporter:
+    image: oliver006/redis_exporter
+    ports:
+      - 9121:9121
+    environment:
+      REDIS_ADDR: "redis:6379"
+      REDIS_USER: null
+      REDIS_PASSWORD: my_master_password
+    links:
+      - redis
+      - prometheus
 
   ussd:
     container_name: ussd
@@ -211,7 +222,7 @@ services:
 
   ## Prometheus
   prometheus:
-    image: prom/prometheus:v2.37.1
+    image: prom/prometheus:latest
     container_name: prometheus
     restart: always
     ports:
@@ -223,6 +234,9 @@ services:
       - inventory-service
       - order-service
       - notification-service
+      - payment-service
+      - ussd
+
 
   grafana:
     image: grafana/grafana:latest
