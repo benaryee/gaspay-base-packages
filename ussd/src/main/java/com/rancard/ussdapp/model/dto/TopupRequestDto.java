@@ -12,5 +12,6 @@ public class TopupRequestDto {
     private UserDto user;
     private String amount;
     private Channel channel;
+    private String mobileNetwork;
     private String sessionId;
 }

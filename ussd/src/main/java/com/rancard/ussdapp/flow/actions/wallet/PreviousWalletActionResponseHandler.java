@@ -54,6 +54,7 @@ public class PreviousWalletActionResponseHandler extends BotletActions {
                             .amount(dispatchObject.getSession().getTopUpAmount())
                             .user(dispatchObject.getSession().getUser())
                             .sessionId(sessionId)
+                            .mobileNetwork(dispatchObject.getUssdRequest().getMobileNetwork())
                             .channel(Channel.USSD)
                             .build();
 

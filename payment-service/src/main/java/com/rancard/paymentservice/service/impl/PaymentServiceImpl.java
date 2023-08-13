@@ -52,16 +52,17 @@ public class PaymentServiceImpl implements PaymentService {
                 .amount(topupupRequestDto.getAmount())
                 .extra_id(sessionId)
                 .source_country("GH")
+                .service_type("wallet")
                 .customer_first_name(topupupRequestDto.getUser().getFirstname())
                 .customer_last_name(topupupRequestDto.getUser().getLastname())
                 .debit_currency("GHS")
                 .debit_country("GH")
                 .customer_msisdn(topupupRequestDto.getUser().getPhone())
-                .mno("MTN")
+                .mno(topupupRequestDto.getMobileNetwork())
                 .transaction_type("DR")
                 .callback_url("https://webhook.site/62d559bb-a401-4956-88f6-abc95447428c")
                 .build();
-        ParameterizedTypeReference<ZeepayApiResponse> responseType = new ParameterizedTypeReference<ZeepayApiResponse>() {};
+        ParameterizedTypeReference<ZeepayApiResponse> responseType = new ParameterizedTypeReference<>() {};
 
         ZeepayApiResponse response = webClientService.makeApiCall(BASE_URL+"/api/debits", method, null, headers, requestBody, responseType);
 

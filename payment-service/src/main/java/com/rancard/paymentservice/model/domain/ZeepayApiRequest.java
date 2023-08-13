@@ -15,7 +15,7 @@ public class ZeepayApiRequest {
     private String customer_msisdn;
     private String receiver_country;
     private BigDecimal amount;
-    private String service_type = "Wallet";
+    private String service_type;
     private String extra_id;
     private String description;
     private String debit_currency;
