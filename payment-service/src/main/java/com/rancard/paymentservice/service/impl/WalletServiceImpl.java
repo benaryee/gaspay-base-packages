@@ -3,7 +3,7 @@ package com.rancard.paymentservice.service.impl;
 
 import com.rancard.paymentservice.exception.ServiceException;
 import com.rancard.paymentservice.model.dto.wallet.CreateWalletDto;
-import com.rancard.paymentservice.model.dto.wallet.CreditWalletDto;
+import com.rancard.paymentservice.model.dto.wallet.TopupupRequestDto;
 import com.rancard.paymentservice.model.dto.wallet.DebitWalletDto;
 import com.rancard.paymentservice.model.dto.wallet.EditWalletDto;
 import com.rancard.paymentservice.model.mongo.Wallet;
@@ -47,7 +47,7 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet creditWallet(CreditWalletDto createWalletDto) {
+    public Wallet creditWallet(TopupupRequestDto createWalletDto) {
         return null;
     }
 
@@ -77,13 +77,13 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet topupWallet(CreditWalletDto creditWalletDto, String sessionId) {
-        Wallet wallet = walletRepository.findById(creditWalletDto.getId()).orElse(null);
+    public Wallet topupWallet(TopupupRequestDto creditWalletDto, String sessionId) {
+        Wallet wallet = walletRepository.findById(creditWalletDto.getUser().getWalletId()).orElse(null);
         if (wallet == null){
             throw new ServiceException(WALLET_NOT_FOUND);
         }
 
-        paymentService.topupWallet(creditWalletDto, sessionId);
+        paymentService.makePayment(creditWalletDto, sessionId);
         return wallet;
     }
 }

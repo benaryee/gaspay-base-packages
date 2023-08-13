@@ -146,17 +146,9 @@ services:
     command: redis-server --save 20 1 --loglevel warning --logfile /data/redis.log
     volumes:
       - ./redis-data:/data
-  redis-exporter:
-    image: oliver006/redis_exporter
-    ports:
-      - 9121:9121
-    environment:
-      REDIS_ADDR: "redis:6379"
-      REDIS_USER: null
-      REDIS_PASSWORD: my_master_password
-    links:
-      - redis
-      - prometheus
+  adapter:
+    image: "redislabs/prometheus-redistimeseries-adapter:master"
+    command: [ "-redis-address", "redis:6379", "-web.listen-address", "0.0.0.0:9201" ]
 
   ussd:
     container_name: ussd

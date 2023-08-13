@@ -2,7 +2,7 @@ package com.rancard.ussdapp.flow.actions.wallet;
 
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
-import com.rancard.ussdapp.flow.actions.enquiry.*;
+import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.response.UssdResponse;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
+import static com.rancard.ussdapp.model.enums.MenuKey.TOPUP_AMOUNT_CONFIRMATION_RESPONSE;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.*;
 
 @Component
@@ -52,17 +53,25 @@ public class WalletActionRouter extends BotletActions {
                 response.setContinueSession(true);
                 response.setMessage(menuUtils.getResponse(TOPUP_AMOUNT_CONFIRMATION_RESPONSE,dispatchObject,sessionId).replace("[amount]",dispatchObject.getSession().getTopUpAmount()));
                 log.info("[{}] Topup amount confirmation submenuLevel response : {}", sessionId , response);
-                dispatchObject.getSession().setSubMenuLevel(TOPUP_AWAITING_APPROVAL);
+                dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.TOPUP_AMOUNT_CONFIRMATION_RESPONSE);
                 dispatchObject.getSession().setPreviousSubMenuLevel(TOPUP_AMOUNT_CONFIRMATION);
                 return response;
             }
 
-            case TOPUP_AWAITING_APPROVAL -> {
-                response.setContinueSession(false);
-                response.setMessage(menuUtils.getResponse(TOPUP_AWAITING_APPROVAL_RESPONSE,dispatchObject,sessionId));
-                log.info("[{}] Awaiting approval submenuLevel response : {}", sessionId , response);
-                dispatchObject.getSession().setSubMenuLevel(TOPUP_AMOUNT_CONFIRMATION);
-                dispatchObject.getSession().setPreviousSubMenuLevel(TOPUP_AMOUNT_CONFIRMATION);
+            case TOPUP_AMOUNT_CONFIRMATION_RESPONSE -> {
+                if(dispatchObject.getUssdRequest().getMessage().equals("1")){
+                    response.setContinueSession(false);
+                    response.setMessage(menuUtils.getResponse(TOPUP_AWAITING_APPROVAL_RESPONSE,dispatchObject,sessionId));
+                    log.info("[{}] Awaiting approval submenuLevel response : {}", sessionId , response);
+                    dispatchObject.getSession().setSubMenuLevel(TOPUP_AMOUNT_CONFIRMATION);
+                    dispatchObject.getSession().setPreviousSubMenuLevel(TOPUP_AMOUNT_CONFIRMATION);
+                }else{
+                    response.setContinueSession(true);
+                    response.setMessage(menuUtils.getResponse(TOPUP_AMOUNT_RESPONSE,dispatchObject,sessionId));
+                    log.info("[{}] Topup amount submenuLevel response : {}", sessionId , response);
+                    dispatchObject.getSession().setSubMenuLevel(TOPUP_AMOUNT_CONFIRMATION);
+                    dispatchObject.getSession().setPreviousSubMenuLevel(TOPUP_AMOUNT);
+                }
                 return response;
             }
 

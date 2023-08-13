@@ -2,13 +2,12 @@ package com.rancard.ussdapp.flow.actions.wallet;
 
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
-import com.rancard.ussdapp.model.dto.UserDto;
-import com.rancard.ussdapp.model.payload.Address;
+import com.rancard.ussdapp.model.dto.TopupRequestDto;
+import com.rancard.ussdapp.model.enums.Channel;
+import com.rancard.ussdapp.services.PaymentService;
 import com.rancard.ussdapp.services.UserService;
-import com.rancard.ussdapp.utils.MailUtils;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -21,12 +20,13 @@ import static com.rancard.ussdapp.model.enums.MenuKey.*;
 @Slf4j
 public class PreviousWalletActionResponseHandler extends BotletActions {
 
-    protected final UserService userService;
+    private final PaymentService paymentService;
 
 
-    public PreviousWalletActionResponseHandler(BeanFactory beanFactory, MenuUtils menuUtils, UserService userService) {
+    public PreviousWalletActionResponseHandler(BeanFactory beanFactory, MenuUtils menuUtils, PaymentService paymentService) {
         super(beanFactory, menuUtils);
-        this.userService = userService;
+
+        this.paymentService = paymentService;
     }
 
     public void call() {
@@ -45,6 +45,21 @@ public class PreviousWalletActionResponseHandler extends BotletActions {
                     return;
                 }
                 dispatchObject.getSession().setTopUpAmount(dispatchObject.getUssdRequest().getMessage());
+            }
+
+            case TOPUP_AMOUNT_CONFIRMATION_RESPONSE -> {
+                if(dispatchObject.getUssdRequest().getMessage().equals("1")){
+
+                    TopupRequestDto topupRequestDto = TopupRequestDto.builder()
+                            .amount(dispatchObject.getSession().getTopUpAmount())
+                            .user(dispatchObject.getSession().getUser())
+                            .sessionId(sessionId)
+                            .channel(Channel.USSD)
+                            .build();
+
+                    paymentService.sendPaymentRequestToUser(topupRequestDto, sessionId);
+                }
+
             }
         }
     }

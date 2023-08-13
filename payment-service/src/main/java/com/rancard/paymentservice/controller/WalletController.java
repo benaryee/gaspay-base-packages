@@ -2,7 +2,7 @@ package com.rancard.paymentservice.controller;
 
 import com.rancard.paymentservice.model.domain.ApiResponse;
 import com.rancard.paymentservice.model.dto.wallet.CreateWalletDto;
-import com.rancard.paymentservice.model.dto.wallet.CreditWalletDto;
+import com.rancard.paymentservice.model.dto.wallet.TopupupRequestDto;
 import com.rancard.paymentservice.model.dto.wallet.WalletDto;
 import com.rancard.paymentservice.model.mongo.Wallet;
 import com.rancard.paymentservice.service.WalletService;
@@ -61,7 +61,7 @@ public class WalletController {
     }
 
     @PostMapping("/credit")
-    public ApiResponse<?> creditWallet(@RequestBody CreditWalletDto creditWalletDto , HttpServletRequest request) {
+    public ApiResponse<?> creditWallet(@RequestBody TopupupRequestDto creditWalletDto , HttpServletRequest request) {
         String sessionId = request.getSession().getId();
         return ApiResponse.builder()
                 .code(200)
