@@ -56,7 +56,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .debit_country("GH")
                 .receiver_country("GH")
                 .customer_msisdn(topupupRequestDto.getUser().getPhone())
-                .mno(topupupRequestDto.getMobileNetwork())
+                .mno(getMno(topupupRequestDto.getMobileNetwork()))
                 .transaction_type("DR")
                 .callback_url("https://webhook.site/62d559bb-a401-4956-88f6-abc95447428c")
                 .build();
@@ -81,6 +81,14 @@ public class PaymentServiceImpl implements PaymentService {
             return paymentRepository.save(payment);
         }
         throw new ServiceException(PAYMENT_FAILED);
+    }
+
+    private String getMno(String mobileNetwork) {
+        return switch (mobileNetwork) {
+            case "MTNGH" -> "MTN";
+            case "OT" -> "VODAFONE";
+            default -> mobileNetwork;
+        };
     }
 
 }
