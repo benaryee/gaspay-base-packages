@@ -3,6 +3,7 @@ package com.rancard.ussdapp.flow.actions.main;
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.flow.actions.orderhistory.OrderHistoryAction;
+import com.rancard.ussdapp.flow.actions.purchase.PurchaseActionRouter;
 import com.rancard.ussdapp.flow.actions.wallet.WalletActionRouter;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.response.UssdResponse;
@@ -15,8 +16,7 @@ import org.springframework.stereotype.Component;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
 import static com.rancard.ussdapp.model.enums.MenuKey.MAIN_MENU_RESPONSE;
-import static com.rancard.ussdapp.model.enums.MenuLevel.MAIN;
-import static com.rancard.ussdapp.model.enums.MenuLevel.WALLET;
+import static com.rancard.ussdapp.model.enums.MenuLevel.*;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.*;
 
 @Component
@@ -46,12 +46,14 @@ public class MainMenuActionRouter extends BotletActions {
             case MAIN_MENU_RESPONSE -> {
                 switch (dispatchObject.getUssdRequest().getMessage()) {
                     case "1" -> {
-                        response.setContinueSession(true);
-                        response.setMessage(menuUtils.getResponse(UNDER_CONSTRUCTION_RESPONSE, dispatchObject, sessionId));
-                        log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
-                        dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
-                        dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
-                        return response;
+                        PurchaseActionRouter purchaseActionRouter = beanFactory.getBean(PurchaseActionRouter.class);
+                        dispatchObject.getSession().setSubMenuLevel(PURCHASE_MAIN_MENU);
+                        dispatchObject.getSession().setMenuLevel(PURCHASE);
+                        purchaseActionRouter.setDispatchObject(dispatchObject);
+                        purchaseActionRouter.setSessionId(sessionId);
+                        purchaseActionRouter.setResponse(response);
+                        purchaseActionRouter.setUser(dispatchObject.getSession().getUser());
+                        return purchaseActionRouter.call();
                     }
                     case "2" -> {
                         WalletActionRouter walletActionRouter = beanFactory.getBean(WalletActionRouter.class);

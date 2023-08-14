@@ -9,7 +9,9 @@ public enum MenuLevel {
     REGISTRATION,
     MAIN,
 
-    PURCHASE_MAIN,
+    PURCHASE,
+    PURCHASE_REFILL,
+    PURCHASE_RETURN,
     WALLET,
     ORDER_HISTORY,
     ACCOUNT,
