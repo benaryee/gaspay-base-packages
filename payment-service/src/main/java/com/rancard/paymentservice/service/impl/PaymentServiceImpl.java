@@ -48,9 +48,9 @@ public class PaymentServiceImpl implements PaymentService {
         headers.setBearerAuth(zeepayOAuth2Config.getAccessTokenObject().getAccessToken());
 
         ZeepayApiRequest requestBody = ZeepayApiRequest.builder()
-                .description("Wallet Topup for "+ topupupRequestDto.getUser().getPhone())
+                .description("Wallet Topup for "+ topupupRequestDto.getUser().getPhone()+" "+topupupRequestDto.getSessionId())
                 .amount(topupupRequestDto.getAmount())
-                .extra_id(sessionId)
+                .extra_id(topupupRequestDto.getSessionId())
                 .source_country("GH")
                 .service_type("wallet")
                 .customer_first_name(topupupRequestDto.getUser().getFirstname())
