@@ -64,6 +64,8 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
         ParameterizedTypeReference<ZeepayApiResponse> responseType = new ParameterizedTypeReference<>() {};
 
+        log.info("[{}] request body to zeepay ::: {}",sessionId,requestBody.toString());
+
         ZeepayApiResponse response = webClientService.makeApiCall(BASE_URL+"/api/debits", method, null, headers, requestBody, responseType);
 
         log.info("[{}] response from ZEEPAY : {} ", sessionId , response);
