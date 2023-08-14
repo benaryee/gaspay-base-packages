@@ -50,6 +50,7 @@ public class PreviousWalletActionResponseHandler extends BotletActions {
             case TOPUP_AMOUNT_CONFIRMATION -> {
                 if(dispatchObject.getUssdRequest().getMessage().equals("1")){
 
+                    dispatchObject.getSession().getUser().setPhone(dispatchObject.getUssdRequest().getMsisdn());
                     TopupRequestDto topupRequestDto = TopupRequestDto.builder()
                             .amount(dispatchObject.getSession().getTopUpAmount())
                             .user(dispatchObject.getSession().getUser())

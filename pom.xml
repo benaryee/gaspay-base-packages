@@ -90,9 +90,7 @@
                     <to>
                         <image>registry.hub.docker.com/bernardaryee/${project.artifactId}</image>
                     </to>
-                    <container>
-                        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
-                    </container>
+
                 </configuration>
                 <executions>
                     <execution>
