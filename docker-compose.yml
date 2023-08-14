@@ -89,7 +89,7 @@ services:
 
   ## Eureka Server
   discovery-server:
-    image: bernardaryee/discovery-server:latest
+    image: registry.hub.docker.com/bernardaryee/discovery-server:latest
     container_name: discovery-server
     ports:
       - "8761:8761"
@@ -99,7 +99,7 @@ services:
       - zipkin
 
   api-gateway:
-    image: bernardaryee/api-gateway:latest
+    image: registry.hub.docker.com/bernardaryee/api-gateway:latest
     container_name: api-gateway
     ports:
       - "8181:8080"
@@ -116,7 +116,7 @@ services:
   ## Product-Service Docker Compose Config
   product-service:
     container_name: product-service
-    image: bernardaryee/product-service:latest
+    image: registry.hub.docker.com/bernardaryee/product-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -127,7 +127,7 @@ services:
   ## Payment-Service Docker Compose Config
   payment-service:
     container_name: payment-service
-    image: bernardaryee/payment-service:latest
+    image: registry.hub.docker.com/bernardaryee/payment-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -152,7 +152,7 @@ services:
 
   ussd:
     container_name: ussd
-    image: bernardaryee/ussd:latest
+    image: registry.hub.docker.com/bernardaryee/ussd:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -165,7 +165,7 @@ services:
   ## Order-Service Docker Compose Config
   order-service:
     container_name: order-service
-    image: bernardaryee/order-service:latest
+    image: registry.hub.docker.com/bernardaryee/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -180,7 +180,7 @@ services:
   ## Inventory-Service Docker Compose Config
   inventory-service:
     container_name: inventory-service
-    image: bernardaryee/inventory-service:latest
+    image: registry.hub.docker.com/bernardaryee/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -191,7 +191,7 @@ services:
   ## Notification-Service Docker Compose Config
   notification-service:
     container_name: notification-service
-    image: bernardaryee/notification-service:latest
+    image: registry.hub.docker.com/bernardaryee/notification-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -203,7 +203,7 @@ services:
   ## Notification-Service Docker Compose Config
   auth:
     container_name: auth
-    image: bernardaryee/auth:latest
+    image: registry.hub.docker.com/bernardaryee/auth:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
