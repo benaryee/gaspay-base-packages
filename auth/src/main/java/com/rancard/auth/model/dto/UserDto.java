@@ -1,6 +1,7 @@
 package com.rancard.auth.model.dto;
 
 import com.rancard.auth.model.enums.UserStatus;
+import com.rancard.auth.model.payload.Address;
 import lombok.*;
 
 import java.io.Serializable;
@@ -27,5 +28,6 @@ public class UserDto implements Serializable {
     private String created;
     private String updated;
     private String walletId;
+    private Address address;
     private Set<RoleDto> roles = new HashSet<>();
 }

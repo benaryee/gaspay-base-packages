@@ -14,4 +14,5 @@ public class OrderItemDto {
     private String skuCode;
     private BigDecimal price;
     private Integer quantity;
+    private float size;
 }

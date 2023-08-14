@@ -52,7 +52,10 @@ public class RefillCylinderActionRouter extends BotletActions {
             }
             case REFILL_DIGITAL_ADDRESS ->{
                 response.setContinueSession(true);
-                response.setMessage(menuUtils.getResponse(PURCHASE_DIGITAL_ADDRESS_CONFIRM_OR_ENTER,dispatchObject,sessionId));
+                response.setMessage(menuUtils.getResponse(PURCHASE_DIGITAL_ADDRESS_CONFIRM_OR_ENTER,dispatchObject,sessionId)
+                        .replace("[ghanaPostGps]",dispatchObject.getSession().getUser().getAddress().getGhanaPostGps())
+                                .replace("[city]",dispatchObject.getSession().getUser().getAddress().getCity())
+                                        .replace("[street]",dispatchObject.getSession().getUser().getAddress().getStreet()));
                 log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId , response);
                 dispatchObject.getSession().setSubMenuLevel(REFILL_CONFIRM);
                 dispatchObject.getSession().setPreviousSubMenuLevel(REFILL_DIGITAL_ADDRESS);
@@ -61,7 +64,12 @@ public class RefillCylinderActionRouter extends BotletActions {
 
             case REFILL_CONFIRM -> {
                 response.setContinueSession(true);
-                response.setMessage(menuUtils.getResponse(PURCHASE_ORDER_CONFIRMATION_RESPONSE,dispatchObject,sessionId));
+                response.setMessage(menuUtils.getResponse(PURCHASE_ORDER_CONFIRMATION_RESPONSE,dispatchObject,sessionId)
+                        .replace("[size]",dispatchObject.getSession().getOrderDto().getOrderItemsDtoList().get(0).getSize())
+                        .replace("[price]","80")
+                        .replace("[delivery]","10")
+                        .replace("[total]","90")
+                );
                 log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId , response);
                 dispatchObject.getSession().setSubMenuLevel(REFILL_PAYMENT_WALLET);
                 dispatchObject.getSession().setPreviousSubMenuLevel(REFILL_CONFIRM);
@@ -70,7 +78,9 @@ public class RefillCylinderActionRouter extends BotletActions {
 
             case REFILL_PAYMENT_WALLET -> {
                 response.setContinueSession(true);
-                response.setMessage(menuUtils.getResponse(PURCHASE_PAYMENT_METHOD,dispatchObject,sessionId));
+                response.setMessage(menuUtils.getResponse(PURCHASE_PAYMENT_METHOD,dispatchObject,sessionId)
+                        .replace("[balance]", "0")
+                );
                 log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId , response);
                 dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.REFILL_PAYMENT_WALLET_RESPONSE);
                 dispatchObject.getSession().setPreviousSubMenuLevel(REFILL_PAYMENT_WALLET);
