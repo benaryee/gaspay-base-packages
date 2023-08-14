@@ -1,7 +1,6 @@
 package com.rancard.paymentservice.service.impl;
 
 import com.rancard.paymentservice.exception.ServiceException;
-import com.rancard.paymentservice.model.domain.ApiResponse;
 import com.rancard.paymentservice.model.domain.ZeepayApiRequest;
 import com.rancard.paymentservice.model.domain.ZeepayApiResponse;
 import com.rancard.paymentservice.model.mongo.PaymentStatus;
@@ -20,8 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.ParameterizedType;
 
 import static com.rancard.paymentservice.model.enums.ServiceError.PAYMENT_FAILED;
 
@@ -50,13 +47,14 @@ public class PaymentServiceImpl implements PaymentService {
         ZeepayApiRequest requestBody = ZeepayApiRequest.builder()
                 .description("Wallet Topup for "+ topupupRequestDto.getUser().getPhone()+" "+topupupRequestDto.getSessionId())
                 .amount(topupupRequestDto.getAmount())
-                .extra_id(topupupRequestDto.getSessionId())
+                .extr_id(topupupRequestDto.getSessionId())
                 .source_country("GH")
                 .service_type("wallet")
                 .customer_first_name(topupupRequestDto.getUser().getFirstname())
                 .customer_last_name(topupupRequestDto.getUser().getLastname())
                 .debit_currency("GHS")
                 .debit_country("GH")
+                .receiver_country("GH")
                 .customer_msisdn(topupupRequestDto.getUser().getPhone())
                 .mno(topupupRequestDto.getMobileNetwork())
                 .transaction_type("DR")
