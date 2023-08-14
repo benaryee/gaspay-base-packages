@@ -47,7 +47,7 @@ public class PreviousWalletActionResponseHandler extends BotletActions {
                 dispatchObject.getSession().setTopUpAmount(dispatchObject.getUssdRequest().getMessage());
             }
 
-            case TOPUP_AMOUNT_CONFIRMATION_RESPONSE -> {
+            case TOPUP_AMOUNT_CONFIRMATION -> {
                 if(dispatchObject.getUssdRequest().getMessage().equals("1")){
 
                     TopupRequestDto topupRequestDto = TopupRequestDto.builder()
@@ -58,6 +58,7 @@ public class PreviousWalletActionResponseHandler extends BotletActions {
                             .channel(Channel.USSD)
                             .build();
 
+                    log.info("Sending topup request to user");
                     paymentService.sendPaymentRequestToUser(topupRequestDto, sessionId);
                 }
 
