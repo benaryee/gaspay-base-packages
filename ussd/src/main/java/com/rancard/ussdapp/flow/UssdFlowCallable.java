@@ -29,18 +29,16 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
 
     private String sessionId;
 
-    private HttpServletRequest httpServletRequest;
-    private UssdResponse response = new UssdResponse();
+    private UssdResponse response;
     private DispatchObject dispatchObject;
 
     private final BeanFactory beanFactory;
 
 
-    public UssdResponse execute(DispatchObject dispatchObject, HttpServletRequest httpServletRequest , UssdResponse response, String sessionId) throws InterruptedException {
+    public UssdResponse execute(DispatchObject dispatchObject, String sessionId) throws InterruptedException {
         this.sessionId = sessionId;
-        this.httpServletRequest = httpServletRequest;
         this.dispatchObject = dispatchObject;
-        this.response = response;
+        this.response = new UssdResponse();
         return call();
     }
 

@@ -22,8 +22,6 @@ public class RequestDispatcher {
 
     private UssdResponse response = new UssdResponse();
     private final UserService userService;
-    private final AccountCreationManager accountCreationManager;
-    private final InvalidOptionManager invalidOptionManager;
     private final UnregisteredUserManager unregisteredUserManager;
     private final UssdFlowCallable ussdFlowCallable;
 
@@ -39,7 +37,7 @@ public class RequestDispatcher {
                 dispatchObject.getSession().setMenuLevel(MenuLevel.MAIN);
                 dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN);
                 dispatchObject.getSession().setUser(user);
-              return  response = ussdFlowCallable.execute(dispatchObject,servletRequest, response,sessionId);
+              return  response = ussdFlowCallable.execute(dispatchObject,sessionId);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -54,7 +52,7 @@ public class RequestDispatcher {
         log.info("[{}] about to dispatch request per menu level: {} " , sessionId , dispatchObject.getSession().getMenuLevel());
 
         try {
-            response = ussdFlowCallable.execute(dispatchObject,servletRequest, response,sessionId);
+            response = ussdFlowCallable.execute(dispatchObject,sessionId);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
