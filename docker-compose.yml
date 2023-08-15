@@ -6,11 +6,13 @@ services:
   mongo:
     container_name: mongo
     image: mongo:4.4.14-rc0-focal
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bernard
+      MONGO_INITDB_ROOT_PASSWORD: password
     restart: always
     ports:
       - "27017:27017"
-    expose:
-      - "27017"
+    command: --auth
     volumes:
       - ./mongo-data:/data/db
 

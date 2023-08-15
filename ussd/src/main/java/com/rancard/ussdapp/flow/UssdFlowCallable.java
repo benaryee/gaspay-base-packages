@@ -26,9 +26,7 @@ import static com.rancard.ussdapp.model.enums.SubMenuLevel.REGISTRATION_FIRST_NA
 @Component
 @RequiredArgsConstructor
 public class UssdFlowCallable implements Callable<UssdResponse> {
-
     private String sessionId;
-
     private UssdResponse response;
     private DispatchObject dispatchObject;
 
