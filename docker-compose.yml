@@ -1,20 +1,75 @@
----
 version: '3.7'
 services:
 
-  ## Mongo Docker Compose Config
+  mongo-keys:
+    image: depop/openssl-bats
+    volumes:
+      - mongo_keys:/mongo-conf
+    command: 'bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile;"'
+
+  ##Primary Mongo Docker Compose Config
   mongo:
-    container_name: mongo
-    image: mongo:4.4.14-rc0-focal
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: bernard
-      MONGO_INITDB_ROOT_PASSWORD: password
-    restart: always
+    image: mongo:latest
+#    restart: always
     ports:
       - "27017:27017"
-    command: --auth
+    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
+    depends_on:
+      - mongo-keys
     volumes:
-      - ./mongo-data:/data/db
+      - mongo_keys:/opt/keyfile
+      - mongo_data_0:/data/db
+    env_file:
+      ./mongod.env
+
+
+  ##Worker 1 Mongo Docker Compose Config
+  mongo-worker-1:
+    image: mongo:latest
+#    restart: always
+    ports:
+      - "27018:27017"
+    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
+    depends_on:
+      - mongo-keys
+    volumes:
+      - mongo_keys:/opt/keyfile
+      - mongo_data_1:/data/db
+    env_file:
+      ./mongod.env
+
+
+  ##Worker 3 Mongo Docker Compose Config
+  mongo-worker-2:
+    image: mongo:latest
+    #    restart: always
+    ports:
+      - "27019:27017"
+    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
+    depends_on:
+      - mongo-keys
+    volumes:
+      - mongo_keys:/opt/keyfile
+      - mongo_data_2:/data/db
+    env_file:
+      ./mongod.env
+
+  ##Worker 3 Mongo Docker Compose Config
+  mongo-worker-3:
+    image: mongo:latest
+    #    restart: always
+    ports:
+      - "27020:27017"
+    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
+    depends_on:
+      - mongo-keys
+    volumes:
+      - mongo_keys:/opt/keyfile
+      - mongo_data_3:/data/db
+    env_file:
+      ./mongod.env
+
+
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -247,3 +302,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=password
 volumes:
   grafana_data: {}
+  mongo_keys:
+  mongo_data_0:
+  mongo_data_1:
+  mongo_data_2:
+  mongo_data_3:
