@@ -1,75 +1,18 @@
+---
 version: '3.7'
 services:
 
-  mongo-keys:
-    image: depop/openssl-bats
-    volumes:
-      - mongo_keys:/mongo-conf
-    command: 'bash -c "openssl rand -base64 741 > /mongo-conf/mongodb-keyfile; chmod 600 /mongo-conf/mongodb-keyfile; chown 999 /mongo-conf/mongodb-keyfile;"'
-
-  ##Primary Mongo Docker Compose Config
+  ## Mongo Docker Compose Config
   mongo:
-    image: mongo:latest
-#    restart: always
+    container_name: mongo
+    image: mongo:4.4.14-rc0-focal
+    restart: always
     ports:
       - "27017:27017"
-    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
-    depends_on:
-      - mongo-keys
+    expose:
+      - "27017"
     volumes:
-      - mongo_keys:/opt/keyfile
-      - mongo_data_0:/data/db
-    env_file:
-      ./mongod.env
-
-
-  ##Worker 1 Mongo Docker Compose Config
-  mongo-worker-1:
-    image: mongo:latest
-#    restart: always
-    ports:
-      - "27018:27017"
-    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
-    depends_on:
-      - mongo-keys
-    volumes:
-      - mongo_keys:/opt/keyfile
-      - mongo_data_1:/data/db
-    env_file:
-      ./mongod.env
-
-
-  ##Worker 3 Mongo Docker Compose Config
-  mongo-worker-2:
-    image: mongo:latest
-    #    restart: always
-    ports:
-      - "27019:27017"
-    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
-    depends_on:
-      - mongo-keys
-    volumes:
-      - mongo_keys:/opt/keyfile
-      - mongo_data_2:/data/db
-    env_file:
-      ./mongod.env
-
-  ##Worker 3 Mongo Docker Compose Config
-  mongo-worker-3:
-    image: mongo:latest
-    #    restart: always
-    ports:
-      - "27020:27017"
-    command: 'mongod --smallfiles --auth --keyfile /opt/keyfile/mongodb-keyfile --replSet mongo-replica-set'
-    depends_on:
-      - mongo-keys
-    volumes:
-      - mongo_keys:/opt/keyfile
-      - mongo_data_3:/data/db
-    env_file:
-      ./mongod.env
-
-
+      - ./mongo-data:/data/db
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -146,7 +89,7 @@ services:
 
   ## Eureka Server
   discovery-server:
-    image: registry.hub.docker.com/bernardaryee/discovery-server:latest
+    image: bernardaryee/discovery-server:latest
     container_name: discovery-server
     ports:
       - "8761:8761"
@@ -156,7 +99,7 @@ services:
       - zipkin
 
   api-gateway:
-    image: registry.hub.docker.com/bernardaryee/api-gateway:latest
+    image: bernardaryee/api-gateway:latest
     container_name: api-gateway
     ports:
       - "8181:8080"
@@ -173,7 +116,7 @@ services:
   ## Product-Service Docker Compose Config
   product-service:
     container_name: product-service
-    image: registry.hub.docker.com/bernardaryee/product-service:latest
+    image: bernardaryee/product-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -184,7 +127,7 @@ services:
   ## Payment-Service Docker Compose Config
   payment-service:
     container_name: payment-service
-    image: registry.hub.docker.com/bernardaryee/payment-service:latest
+    image: bernardaryee/payment-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -209,7 +152,7 @@ services:
 
   ussd:
     container_name: ussd
-    image: registry.hub.docker.com/bernardaryee/ussd:latest
+    image: bernardaryee/ussd:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -222,7 +165,7 @@ services:
   ## Order-Service Docker Compose Config
   order-service:
     container_name: order-service
-    image: registry.hub.docker.com/bernardaryee/order-service:latest
+    image: bernardaryee/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -237,7 +180,7 @@ services:
   ## Inventory-Service Docker Compose Config
   inventory-service:
     container_name: inventory-service
-    image: registry.hub.docker.com/bernardaryee/inventory-service:latest
+    image: bernardaryee/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -248,7 +191,7 @@ services:
   ## Notification-Service Docker Compose Config
   notification-service:
     container_name: notification-service
-    image: registry.hub.docker.com/bernardaryee/notification-service:latest
+    image: bernardaryee/notification-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -260,7 +203,7 @@ services:
   ## Notification-Service Docker Compose Config
   auth:
     container_name: auth
-    image: registry.hub.docker.com/bernardaryee/auth:latest
+    image: bernardaryee/auth:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -302,8 +245,3 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=password
 volumes:
   grafana_data: {}
-  mongo_keys:
-  mongo_data_0:
-  mongo_data_1:
-  mongo_data_2:
-  mongo_data_3:
