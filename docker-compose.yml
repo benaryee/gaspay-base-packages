@@ -5,7 +5,7 @@ services:
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
-    image: mongo:latest
+    image: mongo:4.4.14-rc0-focal
     command: [--auth]
     restart: always
     ports:
