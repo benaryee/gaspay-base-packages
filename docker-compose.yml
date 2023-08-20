@@ -3,39 +3,17 @@ version: '3.7'
 services:
 
   ## Mongo Docker Compose Config
-  mongo-auth:
-    container_name: mongo_auth
-    image: mongo:latest
-    command: [--auth]
-    restart: always
-    ports:
-      - "27020:27017"
-    volumes:
-      - ./mongo-auth-data:/data/db
-
-
-  ## Mongo Docker Compose Config
-  mongo-product:
-    container_name: mongo_product
-    image: mongo:latest
-    command: [--auth]
-    restart: always
-    ports:
-      - "27018:27017"
-    volumes:
-      - ./mongo-product-data:/data/db
-
-  ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
     image: mongo:latest
     command: [--auth]
     restart: always
     ports:
-      - "27019:27017"
+      - "27017:27017"
+    expose:
+      - "27017"
     volumes:
-      - ./mongo-auth-data:/data/db
-
+      - ./mongo-data:/data/db
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -141,7 +119,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - mongo-product
+      - mongo
       - discovery-server
       - api-gateway
 
@@ -222,7 +200,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - keycloak
-      - mongo-auth
+      - mongo
 
   ## Prometheus
   prometheus:
