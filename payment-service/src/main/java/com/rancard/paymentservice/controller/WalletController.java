@@ -1,9 +1,7 @@
 package com.rancard.paymentservice.controller;
 
 import com.rancard.paymentservice.model.domain.ApiResponse;
-import com.rancard.paymentservice.model.dto.wallet.CreateWalletDto;
-import com.rancard.paymentservice.model.dto.wallet.TopupupRequestDto;
-import com.rancard.paymentservice.model.dto.wallet.WalletDto;
+import com.rancard.paymentservice.model.dto.wallet.*;
 import com.rancard.paymentservice.model.mongo.Wallet;
 import com.rancard.paymentservice.service.WalletService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,12 +59,22 @@ public class WalletController {
     }
 
     @PostMapping("/credit")
-    public ApiResponse<?> creditWallet(@RequestBody TopupupRequestDto creditWalletDto , HttpServletRequest request) {
+    public ApiResponse<?> creditWallet(@RequestBody CreditWalletDto creditWalletDto , HttpServletRequest request) {
         String sessionId = request.getSession().getId();
         return ApiResponse.builder()
                 .code(200)
                 .message("Wallet debited successfully")
-                .data(walletService.topupWallet(creditWalletDto , sessionId))
+                .data(walletService.creditWallet(creditWalletDto , sessionId))
+                .build();
+    }
+
+    @PostMapping("/debit")
+    public ApiResponse<?> debitWallet(@RequestBody DebitWalletDto debitWalletDto , HttpServletRequest request) {
+        String sessionId = request.getSession().getId();
+        return ApiResponse.builder()
+                .code(200)
+                .message("Wallet debited successfully")
+                .data(walletService.debitWallet(debitWalletDto , sessionId))
                 .build();
     }
 

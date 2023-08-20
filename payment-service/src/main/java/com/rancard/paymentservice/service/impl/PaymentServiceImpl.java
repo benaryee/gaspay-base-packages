@@ -3,9 +3,13 @@ package com.rancard.paymentservice.service.impl;
 import com.rancard.paymentservice.exception.ServiceException;
 import com.rancard.paymentservice.model.domain.ZeepayApiRequest;
 import com.rancard.paymentservice.model.domain.ZeepayApiResponse;
+import com.rancard.paymentservice.model.dto.CallbackRequest;
+import com.rancard.paymentservice.model.dto.wallet.CreditWalletDto;
 import com.rancard.paymentservice.model.mongo.PaymentStatus;
 import com.rancard.paymentservice.model.mongo.PaymentType;
 import com.rancard.paymentservice.repository.PaymentRepository;
+import com.rancard.paymentservice.repository.WalletRepository;
+import com.rancard.paymentservice.service.WalletService;
 import com.rancard.paymentservice.service.WebClientService;
 import com.rancard.paymentservice.service.ZeepayOAuth2Config;
 import com.rancard.paymentservice.model.dto.wallet.TopupupRequestDto;
@@ -20,18 +24,24 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 import static com.rancard.paymentservice.model.enums.ServiceError.PAYMENT_FAILED;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
+    private final WalletService walletService;
     private final ZeepayOAuth2Config zeepayOAuth2Config;
     private final WebClientService webClientService;
     private final PaymentRepository paymentRepository;
 
     @Value("${zeepay.oauth2.client.base-uri}")
     private String BASE_URL;
+
+    @Value("${zeepay.payment.callback-uri}")
+    private String CALLBACK_URL;
 
 
     @Override
@@ -45,20 +55,19 @@ public class PaymentServiceImpl implements PaymentService {
         headers.setBearerAuth(zeepayOAuth2Config.getAccessTokenObject().getAccessToken());
 
         ZeepayApiRequest requestBody = ZeepayApiRequest.builder()
-                .description("Wallet Topup for "+ topupupRequestDto.getUser().getPhone())
+                .description("Topup for "+ topupupRequestDto.getUser().getPhone())
                 .amount(topupupRequestDto.getAmount())
-                .extr_id(topupupRequestDto.getSessionId())
-                .source_country("GH")
+                .extr_id(UUID.randomUUID().toString().replace("-","").substring(0,  19))
+                .source_country("GHA")
                 .service_type("wallet")
                 .customer_first_name(topupupRequestDto.getUser().getFirstname())
                 .customer_last_name(topupupRequestDto.getUser().getLastname())
                 .debit_currency("GHS")
-                .debit_country("GH")
-                .receiver_country("GH")
+                .debit_country("GHA")
                 .customer_msisdn(topupupRequestDto.getUser().getPhone())
                 .mno(getMno(topupupRequestDto.getMobileNetwork()))
                 .transaction_type("DR")
-                .callback_url("https://webhook.site/62d559bb-a401-4956-88f6-abc95447428c")
+                .callback_url(CALLBACK_URL)
                 .build();
         ParameterizedTypeReference<ZeepayApiResponse> responseType = new ParameterizedTypeReference<>() {};
 
@@ -72,8 +81,9 @@ public class PaymentServiceImpl implements PaymentService {
             log.info("[{}] Pending user approval : {} ", sessionId , response);
             Payment payment = Payment.builder()
                     .paymentId(response.getZeepayId())
+                    .walletId(topupupRequestDto.getUser().getWalletId())
                     .paymentType(PaymentType.TOPUP)
-                    .amount(String.valueOf(topupupRequestDto.getAmount()))
+                    .amount(topupupRequestDto.getAmount())
                     .currency("GHS")
                     .status(PaymentStatus.PENDING)
                     .sessionId(sessionId)
@@ -81,6 +91,30 @@ public class PaymentServiceImpl implements PaymentService {
             return paymentRepository.save(payment);
         }
         throw new ServiceException(PAYMENT_FAILED);
+    }
+
+    @Override
+    public Payment processCallback(CallbackRequest callbackRequest, String sessionId) {
+        log.info("[{}] about to process callback with payload : {}", sessionId, callbackRequest);
+        if(callbackRequest.getPaymentId() == null){
+            throw new ServiceException(PAYMENT_FAILED);
+        }
+
+        Payment payment = paymentRepository.findByPaymentId(callbackRequest.getPaymentId())
+                .orElseThrow(() -> new ServiceException(PAYMENT_FAILED));
+
+        if(payment.getStatus().equals(PaymentStatus.SUCCESS)){
+            CreditWalletDto creditWalletDto = CreditWalletDto.builder()
+                    .amount(payment.getAmount())
+                    .id(payment.getWalletId())
+                    .build();
+
+            walletService.creditWallet(creditWalletDto, sessionId);
+            payment.setStatus(PaymentStatus.SUCCESS);
+            payment.setSessionId(sessionId);
+        }
+
+        return paymentRepository.save(payment);
     }
 
     private String getMno(String mobileNetwork) {

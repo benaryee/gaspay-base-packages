@@ -39,7 +39,7 @@ public class PreviousWalletActionResponseHandler extends BotletActions {
         switch(dispatchObject.getSession().getPreviousSubMenuLevel()) {
 
             case TOPUP_AMOUNT -> {
-                if(!dispatchObject.getUssdRequest().getMessage().matches("\\d+")){
+                if(!dispatchObject.getUssdRequest().getMessage().matches("\\d+(\\.\\d+)?")){
                     dispatchObject.getSession().setThrowPreviousMenuError(true);
                     dispatchObject.getSession().setMenuKey(TOPUP_AMOUNT_INVALID);
                     return;

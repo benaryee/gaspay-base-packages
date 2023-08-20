@@ -12,6 +12,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -20,13 +21,10 @@ import java.util.Collections;
 @Slf4j
 public class PreviousRefillActionResponseHandler extends BotletActions {
 
-    private final PaymentService paymentService;
 
 
-    public PreviousRefillActionResponseHandler(BeanFactory beanFactory, MenuUtils menuUtils, PaymentService paymentService) {
+    public PreviousRefillActionResponseHandler(BeanFactory beanFactory, MenuUtils menuUtils) {
         super(beanFactory, menuUtils);
-
-        this.paymentService = paymentService;
     }
 
     public void call() {
@@ -44,6 +42,13 @@ public class PreviousRefillActionResponseHandler extends BotletActions {
                 orderItemDto.setSize(dispatchObject.getSession().getOptions().get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
                 createOrderDto.setOrderItemsDtoList(Collections.singletonList(orderItemDto));
 
+                BigDecimal totalAmount = new BigDecimal(0);
+
+                dispatchObject.getSession().getOrderDto().getOrderItemsDtoList().forEach(orderItem ->{
+                    totalAmount.add(orderItem.getPrice());
+                });
+
+                createOrderDto.setTotalAmount(totalAmount);
                 dispatchObject.getSession().setOrderDto(createOrderDto);
 
             }

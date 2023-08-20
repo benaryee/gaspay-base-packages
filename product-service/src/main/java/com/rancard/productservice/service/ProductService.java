@@ -3,6 +3,7 @@ package com.rancard.productservice.service;
 import com.rancard.productservice.dto.ProductRequest;
 import com.rancard.productservice.dto.ProductResponse;
 import com.rancard.productservice.model.Product;
+import com.rancard.productservice.model.payload.User;
 import com.rancard.productservice.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +18,25 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final UserService userService;
 
-    public Product createProduct(ProductRequest productRequest) {
+    public Product createProduct(ProductRequest productRequest, String sessionId){
+
+
+        if(productRequest.getUser().getAddress() == null && productRequest.getUser().getMsisdn() == null) {
+            throw new RuntimeException("Address is required");
+        }
+
+        if(productRequest.getUser().getAddress() == null && productRequest.getUser().getMsisdn() != null) {
+            //Get user address from user service
+            log.info("Getting user address from user service");
+            User user = userService.getUserAddress(productRequest.getUser().getMsisdn(), sessionId);
+            if(user != null){
+                productRequest.getUser().setAddress(user.getAddress());
+            }
+
+        }
+
         Product product = Product.builder()
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())

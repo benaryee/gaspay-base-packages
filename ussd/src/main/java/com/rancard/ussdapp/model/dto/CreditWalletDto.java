@@ -1,11 +1,11 @@
-package com.rancard.paymentservice.model.dto.wallet;
+package com.rancard.ussdapp.model.dto;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class DebitWalletDto {
+public class CreditWalletDto {
     private String id;
     private BigDecimal amount;
 }

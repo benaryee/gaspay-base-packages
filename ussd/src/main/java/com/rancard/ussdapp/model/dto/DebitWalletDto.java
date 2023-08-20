@@ -1,4 +1,4 @@
-package com.rancard.paymentservice.model.dto.wallet;
+package com.rancard.ussdapp.model.dto;
 
 import lombok.Data;
 

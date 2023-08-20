@@ -2,10 +2,7 @@ package com.rancard.paymentservice.service.impl;
 
 
 import com.rancard.paymentservice.exception.ServiceException;
-import com.rancard.paymentservice.model.dto.wallet.CreateWalletDto;
-import com.rancard.paymentservice.model.dto.wallet.TopupupRequestDto;
-import com.rancard.paymentservice.model.dto.wallet.DebitWalletDto;
-import com.rancard.paymentservice.model.dto.wallet.EditWalletDto;
+import com.rancard.paymentservice.model.dto.wallet.*;
 import com.rancard.paymentservice.model.mongo.Wallet;
 import com.rancard.paymentservice.repository.WalletRepository;
 import com.rancard.paymentservice.service.PaymentService;
@@ -15,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.rancard.paymentservice.model.enums.ServiceError.WALLET_ALREADY_EXISTS;
@@ -47,13 +45,32 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
-    public Wallet creditWallet(TopupupRequestDto createWalletDto) {
-        return null;
+    public Wallet creditWallet(CreditWalletDto creditWalletDto, String sessionId) {
+
+        log.info("[{}] Crediting wallet with id: {} amount : {}", sessionId, creditWalletDto.getId(), creditWalletDto.getAmount());
+        Wallet wallet = walletRepository.findById(creditWalletDto.getId()).orElse(null);
+        if(wallet == null){
+            throw new ServiceException(WALLET_NOT_FOUND);
+        }
+
+        wallet.setBalance(wallet.getBalance().add(creditWalletDto.getAmount()));
+
+        log.info("[{}] Wallet balance after debit: {}", sessionId, wallet.getBalance());
+        return walletRepository.save(wallet);
     }
 
     @Override
-    public Wallet debitWallet(DebitWalletDto createWalletDto) {
-        return null;
+    public Wallet debitWallet(DebitWalletDto debitWalletDto, String sessionId){
+        log.info("[{}] Debiting wallet with id: {} amount : {}", sessionId, debitWalletDto.getId(), debitWalletDto.getAmount());
+        Wallet wallet = walletRepository.findById(debitWalletDto.getId()).orElse(null);
+        if(wallet == null){
+            throw new ServiceException(WALLET_NOT_FOUND);
+        }
+
+        wallet.setBalance(wallet.getBalance().subtract(debitWalletDto.getAmount()));
+
+        log.info("[{}] Wallet balance after debit: {}", sessionId, wallet.getBalance());
+        return walletRepository.save(wallet);
     }
 
     @Override

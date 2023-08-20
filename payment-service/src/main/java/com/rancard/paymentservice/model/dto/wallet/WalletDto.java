@@ -12,6 +12,6 @@ public class WalletDto {
     private String walletId;
     private String balance;
     private String currency;
-    private String status;
+    private String password;
 
 }

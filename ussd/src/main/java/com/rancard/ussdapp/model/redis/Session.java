@@ -3,6 +3,7 @@ package com.rancard.ussdapp.model.redis;
 
 import com.rancard.ussdapp.model.dto.CreateOrderDto;
 import com.rancard.ussdapp.model.dto.UserDto;
+import com.rancard.ussdapp.model.dto.WalletResponseDto;
 import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
@@ -26,6 +27,7 @@ public class Session implements Serializable {
     private String id;
     private UserDto user;
     private Enquiry enquiry;
+    private WalletResponseDto wallet;
     private CreateOrderDto orderDto;
     private MenuLevel menuLevel;
     private SubMenuLevel subMenuLevel;

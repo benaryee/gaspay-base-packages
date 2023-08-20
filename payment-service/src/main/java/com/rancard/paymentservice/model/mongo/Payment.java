@@ -3,6 +3,8 @@ package com.rancard.paymentservice.model.mongo;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
+
 @Data
 @Document
 @EqualsAndHashCode(callSuper = true)
@@ -13,7 +15,7 @@ public class Payment extends BaseMongoModel {
 
         private String paymentId;
         private String walletId;
-        private String amount;
+        private BigDecimal amount;
         private String currency;
         private PaymentStatus status;
         private PaymentType paymentType;

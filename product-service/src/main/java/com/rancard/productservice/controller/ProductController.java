@@ -5,6 +5,7 @@ import com.rancard.productservice.dto.ProductRequest;
 import com.rancard.productservice.dto.ProductResponse;
 import com.rancard.productservice.model.Product;
 import com.rancard.productservice.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,10 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse createProduct(@RequestBody ProductRequest productRequest) {
+    public ProductResponse createProduct(@RequestBody ProductRequest productRequest, HttpServletRequest request) {
 
-        Product product =  productService.createProduct(productRequest);
+        String sessionId = request.getSession().getId();
+        Product product =  productService.createProduct(productRequest,sessionId);
         return modelMapper.map(product,ProductResponse.class);
     }
 
