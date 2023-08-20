@@ -9,7 +9,7 @@ services:
     command: [--auth]
     restart: always
     ports:
-      - "27017:27017"
+      - "27020:27017"
     volumes:
       - ./mongo-auth-data:/data/db
 
