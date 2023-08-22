@@ -10,6 +10,8 @@ import com.rancard.paymentservice.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,7 +28,9 @@ public class WalletServiceImpl implements WalletService {
     private final WalletRepository walletRepository;
     private final ModelMapper modelMapper;
 
-    private final PaymentService paymentService;
+    @Autowired
+    @Lazy
+    private PaymentService paymentService;
 
     @Override
     public Wallet createWallet(CreateWalletDto createWalletDto) {
