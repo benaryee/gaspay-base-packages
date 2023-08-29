@@ -39,6 +39,12 @@ public class OrderController {
         return CompletableFuture.supplyAsync(() -> "Oops! Something went wrong, please order after some time!");
     }
 
+    @GetMapping()
+    public CompletableFuture<List<Order>> getOrders() {
+        log.info("Getting Orders");
+        return CompletableFuture.supplyAsync(orderService::getOrders);
+    }
+
     @GetMapping("/{orderId}")
     public CompletableFuture<Order> getOrder(@PathVariable String orderId) {
         log.info("Getting Order");
@@ -50,4 +56,6 @@ public class OrderController {
         log.info("Getting Orders By Customer");
         return CompletableFuture.supplyAsync(() -> orderService.getOrdersByCustomer(customerMsisdn));
     }
+
+
 }

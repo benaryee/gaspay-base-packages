@@ -98,4 +98,9 @@ public class OrderService {
         log.info("Getting Order");
         return orderRepository.findById(orderId).orElseThrow();
     }
+
+    public List<Order> getOrders() {
+        log.info("Getting Order");
+        return orderRepository.findAll();
+    }
 }

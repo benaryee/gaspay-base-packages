@@ -52,6 +52,11 @@ public class KeycloakService {
                 user.setRealmRoles(List.of("user"));
                 user.setUsername(signupDto.getPhone());
             }
+            case WEB -> {
+                user.setRealmRoles(List.of("vendor"));
+                user.setUsername(signupDto.getUsername());
+            }
+
         }
 
         user.setUsername(signupDto.getUsername());

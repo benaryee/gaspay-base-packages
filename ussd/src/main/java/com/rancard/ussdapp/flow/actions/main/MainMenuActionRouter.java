@@ -2,6 +2,7 @@ package com.rancard.ussdapp.flow.actions.main;
 
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
+import com.rancard.ussdapp.flow.actions.myaccount.MyAccountActionRouter;
 import com.rancard.ussdapp.flow.actions.orderhistory.OrderHistoryAction;
 import com.rancard.ussdapp.flow.actions.purchase.PurchaseActionRouter;
 import com.rancard.ussdapp.flow.actions.wallet.WalletActionRouter;
@@ -66,12 +67,14 @@ public class MainMenuActionRouter extends BotletActions {
                         return walletActionRouter.call();
                     }
                     case "3" -> {
-                        response.setContinueSession(true);
-                        response.setMessage(menuUtils.getResponse(UNDER_CONSTRUCTION_RESPONSE, dispatchObject, sessionId));
-                        log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
-                        dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
-                        dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
-                        return response;
+                        MyAccountActionRouter myAccountActionRouter = beanFactory.getBean(MyAccountActionRouter.class);
+                        dispatchObject.getSession().setSubMenuLevel(MY_ACCOUNT_MAIN_MENU);
+                        dispatchObject.getSession().setMenuLevel(ACCOUNT);
+                        myAccountActionRouter.setDispatchObject(dispatchObject);
+                        myAccountActionRouter.setSessionId(sessionId);
+                        myAccountActionRouter.setResponse(response);
+                        myAccountActionRouter.setUser(dispatchObject.getSession().getUser());
+                        return myAccountActionRouter.call();
                     }
                     case "4" -> {
                         OrderHistoryAction orderHistoryAction = beanFactory.getBean(OrderHistoryAction.class);

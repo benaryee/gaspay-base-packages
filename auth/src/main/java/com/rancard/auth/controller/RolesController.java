@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/auth/role")
+@CrossOrigin
 public class RolesController {
 
     private final RoleService roleService;

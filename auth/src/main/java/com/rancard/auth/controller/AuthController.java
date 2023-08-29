@@ -20,6 +20,7 @@ import org.springframework.web.client.HttpClientErrorException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
+@CrossOrigin
 public class AuthController {
     private final AuthService authService;
     private final ModelMapper modelMapper;
