@@ -1,19 +1,17 @@
 ---
-version: '3.7'
+version: '3.8'
 services:
 
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
-    image: mongo:4.4.14-rc0-focal
-#    command: [--auth]
-    restart: always
+    image: mongo:4.4.6
+    hostname: mongo
+    restart: unless-stopped
     ports:
-      - "27017:27017"
-#    expose:
-#      - "27017"
+      - "10020:27017"
     volumes:
-      - ./mongo-data:/data/db
+      - ./mongo/data/:/data/db/
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -96,7 +94,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - zipkin
-
+#
   api-gateway:
     image: bernardaryee/api-gateway:latest
     container_name: api-gateway
@@ -201,7 +199,7 @@ services:
     depends_on:
       - keycloak
       - mongo
-
+#
   ## Prometheus
   prometheus:
     image: prom/prometheus:latest
