@@ -26,7 +26,6 @@ public class AuthController {
     private final ModelMapper modelMapper;
 
     @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<?> signUpUser(@RequestBody SignupDto signupDto,
                                            HttpServletRequest httpServletRequest) {
 
@@ -44,7 +43,6 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<?> signIn(@RequestBody SignInDto signInDto,
                                            HttpServletRequest httpServletRequest) {
 

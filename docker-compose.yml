@@ -9,7 +9,7 @@ services:
     hostname: mongo
     restart: unless-stopped
     ports:
-      - "10020:27017"
+      - "27017:27017"
     volumes:
       - ./mongo/data/:/data/db/
 
