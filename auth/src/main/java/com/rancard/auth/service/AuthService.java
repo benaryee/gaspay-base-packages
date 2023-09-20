@@ -25,6 +25,9 @@ import org.keycloak.representations.idm.UserRepresentation;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,6 +47,8 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final AuthenticationManager authenticationManager;
 
     private final KeycloakService keycloakService;
 
@@ -250,18 +255,24 @@ public class AuthService {
     }
 
     public User signInUser(SignInDto signInDto) {
+//
+        //TODO - Uncomment keycloak
+//        UserRepresentation userRepresentation = keycloakService.authenticateUser(signInDto);
+//        if(userRepresentation != null){
+//            User user = getUserByKeyCloakId(userRepresentation.getId());
+//            user.setLastLogin(LocalDateTime.now());
+//            user.setLastSeen(LocalDateTime.now());
+//            user.setResetPassword(false);
+//            user.setUserStatus(UserStatus.CLEARED);
+//            userRepository.save(user);
+//            return user;
+//        }
+//        return null;
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword()));
 
-        UserRepresentation userRepresentation = keycloakService.authenticateUser(signInDto);
-        if(userRepresentation != null){
-            User user = getUserByKeyCloakId(userRepresentation.getId());
-            user.setLastLogin(LocalDateTime.now());
-            user.setLastSeen(LocalDateTime.now());
-            user.setResetPassword(false);
-            user.setUserStatus(UserStatus.CLEARED);
-            userRepository.save(user);
-            return user;
-        }
-        return null;
+        return new User();
+
     }
 
     private WalletDto createWallet(SignupDto signupDto) {
