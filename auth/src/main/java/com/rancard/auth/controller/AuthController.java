@@ -5,6 +5,7 @@ import com.rancard.auth.model.dto.SignupDto;
 import com.rancard.auth.model.dto.UserDto;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.response.response.ApiResponse;
+import com.rancard.auth.model.response.response.AuthResponse;
 import com.rancard.auth.service.AuthService;
 import com.rancard.auth.utils.ApiUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,13 +50,13 @@ public class AuthController {
 
         log.info("[{}] http request: signInUser with details :{}",sessionId, signInDto);
 
-        User user = authService.signInUser(signInDto);
+        AuthResponse authResponse = authService.signInUser(signInDto);
 
-        if(user == null){
+        if(authResponse == null){
             throw  HttpClientErrorException.Unauthorized.create(HttpStatus.UNAUTHORIZED, "Invalid credentials", null, null, null);
         }
 
-        ApiResponse<User> apiResponse= ApiUtils.wrapInApiResponse(user, sessionId);
+        ApiResponse<AuthResponse> apiResponse= ApiUtils.wrapInApiResponse(authResponse, sessionId);
 
         log.info("[{}] http response: signInUser: {}",sessionId, apiResponse);
         return apiResponse;

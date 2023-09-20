@@ -13,21 +13,32 @@ import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
+import com.rancard.auth.model.response.response.AuthResponse;
 import com.rancard.auth.model.response.response.BaseError;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 import java.math.BigDecimal;
+import java.security.Key;
 import java.time.LocalDateTime;
 
 import org.keycloak.representations.idm.UserRepresentation;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +56,9 @@ import static com.rancard.auth.model.enums.ServiceError.*;
 @RequiredArgsConstructor
 public class AuthService {
 
+    @Value("${keycloak.credentials.secret}")
+    private String secret;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -57,6 +71,17 @@ public class AuthService {
     private final UserService userService;
 
     private final ModelMapper modelMapper;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
+
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
 
     private final RoleService roleService;
     public User getUser(String id) {
@@ -254,7 +279,7 @@ public class AuthService {
         return userRepository.count();
     }
 
-    public User signInUser(SignInDto signInDto) {
+    public AuthResponse signInUser(SignInDto signInDto) {
 //
         //TODO - Uncomment keycloak
 //        UserRepresentation userRepresentation = keycloakService.authenticateUser(signInDto);
@@ -270,8 +295,24 @@ public class AuthService {
 //        return null;
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new User();
+        if (authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            String token = Jwts.builder()
+                    .setSubject(userDetails.getUsername())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                    .signWith(key)
+                    .compact();
+
+            return new AuthResponse(userDetails, token);
+
+        } else {
+            return null;
+        }
+
 
     }
 
