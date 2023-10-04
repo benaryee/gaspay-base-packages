@@ -9,9 +9,21 @@ services:
     hostname: mongo
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "27016:27017"
     volumes:
       - ./mongo/data/:/data/db/
+
+  mongo-product:
+    container_name: mongo-product
+    image: mongo:4.4.6
+    hostname: mongo
+    restart: unless-stopped
+    ports:
+      - "27015:27017"
+    volumes:
+      - ./mongo/data/product:/data/db/
+
+
 
   ## Keycloak Config with Mysql database
   keycloak-mysql:
@@ -117,7 +129,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - mongo
+      - mongo-product
       - discovery-server
       - api-gateway
 
@@ -137,9 +149,9 @@ services:
     image: redis:6.2-alpine
     restart: always
     ports:
-      - '6379:6379'
+      - '6378:6379'
     expose:
-      - '6379'
+      - '6378'
     command: redis-server --save 20 1 --loglevel warning --logfile /data/redis.log
     volumes:
       - ./redis-data:/data
@@ -182,6 +194,17 @@ services:
   notification-service:
     container_name: notification-service
     image: bernardaryee/notification-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - zipkin
+      - broker
+      - discovery-server
+      - api-gateway
+  ## Notification-Service Docker Compose Config
+  reporting-service:
+    container_name: reporting-service
+    image: bernardaryee/reporting-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:

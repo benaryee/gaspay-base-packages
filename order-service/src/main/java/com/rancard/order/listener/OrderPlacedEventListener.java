@@ -1,10 +1,12 @@
 package com.rancard.order.listener;
 
 import com.rancard.order.event.OrderPlacedEvent;
+import com.rancard.order.model.Order;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -23,13 +25,13 @@ public class OrderPlacedEventListener {
 
     @EventListener
     public void handleOrderPlacedEvent(OrderPlacedEvent event) {
-        log.info("Order Placed Event Received, Sending OrderPlacedEvent to notificationTopic: {}", event.getOrderNumber());
+        log.info("Order Placed Event Received, Sending OrderPlacedEvent to orderTopic: {}", event.getOrder());
 
         // Create Observation for Kafka Template
         try {
-            Observation.createNotStarted("notification-topic", this.observationRegistry).observeChecked(() -> {
-                CompletableFuture<SendResult<String, OrderPlacedEvent>> future = kafkaTemplate.send("notificationTopic",
-                        new OrderPlacedEvent(event.getOrderNumber()));
+            Observation.createNotStarted("orderTopic", this.observationRegistry).observeChecked(() -> {
+                CompletableFuture<SendResult<String, OrderPlacedEvent>> future = kafkaTemplate.send("orderTopic",
+                        new OrderPlacedEvent(event.getOrder()));
                 return future.handle((result, throwable) -> CompletableFuture.completedFuture(result));
             }).get();
         } catch (InterruptedException | ExecutionException e) {

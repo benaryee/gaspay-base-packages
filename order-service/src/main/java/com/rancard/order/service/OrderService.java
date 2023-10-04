@@ -13,6 +13,7 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,9 @@ public class OrderService {
     private final ObservationRegistry observationRegistry;
     private final ApplicationEventPublisher applicationEventPublisher;
 
-    public String placeOrder(OrderRequest orderRequest) {
+    private NewTopic topic;
+
+    public Order placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderId(UUID.randomUUID().toString());
 
@@ -67,8 +70,8 @@ public class OrderService {
             if (allProductsInStock) {
                 orderRepository.save(order);
                 // publish Order Placed Event
-                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order.getOrderId()));
-                return "Order Placed";
+                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order));
+                return order;
             } else {
                 throw new IllegalArgumentException("Product is not in stock, please try again later");
             }

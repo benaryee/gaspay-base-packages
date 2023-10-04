@@ -1,5 +1,6 @@
 package com.rancard.order.event;
 
+import com.rancard.order.model.Order;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
@@ -8,15 +9,15 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 @Setter
 public class OrderPlacedEvent extends ApplicationEvent {
-    private String orderNumber;
+    private Order order;
 
-    public OrderPlacedEvent(Object source, String orderNumber) {
+    public OrderPlacedEvent(Object source, Order order) {
         super(source);
-        this.orderNumber = orderNumber;
+        this.order = order;
     }
 
-    public OrderPlacedEvent(String orderNumber) {
-        super(orderNumber);
-        this.orderNumber = orderNumber;
+    public OrderPlacedEvent(Order order) {
+        super(order);
+        this.order = order;
     }
 }

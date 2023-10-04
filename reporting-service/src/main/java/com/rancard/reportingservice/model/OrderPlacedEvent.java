@@ -1,4 +1,4 @@
-package com.rancard;
+package com.rancard.reportingservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

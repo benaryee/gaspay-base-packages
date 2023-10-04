@@ -1,5 +1,7 @@
 package com.rancard;
 
+import com.rancard.reportingservice.model.OrderPlacedEvent;
+import com.rancard.reportingservice.service.OrderReportService;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.tracing.Tracer;
@@ -12,24 +14,27 @@ import org.springframework.kafka.annotation.KafkaListener;
 @SpringBootApplication
 @Slf4j
 @RequiredArgsConstructor
-public class NotificationServiceApplication {
+public class ReportingServiceApplication {
 
     private final ObservationRegistry observationRegistry;
     private final Tracer tracer;
 
+    private final OrderReportService orderReportService;
+
     public static void main(String[] args) {
-        SpringApplication.run(NotificationServiceApplication.class, args);
+        SpringApplication.run(ReportingServiceApplication.class, args);
     }
 
-    @KafkaListener(topics = "notificationTopic")
-    public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
+
+    @KafkaListener(topics = "orderTopic")
+    public void orderPlacedMessage(OrderPlacedEvent orderPlacedEvent) {
         Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
             log.info("Got message <{}>", orderPlacedEvent);
             log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
                     orderPlacedEvent.getOrder());
+            orderReportService.saveOrder(orderPlacedEvent.getOrder());
         });
+
         // send out an email notification
     }
-
-
 }
