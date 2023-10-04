@@ -34,13 +34,13 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
-      KC_HOSTNAME_ADMIN_URL: https://keycloak-gaspay.rancardmobility.com
-      KC_HOSTNAME_URL: https://keycloak-gaspay.rancardmobility.com
+      KC_HOSTNAME_ADMIN_URL: https://keycloak.gaspayapp.com
+      KC_HOSTNAME_URL: https://keycloak.gaspayapp.com
       KC_HOSTNAME_STRICT_HTTPS: "true"
       KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
       KC_PROXY: edge
       KC_HTTP_ENABLED: "false"
-      KEYCLOAK_FRONTEND_URL: https://keycloak-gaspay.rancardmobility.com
+      KEYCLOAK_FRONTEND_URL: https://keycloak.gaspayapp.com
       PROXY_ADDRESS_FORWARDING: "false"
 
   keycloak:
