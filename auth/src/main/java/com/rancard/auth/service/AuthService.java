@@ -282,17 +282,16 @@ public class AuthService {
     public AuthResponse signInUser(SignInDto signInDto) {
 //
         //TODO - Uncomment keycloak
-//        UserRepresentation userRepresentation = keycloakService.authenticateUser(signInDto);
-//        if(userRepresentation != null){
-//            User user = getUserByKeyCloakId(userRepresentation.getId());
-//            user.setLastLogin(LocalDateTime.now());
-//            user.setLastSeen(LocalDateTime.now());
-//            user.setResetPassword(false);
-//            user.setUserStatus(UserStatus.CLEARED);
-//            userRepository.save(user);
-//            return user;
-//        }
-//        return null;
+        UserRepresentation userRepresentation = keycloakService.authenticateUser(signInDto);
+        if(userRepresentation != null){
+            User user = getUserByKeyCloakId(userRepresentation.getId());
+            user.setLastLogin(LocalDateTime.now());
+            user.setLastSeen(LocalDateTime.now());
+            user.setResetPassword(false);
+            user.setUserStatus(UserStatus.CLEARED);
+            userRepository.save(user);
+        }
+
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
