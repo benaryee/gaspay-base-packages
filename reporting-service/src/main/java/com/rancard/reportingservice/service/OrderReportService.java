@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -17,6 +19,11 @@ public class OrderReportService {
     public void saveOrder(Order order) {
         log.info("Saving order: " + order);
         orderDao.save(order);
+    }
+
+    public List<Order> getOrders() {
+        log.info("Getting orders");
+        return orderDao.findAll();
     }
 
 }

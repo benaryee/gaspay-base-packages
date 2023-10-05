@@ -34,14 +34,7 @@ services:
       MYSQL_DATABASE: keycloak
       MYSQL_USER: keycloak
       MYSQL_PASSWORD: password
-      KC_HOSTNAME_ADMIN_URL: https://keycloak.gaspayapp.com
-      KC_HOSTNAME_URL: https://keycloak.gaspayapp.com
-      KC_HOSTNAME_STRICT_HTTPS: "true"
-      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
-      KC_PROXY: edge
-      KC_HTTP_ENABLED: "false"
-      KEYCLOAK_FRONTEND_URL: https://keycloak.gaspayapp.com
-      PROXY_ADDRESS_FORWARDING: "false"
+
 
   keycloak:
     container_name: keycloak
@@ -55,10 +48,16 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_ADMIN_URL: https://keycloak.gaspayapp.com
+      KC_HOSTNAME_URL: https://keycloak.gaspayapp.com
+      KC_HOSTNAME_STRICT_HTTPS: "true"
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KC_PROXY: edge
+      KC_HTTP_ENABLED: "false"
+      KEYCLOAK_FRONTEND_URL: https://keycloak.gaspayapp.com
+      PROXY_ADDRESS_FORWARDING: "false"
     ports:
-      - "8080:8080"
-    expose:
-      - '8080'
+      - "8282:8080"
     volumes:
       - ./realms/:/opt/keycloak/data/import/
     depends_on:
