@@ -145,7 +145,7 @@ public class AuthService {
         List<Role> userRoles = new ArrayList<>();
         signUpUserDto.getRoles().forEach(roleDto -> userRoles.add(roleService.getRole(roleDto.getCode())));
 
-//        UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
+        UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
 
         WalletDto walletDto = createWallet(signUpUserDto);
 
