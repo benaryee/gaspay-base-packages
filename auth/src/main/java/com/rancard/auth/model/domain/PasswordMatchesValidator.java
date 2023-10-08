@@ -4,8 +4,9 @@ package com.rancard.auth.model.domain;
 import com.rancard.auth.interfaces.PasswordMatches;
 import com.rancard.auth.model.dto.SignupDto;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
     @Override

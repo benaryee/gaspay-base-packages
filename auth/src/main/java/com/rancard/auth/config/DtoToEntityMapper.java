@@ -1,6 +1,7 @@
 package com.rancard.auth.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Conditions;
 import org.modelmapper.Converter;
@@ -52,4 +53,5 @@ public class DtoToEntityMapper {
 
         return modelMapper;
     }
+
 }

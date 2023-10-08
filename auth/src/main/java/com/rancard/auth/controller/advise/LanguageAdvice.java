@@ -1,9 +1,10 @@
 package com.rancard.auth.controller.advise;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestControllerAdvice(annotations = RestController.class)

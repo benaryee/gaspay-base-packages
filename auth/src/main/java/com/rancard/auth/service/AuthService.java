@@ -14,15 +14,9 @@ import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.model.response.response.AuthResponse;
-import com.rancard.auth.model.response.response.BaseError;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.codec.binary.StringUtils;
 
 import java.math.BigDecimal;
 import java.security.Key;
@@ -46,6 +40,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 import static com.rancard.auth.model.enums.ServiceError.*;
@@ -70,18 +65,7 @@ public class AuthService {
 
     private final UserService userService;
 
-    private final ModelMapper modelMapper;
 
-    private Key key;
-
-    @PostConstruct
-    public void init() {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-    }
-
-    public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
 
     private final RoleService roleService;
     public User getUser(String id) {
@@ -142,12 +126,8 @@ public class AuthService {
         if (optionalUser.isPresent())
             throw new ServiceException(USER_ALREADY_EXISTS);
 
-        List<Role> userRoles = new ArrayList<>();
-        signUpUserDto.getRoles().forEach(roleDto -> userRoles.add(roleService.getRole(roleDto.getCode())));
 
         UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
-
-        WalletDto walletDto = createWallet(signUpUserDto);
 
         if(signUpUserDto.getChannel() != Channel.USSD && signUpUserDto.getAddress() != null && signUpUserDto.getAddress().getGhanaPostGps() != null){
             Address address = userService.getUserAddressByGps(signUpUserDto.getAddress().getGhanaPostGps());
@@ -166,7 +146,7 @@ public class AuthService {
         user.setFirstname(signUpUserDto.getFirstName());
         user.setLastname(signUpUserDto.getLastName());
         user.setOthernames(signUpUserDto.getOtherNames());
-//        user.setKeycloakUserId(keycloakUser.getId());
+        user.setKeycloakUserId(keycloakUser.getId());
         user.setUserStatus(UserStatus.CLEARED);
         user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
         user.setLastLogin(LocalDateTime.now());
@@ -174,9 +154,7 @@ public class AuthService {
         user.setAddress(signUpUserDto.getAddress());
         user.setFamilySize(signUpUserDto.getFamilySize());
         user.setCurrentFuelSource(signUpUserDto.getCurrentFuelSource());
-        user.setWalletId(walletDto.getId());
         user.setUserStatus(UserStatus.CLEARED);
-        user.setRoles(new HashSet<>(userRoles));
 
         log.info("user: {}", user);
         return userRepository.save(user);
@@ -195,7 +173,7 @@ public class AuthService {
         user.setLastname(editUserDto.getLastName());
         user.setOthernames(editUserDto.getOtherNames());
 
-        user.setRoles(new HashSet<>(userRoles));
+
         return userRepository.save(user);
     }
 
@@ -205,13 +183,11 @@ public class AuthService {
         Role role = roleService.getRole(100);
         HashSet<Role> roles = new HashSet<>();
         roles.add(role);
-        user.setRoles(roles);
         return userRepository.save(user);
     }
 
     public void deleteUser(String id) {
         User user = getUser(id);
-        user.getRoles().removeAll(user.getRoles());
         userRepository.delete(user);
     }
 
@@ -296,22 +272,7 @@ public class AuthService {
                 .authenticate(new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        if (authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            String token = Jwts.builder()
-                    .setSubject(userDetails.getUsername())
-                    .setIssuedAt(new Date())
-                    .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-                    .signWith(key)
-                    .compact();
-
-            return new AuthResponse(userDetails, token);
-
-        } else {
-            return null;
-        }
-
+        return null;
 
     }
 
@@ -324,17 +285,23 @@ public class AuthService {
                 .currency("GHS")
                 .build();
 
-        ApiResponse<?> createWalletResponse = webClientBuilder.build().post()
-                .uri("lb://payment-service/api/payment/wallet")
-                .body(Mono.just(createWalletDto) , CreateWalletDto.class)
-                .exchangeToMono(clientResponse -> {
-                    if(clientResponse.statusCode().is2xxSuccessful()){
-                        return clientResponse.bodyToMono(new ParameterizedTypeReference<ApiResponse<WalletDto>>() {});
-                    }else{
-                        throw new ServiceException(WALLET_CREATION_EXCEPTION);
-                    }
-                })
-                .block();
+        ApiResponse<?> createWalletResponse = new ApiResponse<>();
+        try {
+           createWalletResponse = webClientBuilder.build().post()
+                    .uri("lb://payment-service/api/payment/wallet")
+                    .body(Mono.just(createWalletDto), CreateWalletDto.class)
+                    .exchangeToMono(clientResponse -> {
+                        if (clientResponse != null) {
+                            return clientResponse.bodyToMono(new ParameterizedTypeReference<ApiResponse<WalletDto>>() {
+                            });
+                        } else {
+                            throw new ServiceException(WALLET_CREATION_EXCEPTION);
+                        }
+                    })
+                    .block();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
        return (WalletDto) Objects.requireNonNull(createWalletResponse).getData();
     }
 

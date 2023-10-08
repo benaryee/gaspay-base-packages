@@ -6,11 +6,12 @@ import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.service.UserService;
 import com.rancard.auth.utils.ApiUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Slf4j

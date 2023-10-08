@@ -1,5 +1,6 @@
 package com.rancard.auth.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.auth.model.enums.UserStatus;
 import com.rancard.auth.model.payload.Address;
 import lombok.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Setter
 @ToString
 @EqualsAndHashCode
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto implements Serializable {
     private String id;
     private String email;
@@ -29,5 +31,4 @@ public class UserDto implements Serializable {
     private String updated;
     private String walletId;
     private Address address;
-    private Set<RoleDto> roles = new HashSet<>();
 }

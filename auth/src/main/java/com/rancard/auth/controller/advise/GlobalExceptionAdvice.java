@@ -7,8 +7,6 @@ import com.rancard.auth.exception.ServiceException;
 import com.rancard.auth.model.enums.ResponseMessage;
 import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.model.response.response.BaseError;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,8 +24,8 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.RollbackException;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -121,34 +119,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, baseError, headers, status, request);
     }
 
-    @ExceptionHandler(value = NonUniqueResultException.class)
-    public final ResponseEntity<?> handleNonUniqueResultException(NonUniqueResultException ex, WebRequest request) throws Exception{
-        HttpHeaders headers = new HttpHeaders();
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        BaseError baseError = new BaseError();
-        baseError.setUrl(getUrl(request));
-        baseError.setErrorCode(status.value());
-        baseError.setErrorMessage("Result not unique. Unique result expected.");
-
-        return handleExceptionInternal(ex, baseError, headers, status, request);
-    }
-
-    @ExceptionHandler(value = RollbackException.class)
-    public final ResponseEntity<?> handleRollbackException(RollbackException ex, WebRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        if (ex.getCause() instanceof ConstraintViolationException){
-            HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-            return handleConstraintException((ConstraintViolationException) ex.getCause(), headers, status, request);
-        }
-        else {
-            if (logger.isWarnEnabled()) {
-                logger.warn("Unknown exception type: " + ex.getClass().getName());
-            }
-            HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-            return handleExceptionInternal(ex, "Unknown exception type", headers, status, request);
-        }
-    }
 
     @ExceptionHandler(value = InvalidDataAccessApiUsageException.class)
     public final ResponseEntity<?> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex, WebRequest request) {
@@ -170,7 +141,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    protected ResponseEntity<?> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();

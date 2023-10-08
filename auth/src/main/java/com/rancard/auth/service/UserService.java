@@ -1,7 +1,5 @@
 package com.rancard.auth.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.rancard.auth.exception.ServiceException;
 import com.rancard.auth.model.UserRepository;
@@ -9,17 +7,13 @@ import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.payload.LocationInfo;
 import com.rancard.auth.model.payload.LocationResponse;
-import com.rancard.auth.model.response.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.modelmapper.TypeToken;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Objects;
 

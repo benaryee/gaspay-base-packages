@@ -8,13 +8,14 @@ import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.model.response.response.AuthResponse;
 import com.rancard.auth.service.AuthService;
 import com.rancard.auth.utils.ApiUtils;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.client.HttpClientErrorException;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Slf4j

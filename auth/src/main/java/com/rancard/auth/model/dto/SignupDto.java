@@ -3,11 +3,12 @@ package com.rancard.auth.model.dto;
 import com.rancard.auth.model.enums.Channel;
 import com.rancard.auth.model.enums.Role;
 import com.rancard.auth.model.payload.Address;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
 import lombok.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,9 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SignupDto implements Serializable {
 
         private String username;
