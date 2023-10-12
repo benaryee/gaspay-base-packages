@@ -63,12 +63,12 @@ public class PreviousRegistrationActionResponseHandler extends BotletActions {
 
 
             case REGISTRATION_CURRENT_FUEL_SOURCE -> {
-                dispatchObject.getSession().getUser().setCurrentFuelSource(dispatchObject.getSession().getOptions()
+                dispatchObject.getSession().getUser().setCurrentFuelSource((String) dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
             }
 
             case REGISTRATION_FAMILY_SIZE -> {
-                dispatchObject.getSession().getUser().setFamilySize(dispatchObject.getSession().getOptions()
+                dispatchObject.getSession().getUser().setFamilySize((String) dispatchObject.getSession().getOptions()
                         .get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
 
             }

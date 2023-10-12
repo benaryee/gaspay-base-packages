@@ -1,6 +1,5 @@
-package com.rancard.productservice.dto;
+package com.rancard.ussdapp.model.dto;
 
-import com.rancard.productservice.model.payload.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,11 +12,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
+public class ProductResponse {
+    private String id;
     private String name;
     private String description;
     private BigDecimal price;
-    private User user;
-    private List<Variant> variant;
-
+    private List<Variant> variantList;
 }

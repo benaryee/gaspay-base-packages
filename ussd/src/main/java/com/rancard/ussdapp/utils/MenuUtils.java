@@ -105,7 +105,7 @@ public class MenuUtils {
         int counter = 1;
         for (Option option : options) {
             optionsList.append(counter).append(". ").append(WordUtils.capitalize(option.getContent())).append("\n");
-            dispatchObject.getSession().getOptions().put(counter,String.valueOf(option.getContent()));
+            dispatchObject.getSession().getOptions().put(counter,option.getContent());
             counter++;
         }
 

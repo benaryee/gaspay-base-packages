@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -14,11 +15,17 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class WebClientConfig {
 
+
     @Bean
     @LoadBalanced
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder()
                 .filter(logRequest());
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     private ExchangeFilterFunction logRequest() {
@@ -47,5 +54,6 @@ public class WebClientConfig {
                     .map(body -> clientResponse);
         });
     }
+
 
 }

@@ -7,6 +7,7 @@ import com.rancard.productservice.model.Product;
 import com.rancard.productservice.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
@@ -35,6 +37,13 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts();
+    }
+
+    @GetMapping("/get-by-name")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductResponse getProductsByName(@RequestParam String name) {
+        log.info("About to get product by name {}",name);
+        return productService.getProductByName(name);
     }
 
     @GetMapping("/in-radius")

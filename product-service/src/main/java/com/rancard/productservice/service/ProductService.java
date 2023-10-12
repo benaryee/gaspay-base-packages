@@ -41,7 +41,7 @@ public class ProductService {
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .address(productRequest.getUser().getAddress())
-                .price(productRequest.getPrice())
+                .variantList(productRequest.getVariant())
                 .build();
 
         log.info("Product {} is saved", product.getId());
@@ -53,12 +53,17 @@ public class ProductService {
         return products.stream().map(this::mapToProductResponse).toList();
     }
 
+    public ProductResponse getProductByName(String name) {
+        Product product = productRepository.findByName(name);
+        return mapToProductResponse(product);
+    }
+
     private ProductResponse mapToProductResponse(Product product) {
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
-                .price(product.getPrice())
+                .variantList(product.getVariantList())
                 .build();
     }
 
@@ -76,4 +81,6 @@ public class ProductService {
     public boolean checkInventory(String id) {
         return true;
     }
+
+
 }

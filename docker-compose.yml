@@ -158,6 +158,8 @@ services:
     image: bernardaryee/ussd:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "18080:8080"
     depends_on:
       - mongo
       - api-gateway

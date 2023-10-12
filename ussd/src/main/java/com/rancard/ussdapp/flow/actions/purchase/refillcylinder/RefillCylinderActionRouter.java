@@ -3,18 +3,28 @@ package com.rancard.ussdapp.flow.actions.purchase.refillcylinder;
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.model.dto.OrderDto;
+import com.rancard.ussdapp.model.dto.ProductResponse;
+import com.rancard.ussdapp.model.dto.Variant;
 import com.rancard.ussdapp.model.dto.WalletResponseDto;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
+import com.rancard.ussdapp.model.payload.GenericValueMap;
+import com.rancard.ussdapp.model.payload.Option;
 import com.rancard.ussdapp.model.response.ApiResponse;
 import com.rancard.ussdapp.model.response.UssdResponse;
 import com.rancard.ussdapp.services.OrderService;
 import com.rancard.ussdapp.services.PaymentService;
+import com.rancard.ussdapp.services.ProductService;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
 import static com.rancard.ussdapp.model.enums.MenuKey.WALLET_PASSWORD_RESPONSE;
@@ -26,13 +36,16 @@ import static com.rancard.ussdapp.model.enums.SubMenuLevel.*;
 public class RefillCylinderActionRouter extends BotletActions {
 
     private final PaymentService paymentService;
+    private final ProductService productService;
     private final OrderService orderService;
 
-    public RefillCylinderActionRouter(BeanFactory beanFactory, MenuUtils menuUtils, PaymentService paymentService, OrderService orderService) {
-        super(beanFactory, menuUtils);
+    public RefillCylinderActionRouter(BeanFactory beanFactory, MenuUtils menuUtils,PaymentService paymentService, ProductService productService, OrderService orderService) {
+        super(beanFactory ,menuUtils);
         this.paymentService = paymentService;
+        this.productService = productService;
         this.orderService = orderService;
     }
+
 
     public UssdResponse call() {
 
@@ -53,7 +66,23 @@ public class RefillCylinderActionRouter extends BotletActions {
 
             case REFILL_MAIN_MENU -> {
                 response.setContinueSession(true);
-                response.setMessage(menuUtils.getResponse(PURCHASE_SIZE_OPTIONS_RESPONSE,dispatchObject,sessionId));
+                ProductResponse products = productService.getCylinderTypesAvailable(sessionId);
+
+                List<Variant> productsVariantList =  products.getVariantList();
+
+                StringBuilder variants = new StringBuilder();
+                GenericValueMap<Variant> pseudoOptions  = new GenericValueMap<>();
+                int count = 1;
+                for (Variant variant : productsVariantList) {
+                    variants.append(count).append(". ").append(variant.getWeight()).append("kg - GHs").append(variant.getPrice()).append("\n");
+                    pseudoOptions.put(count,variant);
+                    count++;
+                }
+                dispatchObject.getSession().setOptions(pseudoOptions);
+
+                log.info(variants.toString());
+
+                response.setMessage(menuUtils.getResponse(PURCHASE_SIZE_OPTIONS_RESPONSE,dispatchObject,sessionId).replace("[sizes]",variants.toString()));
                 log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId , response);
                 dispatchObject.getSession().setSubMenuLevel(REFILL_DIGITAL_ADDRESS);
                 dispatchObject.getSession().setPreviousSubMenuLevel(REFILL_MAIN_MENU);

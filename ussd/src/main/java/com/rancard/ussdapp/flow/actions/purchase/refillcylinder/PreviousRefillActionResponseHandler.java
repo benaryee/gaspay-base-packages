@@ -39,9 +39,10 @@ public class PreviousRefillActionResponseHandler extends BotletActions {
                 CreateOrderDto createOrderDto = new CreateOrderDto();
                 createOrderDto.setCustomerMsisdn(dispatchObject.getUssdRequest().getMsisdn());
                 OrderItemDto orderItemDto = new OrderItemDto();
-                orderItemDto.setSize(dispatchObject.getSession().getOptions().get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())));
+                orderItemDto.setSize(dispatchObject.getSession().getOptions().get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())).toString());
                 createOrderDto.setOrderItemsDtoList(Collections.singletonList(orderItemDto));
 
+                dispatchObject.getSession().setOrderDto(createOrderDto);
                 BigDecimal totalAmount = new BigDecimal(0);
 
                 dispatchObject.getSession().getOrderDto().getOrderItemsDtoList().forEach(orderItem ->{

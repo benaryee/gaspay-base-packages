@@ -8,7 +8,8 @@ import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.mongo.Enquiry;
-import com.rancard.ussdapp.model.mongo.User;
+
+import com.rancard.ussdapp.model.payload.GenericValueMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,8 +42,8 @@ public class Session implements Serializable {
 
     private String itemPrice;
     private boolean initialRequest;
-    private Map<Integer, String> options = new HashMap<>();
-    private Map<Integer, String> previousOptions = new HashMap<>();
+    private GenericValueMap<?> options = new GenericValueMap<>();
+    private GenericValueMap<?> previousOptions = new GenericValueMap<>();
     private boolean hasNext;
     private boolean hasBack;
 

@@ -9,4 +9,6 @@ public interface ProductRepository extends MongoRepository<Product, String> {
     List<Product> findByAddressLatitudeBetweenAndAddressLongitudeBetween(
             double minLat, double maxLat, double minLon, double maxLon
     );
+
+    Product findByName(String name);
 }
