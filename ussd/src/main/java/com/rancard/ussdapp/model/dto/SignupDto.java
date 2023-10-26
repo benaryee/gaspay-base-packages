@@ -1,7 +1,7 @@
 package com.rancard.ussdapp.model.dto;
 
+import com.rancard.basepackages.model.mongo.Address;
 import com.rancard.ussdapp.model.enums.Channel;
-import com.rancard.ussdapp.model.payload.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

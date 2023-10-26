@@ -1,11 +1,9 @@
 package com.rancard.ussdapp.model.dto;
 
-import com.rancard.ussdapp.model.payload.Address;
+import com.rancard.basepackages.model.mongo.Address;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class UserDto implements Serializable {

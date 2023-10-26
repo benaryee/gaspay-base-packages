@@ -1,10 +1,9 @@
 package com.rancard.ussdapp.flow.actions.account.registration;
 
 
+import com.rancard.basepackages.model.mongo.Address;
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.model.dto.UserDto;
-import com.rancard.ussdapp.model.mongo.User;
-import com.rancard.ussdapp.model.payload.Address;
 import com.rancard.ussdapp.services.UserService;
 import com.rancard.ussdapp.utils.MailUtils;
 import com.rancard.ussdapp.utils.MenuUtils;

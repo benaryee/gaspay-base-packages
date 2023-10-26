@@ -1,4 +1,4 @@
-package com.rancard.ussdapp.model.payload;
+package com.rancard.basepackages.model.mongo;
 
 import lombok.Data;
 

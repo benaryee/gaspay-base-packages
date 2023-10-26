@@ -110,5 +110,11 @@
             <artifactId>spring-webflux</artifactId>
             <version>6.0.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.rancard</groupId>
+            <artifactId>base-package</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

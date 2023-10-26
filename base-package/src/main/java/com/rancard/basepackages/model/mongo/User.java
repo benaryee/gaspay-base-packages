@@ -1,8 +1,7 @@
-package com.rancard.order.model.mongo;
+package com.rancard.basepackages.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rancard.auth.model.enums.UserStatus;
-import com.rancard.auth.model.payload.Address;
+import com.rancard.basepackages.model.enums.UserStatus;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +11,7 @@ import java.util.Set;
 @Data
 @Document
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class User extends BaseMongoModel{
+public class User extends BaseMongoModel {
     private String username;
     private String firstname;
     private String othernames;

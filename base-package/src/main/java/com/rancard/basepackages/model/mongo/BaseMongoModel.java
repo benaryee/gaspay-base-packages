@@ -1,4 +1,4 @@
-package com.rancard.order.model.mongo;
+package com.rancard.basepackages.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

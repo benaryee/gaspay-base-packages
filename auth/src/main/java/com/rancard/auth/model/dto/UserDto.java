@@ -6,8 +6,6 @@ import com.rancard.auth.model.payload.Address;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
