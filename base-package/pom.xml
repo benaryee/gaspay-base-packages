@@ -48,7 +48,7 @@
         <snapshotRepository>
             <id>snapshots</id>
             <name>a0odwcsulxhzh-artifactory-primary-0-snapshots</name>
-            <url>https://rancard.jfrog.io/artifactory/libs-snapshot</url>
+            <url>https://rancard.jfrog.io/artifactory/gaspayapp-libs-snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 
