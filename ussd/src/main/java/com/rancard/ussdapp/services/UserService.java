@@ -1,11 +1,11 @@
 package com.rancard.ussdapp.services;
 
-import com.rancard.basepackages.model.mongo.Address;
 import com.rancard.ussdapp.model.dao.mongo.UserDao;
 import com.rancard.ussdapp.model.dto.RoleDto;
 import com.rancard.ussdapp.model.dto.SignupDto;
 import com.rancard.ussdapp.model.dto.UserDto;
 import com.rancard.ussdapp.model.enums.Channel;
+import com.rancard.ussdapp.model.payload.Address;
 import com.rancard.ussdapp.model.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

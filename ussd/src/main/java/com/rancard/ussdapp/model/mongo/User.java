@@ -1,6 +1,6 @@
 package com.rancard.ussdapp.model.mongo;
 
-import com.rancard.basepackages.model.mongo.Address;
+import com.rancard.ussdapp.model.payload.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

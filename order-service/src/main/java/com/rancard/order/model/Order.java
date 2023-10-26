@@ -1,7 +1,8 @@
 package com.rancard.order.model;
 
-import com.rancard.basepackages.model.enums.OrderStatus;
-import com.rancard.basepackages.model.mongo.BaseMongoModel;
+
+import com.rancard.order.model.enums.OrderStatus;
+import com.rancard.order.model.mongo.BaseMongoModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
