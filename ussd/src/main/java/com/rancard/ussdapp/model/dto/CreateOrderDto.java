@@ -10,4 +10,6 @@ public class CreateOrderDto {
     private String customerMsisdn;
     private List<OrderItemDto> orderItemsDtoList;
     private BigDecimal totalAmount;
+    private String shippingAddress;
+
 }

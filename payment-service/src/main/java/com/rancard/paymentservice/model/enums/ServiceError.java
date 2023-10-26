@@ -5,7 +5,8 @@ public enum ServiceError {
     WALLET_ALREADY_EXISTS(1002, "Wallet already exists for user"),
     USER_EMAIL_ALREADY_EXISTS(1003, "User email already exists"),
     PASSWORD_MISMATCH(1004, "User passwords don't match"),
-    PAYMENT_FAILED(4001,"Failed to process payment");
+    PAYMENT_FAILED(4001,"Failed to process payment"),
+    INSUFFICIENT_BALANCE(4002,"Insufficient Balance in Wallet");
     private final int code;
     private final String message;
     ServiceError(int code , String message) {

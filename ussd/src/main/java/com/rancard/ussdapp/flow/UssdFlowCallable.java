@@ -6,6 +6,7 @@ import com.rancard.ussdapp.flow.actions.main.MainMenuActionRouter;
 import com.rancard.ussdapp.flow.actions.account.registration.RegistrationActionRouter;
 import com.rancard.ussdapp.flow.actions.enquiry.MainEnquiryAction;
 import com.rancard.ussdapp.flow.actions.enquiry.EnquiryActionRouter;
+import com.rancard.ussdapp.flow.actions.myaccount.MyAccountActionRouter;
 import com.rancard.ussdapp.flow.actions.purchase.PurchaseActionRouter;
 import com.rancard.ussdapp.flow.actions.purchase.refillcylinder.RefillCylinderActionRouter;
 import com.rancard.ussdapp.flow.actions.wallet.WalletActionRouter;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.Callable;
 
 import static com.rancard.ussdapp.model.enums.MenuLevel.*;
+import static com.rancard.ussdapp.model.enums.SubMenuLevel.MY_ACCOUNT_MAIN_MENU;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.REGISTRATION_FIRST_NAME;
 
 @Slf4j
@@ -54,7 +56,6 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
             invalidOptionAction.setSessionId(sessionId);
             invalidOptionAction.setResponse(response);
             return invalidOptionAction.call();
-
         }
 
 
@@ -153,12 +154,12 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
             }
 
             case ACCOUNT -> {
-                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
-                mainMenuAction.setDispatchObject(dispatchObject);
-                mainMenuAction.setSessionId(sessionId);
-                mainMenuAction.setResponse(response);
-                mainMenuAction.setUser(dispatchObject.getSession().getUser());
-                return mainMenuAction.call();
+                MyAccountActionRouter myAccountActionRouter = beanFactory.getBean(MyAccountActionRouter.class);
+                myAccountActionRouter.setDispatchObject(dispatchObject);
+                myAccountActionRouter.setSessionId(sessionId);
+                myAccountActionRouter.setResponse(response);
+                myAccountActionRouter.setUser(dispatchObject.getSession().getUser());
+                return myAccountActionRouter.call();
             }
 
             case REPORT_INCIDENT -> {

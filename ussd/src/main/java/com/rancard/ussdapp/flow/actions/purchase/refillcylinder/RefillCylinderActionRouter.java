@@ -71,14 +71,14 @@ public class RefillCylinderActionRouter extends BotletActions {
                 List<Variant> productsVariantList =  products.getVariantList();
 
                 StringBuilder variants = new StringBuilder();
-                GenericValueMap<Variant> pseudoOptions  = new GenericValueMap<>();
+                HashMap<Integer,Variant> pseudoOptions  = new HashMap<>();
                 int count = 1;
                 for (Variant variant : productsVariantList) {
                     variants.append(count).append(". ").append(variant.getWeight()).append("kg - GHs").append(variant.getPrice()).append("\n");
-                    pseudoOptions.put(count,variant);
+                    pseudoOptions.put(count, variant);
                     count++;
                 }
-                dispatchObject.getSession().setOptions(pseudoOptions);
+                dispatchObject.getSession().setVariantOptions(pseudoOptions);
 
                 log.info(variants.toString());
 
@@ -103,10 +103,10 @@ public class RefillCylinderActionRouter extends BotletActions {
             case REFILL_CONFIRM -> {
                 response.setContinueSession(true);
                 response.setMessage(menuUtils.getResponse(PURCHASE_ORDER_CONFIRMATION_RESPONSE,dispatchObject,sessionId)
-                        .replace("[size]",dispatchObject.getSession().getOrderDto().getOrderItemsDtoList().get(0).getSize())
-                        .replace("[price]","80")
-                        .replace("[delivery]","10")
-                        .replace("[total]","90")
+                        .replace("[size]",dispatchObject.getSession().getOrderDto().getOrderItemsDtoList().get(0).getSize()+"kg")
+                        .replace("[price]", "GHs"+dispatchObject.getSession().getOrderDto().getTotalAmount().toString())
+                        .replace("[delivery]","0")
+                        .replace("[total]","GHs"+dispatchObject.getSession().getOrderDto().getTotalAmount().toString())
                 );
                 log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId , response);
                 dispatchObject.getSession().setSubMenuLevel(REFILL_PAYMENT_WALLET);
@@ -146,9 +146,16 @@ public class RefillCylinderActionRouter extends BotletActions {
 
             case WALLET_PASSWORD_RESPONSE -> {
                 if(dispatchObject.getUssdRequest().getMessage().equals(dispatchObject.getSession().getWallet().getWalletKey())){
-                    paymentService.deductFromWallet(dispatchObject.getSession().getUser().getWalletId(),
+                    ApiResponse<WalletResponseDto> deductionResponse = paymentService.deductFromWallet(dispatchObject.getSession().getUser().getWalletId(),
                             dispatchObject.getSession().getOrderDto().getTotalAmount(),sessionId);
-                    //Deduct from wallet
+
+                    if(deductionResponse.getCode() == 4002){
+                        response.setContinueSession(false);
+                        response.setMessage("Sorry!, you don't have enough money in your wallet.");
+
+                        log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId, response);
+                        return response;
+                    }
 
                     ApiResponse<OrderDto> orderDtoApiResponse = orderService.placeOrder(dispatchObject.getSession().getOrderDto(),sessionId);
 

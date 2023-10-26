@@ -31,8 +31,6 @@ public class RequestController {
 
     private final RequestDispatcher requestDispatcherService;
     private final SessionManager sessionManager;
-
-
     private final DateUtils dateUtils;
 
 
@@ -40,6 +38,8 @@ public class RequestController {
     public String processUssdRequest(@RequestBody UssdRequest ussdRequest, HttpServletRequest request) {
         long start = new Date().getTime();
         long end;
+
+        requestDispatcherService.setResponse(new UssdResponse());
 
         String redisDate = dateUtils.formatRedisDate(new Date());
         DispatchObject dispatchObject = new DispatchObject();
@@ -52,7 +52,6 @@ public class RequestController {
         boolean isValidRequest = ussdRequest.isValidRequest(sessionId);
 
         log.info("[" + sessionId + "] formatted msisdn request ::: " + ussdRequest);
-
 
         if (isValidRequest) {
             log.info(" [ " + sessionId + " ] Request" + request.getQueryString());

@@ -13,6 +13,9 @@ public class Wallet extends BaseMongoModel {
 
     private String walletId;
     private BigDecimal balance;
+    private BigDecimal promoBalance;
+    private BigDecimal hirePurchaseBalance;
+    private BigDecimal topupBalance;
     private String currency;
     private String status;
     private String password;

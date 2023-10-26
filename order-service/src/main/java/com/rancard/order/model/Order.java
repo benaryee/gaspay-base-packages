@@ -1,5 +1,6 @@
 package com.rancard.order.model;
 
+import com.rancard.basepackages.model.enums.OrderStatus;
 import com.rancard.order.model.mongo.BaseMongoModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class Order extends BaseMongoModel {
     private List<OrderItem> items;
     private double totalAmount;
     private String customerMsisdn;
-    private String orderStatus;
+    private OrderStatus orderStatus;
     private String shippingAddress;
+    private String agentId;
 }

@@ -28,7 +28,7 @@ public class NotificationServiceApplication {
             log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
                     orderPlacedEvent.getOrder());
         });
-        // send out an email notification
+
     }
 
 

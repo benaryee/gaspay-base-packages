@@ -3,13 +3,14 @@ package com.rancard.ussdapp.model.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 public class Variant implements Serializable {
-    private Double price;
+    private BigDecimal price;
     private Double weight;
     private Double height;
-    private String name;
+//    private String name;
     private int quantity;
     private int stock=-1;
 }

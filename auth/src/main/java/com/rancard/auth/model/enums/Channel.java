@@ -4,4 +4,5 @@ public enum Channel {
     USSD,
     WEB,
     APP,
+    INVITE
 }

@@ -10,6 +10,7 @@ import com.rancard.auth.service.AuthService;
 import com.rancard.auth.utils.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.representations.AccessTokenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
@@ -44,23 +45,23 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ApiResponse<?> signIn(@RequestBody SignInDto signInDto,
+    public AccessTokenResponse signIn(@RequestBody SignInDto signInDto,
                                            HttpServletRequest httpServletRequest) {
 
         String sessionId = httpServletRequest.getSession().getId();
 
         log.info("[{}] http request: signInUser with details :{}",sessionId, signInDto);
 
-        AuthResponse authResponse = authService.signInUser(signInDto);
+        AccessTokenResponse authResponse = authService.signInUser(signInDto);
 
         if(authResponse == null){
             throw  HttpClientErrorException.Unauthorized.create(HttpStatus.UNAUTHORIZED, "Invalid credentials", null, null, null);
         }
+//
+//        AccessTokenResponse apiResponse= ApiUtils.wrapInApiResponse(authResponse, sessionId);
 
-        ApiResponse<AuthResponse> apiResponse= ApiUtils.wrapInApiResponse(authResponse, sessionId);
-
-        log.info("[{}] http response: signInUser: {}",sessionId, apiResponse);
-        return apiResponse;
+        log.info("[{}] http response: signInUser: {}",sessionId, authResponse);
+        return authResponse;
     }
 
 

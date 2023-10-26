@@ -2,7 +2,9 @@ package com.rancard.auth.service;
 
 import com.google.gson.Gson;
 import com.rancard.auth.exception.ServiceException;
+import com.rancard.auth.model.AgentRepository;
 import com.rancard.auth.model.UserRepository;
+import com.rancard.auth.model.mongo.Agent;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.payload.LocationInfo;
@@ -26,10 +28,16 @@ import static com.rancard.auth.model.enums.ServiceError.USER_NOT_FOUND;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AgentRepository agentRepository;
+
     private final Gson gson;
     public User getUserByMsisdn(String msisdn){
         return userRepository.findByMsisdn(msisdn).orElseThrow(()->
                 new ServiceException(USER_NOT_FOUND));
+    }
+
+    public Agent getAgents() {
+        return agentRepository.findTopByActiveIsTrue();
     }
 
     public Address getUserAddressByGps(String ghanaPostGps){

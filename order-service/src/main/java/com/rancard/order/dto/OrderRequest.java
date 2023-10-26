@@ -12,4 +12,5 @@ import java.util.List;
 public class OrderRequest {
     private String customerMsisdn;
     private List<OrderItemDto> orderItemsDtoList;
+    private String shippingAddress;
 }

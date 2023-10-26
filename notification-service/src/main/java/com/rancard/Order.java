@@ -1,5 +1,6 @@
 package com.rancard;
 
+import com.rancard.model.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class Order {
     private List<OrderItem> items;
     private double totalAmount;
     private String customerMsisdn;
-    private String orderStatus;
+    private OrderStatus orderStatus;
     private String shippingAddress;
+    private String agentId;
 }

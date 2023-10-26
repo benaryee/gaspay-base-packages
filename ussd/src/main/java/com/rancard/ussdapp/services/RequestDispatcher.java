@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RequestDispatcher {
 
-    private UssdResponse response = new UssdResponse();
+    public UssdResponse response;
     private final UserService userService;
     private final UnregisteredUserManager unregisteredUserManager;
     private final UssdFlowCallable ussdFlowCallable;
@@ -58,4 +58,7 @@ public class RequestDispatcher {
         return  response;
     }
 
+    public void setResponse(UssdResponse response){
+        this.response = response;
+    }
 }

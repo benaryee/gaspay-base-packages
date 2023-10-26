@@ -1,6 +1,7 @@
 package com.rancard.auth.controller;
 
 import com.rancard.auth.model.dto.UserDto;
+import com.rancard.auth.model.mongo.Agent;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
@@ -43,6 +44,13 @@ public class UserController {
         Address userAddress = modelMapper.map(address, Address.class);
 
         return ApiUtils.wrapInApiResponse(userAddress, sessionId);
+    }
+
+    @GetMapping("/agent")
+    public ApiResponse<?> getAgents(HttpServletRequest request){
+        String sessionId = request.getSession().getId();
+        Agent agent = userService.getAgents();
+        return ApiUtils.wrapInApiResponse(agent, sessionId);
     }
 
 }

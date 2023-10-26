@@ -1,8 +1,10 @@
 package com.rancard.ussdapp.model.redis;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.ussdapp.model.dto.CreateOrderDto;
 import com.rancard.ussdapp.model.dto.UserDto;
+import com.rancard.ussdapp.model.dto.Variant;
 import com.rancard.ussdapp.model.dto.WalletResponseDto;
 import com.rancard.ussdapp.model.enums.MenuKey;
 import com.rancard.ussdapp.model.enums.MenuLevel;
@@ -23,6 +25,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Session implements Serializable {
 
     private String id;
@@ -43,6 +46,7 @@ public class Session implements Serializable {
     private String itemPrice;
     private boolean initialRequest;
     private GenericValueMap<?> options = new GenericValueMap<>();
+    private HashMap<Integer, Variant> variantOptions = new HashMap<>();
     private GenericValueMap<?> previousOptions = new GenericValueMap<>();
     private boolean hasNext;
     private boolean hasBack;

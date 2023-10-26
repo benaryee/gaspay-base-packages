@@ -1,25 +1,25 @@
 package com.rancard.order.service;
 
 
-import com.rancard.order.dto.InventoryResponse;
+import com.rancard.basepackages.model.enums.OrderStatus;
 import com.rancard.order.dto.OrderItemDto;
 import com.rancard.order.dto.OrderRequest;
 import com.rancard.order.event.OrderPlacedEvent;
 import com.rancard.order.model.Order;
 import com.rancard.order.model.OrderItem;
+import com.rancard.order.model.mongo.Agent;
 import com.rancard.order.model.response.ApiResponse;
 import com.rancard.order.repository.OrderRepository;
-import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +39,9 @@ public class OrderService {
     public Order placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderId(UUID.randomUUID().toString());
+        order.setShippingAddress(order.getShippingAddress());
+        order.setCustomerMsisdn(orderRequest.getCustomerMsisdn());
+        order.setOrderStatus(OrderStatus.PENDING);
 
         List<OrderItem> orderLineItems = orderRequest.getOrderItemsDtoList()
                 .stream()
@@ -47,25 +50,31 @@ public class OrderService {
 
         order.setItems(orderLineItems);
 
-        List<String> skuCodes = order.getItems().stream()
-                .map(OrderItem::getSkuCode)
-                .toList();
+        Agent agent = getAgent();
+        if(agent != null){
+            order.setAgentId(agent.getIdString());
+        }
+
+//        List<String> skuCodes = order.getItems().stream()
+//                .map(OrderItem::getSkuCode)
+//                .toList();
 
         // Call Inventory Service, and place order if product is in
         // stock
-        Observation inventoryServiceObservation = Observation.createNotStarted("inventory-service-lookup",
-                this.observationRegistry);
-        inventoryServiceObservation.lowCardinalityKeyValue("call", "inventory-service");
-        return inventoryServiceObservation.observe(() -> {
-            InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
-                    .uri("http://inventory-service/api/inventory",
-                            uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
-                    .retrieve()
-                    .bodyToMono(InventoryResponse[].class)
-                    .block();
+//        Observation inventoryServiceObservation = Observation.createNotStarted("inventory-service-lookup",
+//                this.observationRegistry);
+//        inventoryServiceObservation.lowCardinalityKeyValue("call", "inventory-service");
+//        return inventoryServiceObservation.observe(() -> {
+//            InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
+//                    .uri("http://inventory-service/api/inventory",
+//                            uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+//                    .retrieve()
+//                    .bodyToMono(InventoryResponse[].class)
+//                    .block();
 
-            boolean allProductsInStock = Arrays.stream(inventoryResponseArray)
-                    .allMatch(InventoryResponse::isInStock);
+            boolean allProductsInStock = true;
+//            boolean allProductsInStock = Arrays.stream(inventoryResponseArray)
+//                    .allMatch(InventoryResponse::isInStock);
 
             if (allProductsInStock) {
                 orderRepository.save(order);
@@ -75,7 +84,7 @@ public class OrderService {
             } else {
                 throw new IllegalArgumentException("Product is not in stock, please try again later");
             }
-        });
+//        });
 
     }
 
@@ -105,5 +114,20 @@ public class OrderService {
     public List<Order> getOrders() {
         log.info("Getting Order");
         return orderRepository.findAll();
+    }
+
+    public Agent getAgent(){
+
+        ApiResponse<?> agentResponse = webClientBuilder.build().get()
+                .uri("lb://auth/api/auth/users/agent")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<ApiResponse<Agent>>() {})
+                .block();
+
+        if(agentResponse != null && agentResponse.getData() != null){
+            return (Agent) agentResponse.getData();
+        }
+        return null;
+
     }
 }

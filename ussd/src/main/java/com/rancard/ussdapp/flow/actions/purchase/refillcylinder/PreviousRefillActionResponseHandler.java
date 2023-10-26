@@ -39,19 +39,19 @@ public class PreviousRefillActionResponseHandler extends BotletActions {
                 CreateOrderDto createOrderDto = new CreateOrderDto();
                 createOrderDto.setCustomerMsisdn(dispatchObject.getUssdRequest().getMsisdn());
                 OrderItemDto orderItemDto = new OrderItemDto();
-                orderItemDto.setSize(dispatchObject.getSession().getOptions().get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())).toString());
+                orderItemDto.setSize(dispatchObject.getSession().getVariantOptions().get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())).getWeight().toString());
+                orderItemDto.setPrice(dispatchObject.getSession().getVariantOptions().get(Integer.parseInt(dispatchObject.getUssdRequest().getMessage())).getPrice());
+                orderItemDto.setQuantity(1f);
+                orderItemDto.setSkuCode(orderItemDto.getSize()+"kg_cylinder");
                 createOrderDto.setOrderItemsDtoList(Collections.singletonList(orderItemDto));
 
                 dispatchObject.getSession().setOrderDto(createOrderDto);
-                BigDecimal totalAmount = new BigDecimal(0);
-
-                dispatchObject.getSession().getOrderDto().getOrderItemsDtoList().forEach(orderItem ->{
-                    totalAmount.add(orderItem.getPrice());
-                });
-
-                createOrderDto.setTotalAmount(totalAmount);
+                createOrderDto.setTotalAmount(orderItemDto.getPrice());
                 dispatchObject.getSession().setOrderDto(createOrderDto);
 
+            }
+            case REFILL_DIGITAL_ADDRESS -> {
+                dispatchObject.getSession().getOrderDto().setShippingAddress(dispatchObject.getSession().getUser().getAddress().getGhanaPostGps());
             }
         }
 

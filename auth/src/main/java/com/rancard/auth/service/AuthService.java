@@ -2,6 +2,7 @@ package com.rancard.auth.service;
 
 import com.rancard.auth.exception.AuthException;
 import com.rancard.auth.exception.ServiceException;
+import com.rancard.auth.model.AgentRepository;
 import com.rancard.auth.model.UserRepository;
 import com.rancard.auth.model.domain.AuthUserDetail;
 import com.rancard.auth.model.dto.*;
@@ -9,38 +10,32 @@ import com.rancard.auth.model.dto.wallet.CreateWalletDto;
 import com.rancard.auth.model.dto.wallet.WalletDto;
 import com.rancard.auth.model.enums.Channel;
 import com.rancard.auth.model.enums.UserStatus;
+import com.rancard.auth.model.mongo.Agent;
 import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
-import com.rancard.auth.model.response.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.StringUtils;
 
 import java.math.BigDecimal;
-import java.security.Key;
 import java.time.LocalDateTime;
 
+import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
-import javax.annotation.PostConstruct;
 import java.util.*;
 
 import static com.rancard.auth.model.enums.ServiceError.*;
@@ -55,6 +50,7 @@ public class AuthService {
     private String secret;
 
     private final UserRepository userRepository;
+    private final AgentRepository agentRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationManager authenticationManager;
@@ -62,10 +58,9 @@ public class AuthService {
     private final KeycloakService keycloakService;
 
     private final WebClient.Builder webClientBuilder;
-
     private final UserService userService;
 
-
+    private final RestTemplate restTemplate;
 
     private final RoleService roleService;
     public User getUser(String id) {
@@ -126,7 +121,6 @@ public class AuthService {
         if (optionalUser.isPresent())
             throw new ServiceException(USER_ALREADY_EXISTS);
 
-
         UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
 
         if(signUpUserDto.getChannel() != Channel.USSD && signUpUserDto.getAddress() != null && signUpUserDto.getAddress().getGhanaPostGps() != null){
@@ -134,30 +128,86 @@ public class AuthService {
 
             if(address != null){
                 signUpUserDto.setAddress(address);
-            }else{
-                throw new ServiceException(ADDRESS_NOT_FOUND_EXCEPTION);
             }
         }
 
-        User user = new User();
-        user.setUsername(signUpUserDto.getUsername());
-        user.setEmail(signUpUserDto.getEmail());
-        user.setMsisdn(signUpUserDto.getPhone());
-        user.setFirstname(signUpUserDto.getFirstName());
-        user.setLastname(signUpUserDto.getLastName());
-        user.setOthernames(signUpUserDto.getOtherNames());
-        user.setKeycloakUserId(keycloakUser.getId());
-        user.setUserStatus(UserStatus.CLEARED);
-        user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
-        user.setLastLogin(LocalDateTime.now());
-        user.setLastSeen(LocalDateTime.now());
-        user.setAddress(signUpUserDto.getAddress());
-        user.setFamilySize(signUpUserDto.getFamilySize());
-        user.setCurrentFuelSource(signUpUserDto.getCurrentFuelSource());
-        user.setUserStatus(UserStatus.CLEARED);
+        if(signUpUserDto.getChannel().equals(Channel.USSD) || signUpUserDto.getChannel().equals(Channel.APP)) {
+            User user = new User();
+            user.setUsername(signUpUserDto.getUsername());
+            user.setEmail(signUpUserDto.getEmail());
+            user.setMsisdn(signUpUserDto.getPhone());
+            user.setFirstname(signUpUserDto.getFirstName());
+            user.setLastname(signUpUserDto.getLastName());
+            user.setOthernames(signUpUserDto.getOtherNames());
+            user.setKeycloakUserId(keycloakUser.getId());
+            user.setUserStatus(UserStatus.CLEARED);
+            user.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
+            user.setLastLogin(LocalDateTime.now());
+            user.setLastSeen(LocalDateTime.now());
+            user.setAddress(signUpUserDto.getAddress());
 
-        log.info("user: {}", user);
-        return userRepository.save(user);
+            if (signUpUserDto.getChannel().equals(Channel.USSD)) {
+                WalletDto walletDto = createWallet(signUpUserDto);
+                user.setWalletId(walletDto.getWalletId());
+            }
+
+
+            user.setFamilySize(signUpUserDto.getFamilySize());
+            user.setCurrentFuelSource(signUpUserDto.getCurrentFuelSource());
+            user.setUserStatus(UserStatus.CLEARED);
+
+            log.info("user: {}", user);
+            return userRepository.save(user);
+        }else if(signUpUserDto.getChannel().equals(Channel.WEB)){
+            Agent agent = new Agent();
+            agent.setUsername(signUpUserDto.getUsername());
+            agent.setEmail(signUpUserDto.getEmail());
+            agent.setMsisdn(signUpUserDto.getPhone());
+            agent.setFirstname(signUpUserDto.getFirstName());
+            agent.setLastname(signUpUserDto.getLastName());
+            agent.setOthernames(signUpUserDto.getOtherNames());
+            agent.setKeycloakUserId(keycloakUser.getId());
+            agent.setRoles(Collections.singleton(roleService.getRole(200)));
+            agent.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
+            agent.setLastLogin(LocalDateTime.now());
+            agent.setLastSeen(LocalDateTime.now());
+            agent.setAddress(signUpUserDto.getAddress());
+
+
+            WalletDto walletDto = createWallet(signUpUserDto);
+            agent.setWalletId(walletDto.getWalletId());
+
+            agent.setUserStatus(UserStatus.CLEARED);
+
+            log.info("user: {}", agent);
+            return agentRepository.save(agent);
+
+        }else{
+            Agent agent = new Agent();
+            agent.setUsername(signUpUserDto.getUsername());
+            agent.setEmail(signUpUserDto.getEmail());
+            agent.setMsisdn(signUpUserDto.getPhone());
+            agent.setFirstname(signUpUserDto.getFirstName());
+            agent.setLastname(signUpUserDto.getLastName());
+            agent.setOthernames(signUpUserDto.getOtherNames());
+            agent.setKeycloakUserId(keycloakUser.getId());
+            agent.setRoles(Collections.singleton(roleService.getRole(300)));
+            agent.setPassword(passwordEncoder.encode(signUpUserDto.getPassword()));
+            agent.setLastLogin(LocalDateTime.now());
+            agent.setLastSeen(LocalDateTime.now());
+            agent.setAddress(signUpUserDto.getAddress());
+
+
+            WalletDto walletDto = createWallet(signUpUserDto);
+            agent.setWalletId(walletDto.getWalletId());
+
+            agent.setUserStatus(UserStatus.CLEARED);
+
+            log.info("user: {}", agent);
+            return agentRepository.save(agent);
+
+        }
+
     }
 
 
@@ -255,25 +305,8 @@ public class AuthService {
         return userRepository.count();
     }
 
-    public AuthResponse signInUser(SignInDto signInDto) {
-//
-        //TODO - Uncomment keycloak
-        UserRepresentation userRepresentation = keycloakService.authenticateUser(signInDto);
-        if(userRepresentation != null){
-            User user = getUserByKeyCloakId(userRepresentation.getId());
-            user.setLastLogin(LocalDateTime.now());
-            user.setLastSeen(LocalDateTime.now());
-            user.setResetPassword(false);
-            user.setUserStatus(UserStatus.CLEARED);
-            userRepository.save(user);
-        }
-
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(signInDto.getUsername(), signInDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return null;
-
+    public AccessTokenResponse signInUser(SignInDto signInDto) {
+        return keycloakService.authenticateUser(signInDto);
     }
 
     private WalletDto createWallet(SignupDto signupDto) {
@@ -285,24 +318,23 @@ public class AuthService {
                 .currency("GHS")
                 .build();
 
-        ApiResponse<?> createWalletResponse = new ApiResponse<>();
+        ApiResponse<WalletDto> createWalletResponse = new ApiResponse<>();
         try {
-           createWalletResponse = webClientBuilder.build().post()
-                    .uri("lb://payment-service/api/payment/wallet")
-                    .body(Mono.just(createWalletDto), CreateWalletDto.class)
-                    .exchangeToMono(clientResponse -> {
-                        if (clientResponse != null) {
-                            return clientResponse.bodyToMono(new ParameterizedTypeReference<ApiResponse<WalletDto>>() {
-                            });
-                        } else {
-                            throw new ServiceException(WALLET_CREATION_EXCEPTION);
-                        }
-                    })
-                    .block();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            ParameterizedTypeReference<ApiResponse<WalletDto>> responseType = new ParameterizedTypeReference<ApiResponse<WalletDto>>() {};
+
+            HttpEntity<CreateWalletDto> requestEntity = new HttpEntity<>(createWalletDto, headers);
+            ResponseEntity<ApiResponse<WalletDto>> createWalletResponseEntity = restTemplate
+                    .exchange("https://api.gaspayapp.com/api/payment/wallet",
+                        HttpMethod.POST,
+                            requestEntity,
+                            responseType);
+            createWalletResponse =  createWalletResponseEntity.getBody();
         }catch(Exception e){
             e.printStackTrace();
         }
-       return (WalletDto) Objects.requireNonNull(createWalletResponse).getData();
+       return Objects.requireNonNull(createWalletResponse).getData();
     }
 
 

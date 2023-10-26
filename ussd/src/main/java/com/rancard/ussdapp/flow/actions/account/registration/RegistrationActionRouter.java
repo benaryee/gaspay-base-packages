@@ -3,6 +3,8 @@ package com.rancard.ussdapp.flow.actions.account.registration;
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
 import com.rancard.ussdapp.flow.actions.main.MainMenuActionRouter;
+import com.rancard.ussdapp.model.enums.MenuLevel;
+import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.response.UssdResponse;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static com.rancard.ussdapp.model.enums.MenuKey.*;
+import static com.rancard.ussdapp.model.enums.MenuKey.MAIN_MENU_RESPONSE;
 import static com.rancard.ussdapp.model.enums.SubMenuLevel.*;
 
 @Component
@@ -120,14 +123,15 @@ public class RegistrationActionRouter extends BotletActions {
                    log.info("[{}] user DOES NOT want to go to main menu ", sessionId);
                    response.setContinueSession(false);
                    response.setMessage(menuUtils.getResponse(REGISTRATION_COMPLETE_NO_FOLLOW_RESPONSE,dispatchObject,sessionId));
-                   return response;
                }else{
-                   MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
-                   mainMenuAction.setDispatchObject(dispatchObject);
-                   mainMenuAction.setSessionId(sessionId);
-                   mainMenuAction.setResponse(response);
-                   return mainMenuAction.call();
+                   response.setContinueSession(true);
+                   response.setMessage(menuUtils.getResponse(MAIN_MENU_RESPONSE, dispatchObject, sessionId).replace("[name]", dispatchObject.getSession().getUser().getFirstname()));
+                   log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
+                   dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
+                   dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
+                   dispatchObject.getSession().setMenuLevel(MenuLevel.MAIN);
                }
+                return response;
             }
 
         }

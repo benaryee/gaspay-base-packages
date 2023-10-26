@@ -33,11 +33,24 @@ public class MyAccountActionRouter extends BotletActions {
 
         switch (dispatchObject.getSession().getSubMenuLevel()) {
             case MY_ACCOUNT_MAIN_MENU:
+
+                switch(dispatchObject.getUssdRequest().getMessage()){
+                    case "1" -> {
+                        //Change Name
+                    }
+                    case "2" -> {
+                        //Change Location
+                    }
+                    case "3" -> {
+                        //Change Pin
+                    }
+                }
+
                 response.setContinueSession(true);
                 response.setMessage(menuUtils.getResponse(MY_ACCOUNT_MAIN_MENU_RESPONSE, dispatchObject, sessionId));
                 log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
-                dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
-                dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MY_ACCOUNT_MAIN_MENU);
+                dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MY_ACCOUNT_MAIN_MENU);
+                dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
                 return response;
 
         }
