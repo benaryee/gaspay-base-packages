@@ -7,7 +7,7 @@ services:
     hostname: mongo
     restart: unless-stopped
     ports:
-      - "27016:27017"
+      - "27017:27017"
     volumes:
       - ./mongo/data/:/data/db/
 
@@ -17,7 +17,7 @@ services:
     hostname: mongo
     restart: unless-stopped
     ports:
-      - "27015:27017"
+      - "27017:27017"
     volumes:
       - ./mongo/data/product:/data/db/
 
