@@ -223,6 +223,12 @@ services:
     depends_on:
       - keycloak
       - mongo
+
+  base-package:
+    container_name: base-package
+    image: bernardaryee/base-package:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 #
   ## Prometheus
   prometheus:
