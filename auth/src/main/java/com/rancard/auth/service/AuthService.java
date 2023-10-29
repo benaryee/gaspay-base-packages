@@ -46,18 +46,10 @@ import static com.rancard.auth.model.enums.ServiceError.*;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value("${keycloak.credentials.secret}")
-    private String secret;
-
     private final UserRepository userRepository;
     private final AgentRepository agentRepository;
     private final PasswordEncoder passwordEncoder;
-
-    private final AuthenticationManager authenticationManager;
-
     private final KeycloakService keycloakService;
-
-    private final WebClient.Builder webClientBuilder;
     private final UserService userService;
 
     private final RestTemplate restTemplate;

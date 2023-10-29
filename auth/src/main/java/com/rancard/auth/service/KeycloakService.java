@@ -46,15 +46,16 @@ public class KeycloakService {
     private String realm;
     @Value("${keycloak.resource}")
     private String clientId;
-    @Value("${keycloak.credentials.secret}")
-    private String clientSecret;
+//    @Value("${keycloak.credentials.secret}")
+//    private String clientSecret;
     public UserRepresentation registerUser(SignupDto signupDto) {
         Keycloak keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakServerUrl)
                 .realm(realm)
                 .clientId(clientId)
-                .clientSecret(clientSecret)
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .username("app-admin")
+                .password("9@$$w0rD")
+                .grantType(OAuth2Constants.PASSWORD)
                 .build();
         // Create a new UserRepresentation
         UserRepresentation user = new UserRepresentation();
@@ -122,8 +123,9 @@ public class KeycloakService {
                 .serverUrl(keycloakServerUrl)
                 .realm(realm)
                 .clientId(clientId)
-                .clientSecret(clientSecret)
-                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .username("app-admin")
+                .password("9@$$w0rD")
+                .grantType(OAuth2Constants.PASSWORD)
                 .build();
         return keycloak.realm(realm).roles().list();
     }
@@ -133,10 +135,9 @@ public class KeycloakService {
                 .serverUrl(keycloakServerUrl)
                 .realm(realm)
                 .clientId(clientId)
-                .clientSecret(clientSecret)
+                .username("app-admin")
+                .password("9@$$w0rD")
                 .grantType(OAuth2Constants.PASSWORD)
-                .username(signInDto.getUsername())
-                .password(signInDto.getPassword())
                 .build();
 
         AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
@@ -158,9 +159,9 @@ public class KeycloakService {
                 .serverUrl(keycloakServerUrl)
                 .realm(realm)
                 .clientId(clientId)
-                .grantType(OAuth2Constants.PASSWORD)
                 .username(signInDto.getUsername())
                 .password(signInDto.getPassword())
+                .grantType(OAuth2Constants.PASSWORD)
                 .build();
 
 

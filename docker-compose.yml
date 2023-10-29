@@ -9,8 +9,17 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./mongo/data/:/data/db/
+        - ./mongo_data:/data/db
 
+  mongo-product:
+    container_name: mongo-product
+    image: mongo:4.4.6
+    hostname: mongo-product
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    volumes:
+        - ./mongo_product_data:/data/db
 
   # Keycloak Config with Mysql database
   keycloak-mysql:
@@ -115,7 +124,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
-      - mongo
+      - mongo-product
       - discovery-server
       - api-gateway
 
