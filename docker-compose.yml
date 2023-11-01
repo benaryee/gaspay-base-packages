@@ -14,13 +14,14 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_ROOT_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGO_ROOT_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGO_DB
       - MONGO_DB_USERNAME=$MONGO_DB_USERNAME
       - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
     volumes:
       #        - ./mongo_product_data:/data/db
-      - ./mongodb/initdb.d:/docker-entrypoint-initdb.d/
-      - ./mongodb/data:/data/db
-      - ./mongodb/log:/var/log/mongodb
+      - $MONGO_INITDB_SCRIPTS_HOST_PATH:/docker-entrypoint-initdb.d/
+      - $MONGO_DATA_HOST_PATH:/data/db
+      - $MONGO_LOG_HOST_PATH:/var/log/mongodb
 
 
 
@@ -112,7 +113,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - zipkin
-  #
+#
   api-gateway:
     image: bernardaryee/api-gateway:latest
     container_name: api-gateway
@@ -121,7 +122,7 @@ services:
     expose:
       - "8181"
     networks:
-      - main-network
+        - main-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
@@ -143,7 +144,7 @@ services:
       - SPRING_DATA_MONGODB_PORT=27017
       - SPRING_DATA_MONGODB_DATABASE=product-service
     networks:
-      - main-network
+        - main-network
     depends_on:
       - mongo
       - discovery-server
@@ -267,7 +268,7 @@ services:
       - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=reporting-service
+      - SPRING_DATA_MONGODB_DATABASE=reporting-database
     depends_on:
       - zipkin
       - broker
@@ -302,7 +303,7 @@ services:
     image: bernardaryee/base-package:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-  #
+#
   ## Prometheus
   prometheus:
     image: prom/prometheus:latest
@@ -341,6 +342,6 @@ volumes:
   grafana_data: {}
 
 networks:
-  main-network:
-    driver: bridge
+    main-network:
+        driver: bridge
 
