@@ -14,14 +14,13 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_ROOT_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGO_ROOT_PASSWORD
-      - MONGO_INITDB_DATABASE=$MONGO_DB
       - MONGO_DB_USERNAME=$MONGO_DB_USERNAME
       - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
     volumes:
       #        - ./mongo_product_data:/data/db
-      - $MONGO_INITDB_SCRIPTS_HOST_PATH:/docker-entrypoint-initdb.d/
-      - $MONGO_DATA_HOST_PATH:/data/db
-      - $MONGO_LOG_HOST_PATH:/var/log/mongodb
+      - ./mongodb/initdb.d:/docker-entrypoint-initdb.d/
+      - ./mongodb/data:/data/db
+      - ./mongodb/log:/var/log/mongodb
 
 
 
@@ -113,7 +112,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - zipkin
-#
+  #
   api-gateway:
     image: bernardaryee/api-gateway:latest
     container_name: api-gateway
@@ -122,7 +121,7 @@ services:
     expose:
       - "8181"
     networks:
-        - main-network
+      - main-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
@@ -137,14 +136,14 @@ services:
     image: bernardaryee/product-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=product
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=product-service
     networks:
-        - main-network
+      - main-network
     depends_on:
       - mongo
       - discovery-server
@@ -158,12 +157,12 @@ services:
       - main-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=payment
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=payment-service
     depends_on:
       - mongo
       - discovery-server
@@ -188,12 +187,12 @@ services:
     image: bernardaryee/ussd:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=ussd
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=ussd
     ports:
       - "18080:8080"
     networks:
@@ -209,12 +208,12 @@ services:
     image: bernardaryee/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=order
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=order-service
     depends_on:
       - mongo
       - broker
@@ -230,12 +229,12 @@ services:
     image: bernardaryee/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=inventory
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=inventory-service
     depends_on:
       - mongo
       - discovery-server
@@ -263,12 +262,12 @@ services:
     image: bernardaryee/reporting-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=reporting
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=reporting-service
     depends_on:
       - zipkin
       - broker
@@ -286,12 +285,12 @@ services:
       - "8082:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=$MONGO_DB
-      - SPRING_DATA_MONGODB_USERNAME=$MONGO_DB_USERNAME
-      - SPRING_DATA_MONGODB_PASSWORD=$MONGO_DB_PASSWORD
+      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
+      - SPRING_DATA_MONGODB_USERNAME=auth
+      - SPRING_DATA_MONGODB_PASSWORD=password
       - SPRING_DATA_MONGODB_HOST=mongo
       - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=$MONGO_DB
+      - SPRING_DATA_MONGODB_DATABASE=auth
     depends_on:
       - keycloak
       - mongo
@@ -303,7 +302,7 @@ services:
     image: bernardaryee/base-package:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-#
+  #
   ## Prometheus
   prometheus:
     image: prom/prometheus:latest
@@ -342,6 +341,6 @@ volumes:
   grafana_data: {}
 
 networks:
-    main-network:
-        driver: bridge
+  main-network:
+    driver: bridge
 

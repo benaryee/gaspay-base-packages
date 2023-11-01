@@ -1,2 +1,6 @@
 #!/bin/bash
-mongo -u "$MONGO_INITDB_ROOT_USERNAME" -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase "$rootAuthDatabase" "$MONGO_INITDB_DATABASE" --eval "db.createUser({ user: '$MONGO_DB_USERNAME', pwd: '$MONGO_DB_PASSWORD', roles: [{ role: 'dbOwner', db: '$MONGO_INITDB_DATABASE' }] })"
+mongo -u root -p root --authenticationDatabase admin --eval "db.createUser({ user: 'product', pwd: 'password', roles: [{ role: 'dbOwner', db: 'product-service' }] })"
+mongo -u root -p root --authenticationDatabase admin --eval "db.createUser({ user: 'ussd', pwd: 'password', roles: [{ role: 'dbOwner', db: 'ussd' }] })"
+mongo -u root -p root --authenticationDatabase admin --eval "db.createUser({ user: 'order', pwd: 'password', roles: [{ role: 'dbOwner', db: 'order-service' }] })"
+mongo -u root -p root --authenticationDatabase admin --eval "db.createUser({ user: 'auth', pwd: 'password', roles: [{ role: 'dbOwner', db: 'auth' }] })"
+mongo -u root -p root --authenticationDatabase admin --eval "db.createUser({ user: 'payment', pwd: 'password', roles: [{ role: 'dbOwner', db: 'payment-service' }] })"
