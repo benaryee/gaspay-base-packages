@@ -1,5 +1,6 @@
 package com.rancard.auth.controller;
 
+import com.rancard.auth.model.dto.CreateAgentDto;
 import com.rancard.auth.model.dto.UserDto;
 import com.rancard.auth.model.mongo.Agent;
 import com.rancard.auth.model.mongo.User;
@@ -52,5 +53,6 @@ public class UserController {
         Agent agent = userService.getAgents();
         return ApiUtils.wrapInApiResponse(agent, sessionId);
     }
+
 
 }

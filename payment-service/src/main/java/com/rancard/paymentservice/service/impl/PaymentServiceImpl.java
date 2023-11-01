@@ -103,7 +103,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findByPaymentId(callbackRequest.getPaymentId())
                 .orElseThrow(() -> new ServiceException(PAYMENT_FAILED));
 
-        if(payment.getStatus().equals(PaymentStatus.SUCCESS)){
+        if(payment.getStatus().equals(PaymentStatus.PENDING)){
             CreditWalletDto creditWalletDto = CreditWalletDto.builder()
                     .amount(payment.getAmount())
                     .id(payment.getWalletId())

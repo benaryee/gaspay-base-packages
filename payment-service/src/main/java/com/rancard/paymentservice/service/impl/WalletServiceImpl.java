@@ -51,7 +51,7 @@ public class WalletServiceImpl implements WalletService {
     public Wallet creditWallet(CreditWalletDto creditWalletDto, String sessionId) {
 
         log.info("[{}] Crediting wallet with id: {} amount : {}", sessionId, creditWalletDto.getId(), creditWalletDto.getAmount());
-        Wallet wallet = walletRepository.findById(creditWalletDto.getId()).orElse(null);
+        Wallet wallet = walletRepository.findByWalletId(creditWalletDto.getId()).orElse(null);
         if(wallet == null){
             throw new ServiceException(WALLET_NOT_FOUND);
         }

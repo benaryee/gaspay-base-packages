@@ -72,6 +72,9 @@ public class KeycloakService {
             case WEB -> {
                 userRealmRole = keycloak.realm(realm).roles()
                         .get("VENDOR").toRepresentation();
+            }case INVITE -> {
+                userRealmRole = keycloak.realm(realm).roles()
+                        .get("AGENT").toRepresentation();
             }
 
         }

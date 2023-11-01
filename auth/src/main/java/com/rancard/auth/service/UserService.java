@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.rancard.auth.exception.ServiceException;
 import com.rancard.auth.model.AgentRepository;
 import com.rancard.auth.model.UserRepository;
+import com.rancard.auth.model.dto.CreateAgentDto;
 import com.rancard.auth.model.mongo.Agent;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
@@ -86,4 +87,6 @@ public class UserService {
         formattedAddress.setGhanaPostGps(locationInfo.getGPSName());
         return formattedAddress;
     }
+
+
 }

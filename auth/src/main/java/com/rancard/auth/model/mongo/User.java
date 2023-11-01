@@ -24,7 +24,7 @@ public class User extends BaseMongoModel{
     private String familySize;
     private String currentFuelSource;
     private String password;
-    private boolean isActive;
+    private boolean active;
     private String street;
     private String city;
     private String state;
