@@ -1,5 +1,6 @@
 package com.rancard.ussdapp.model.dto;
 
+import com.rancard.ussdapp.model.payload.Address;
 import com.rancard.ussdapp.model.payload.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,6 @@ public class OrderDto {
     private double totalAmount;
     private String customerMsisdn;
     private String orderStatus;
-    private String shippingAddress;
+    private Address shippingAddress;
     private LocalDateTime _created;
 }

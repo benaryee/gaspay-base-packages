@@ -40,7 +40,7 @@ public class OrderService {
     public Order placeOrder(OrderRequest orderRequest) {
         Order order = new Order();
         order.setOrderId(UUID.randomUUID().toString());
-        order.setShippingAddress(order.getShippingAddress());
+        order.setShippingAddress(orderRequest.getShippingAddress());
         order.setCustomerMsisdn(orderRequest.getCustomerMsisdn());
         order.setOrderStatus(OrderStatus.PENDING);
 
@@ -53,7 +53,7 @@ public class OrderService {
 
         Agent agent = getAgent();
         if(agent != null){
-            order.setAgentId(agent.getIdString());
+            order.setAgentId(agent.getMsisdn());
         }
 
 //        List<String> skuCodes = order.getItems().stream()

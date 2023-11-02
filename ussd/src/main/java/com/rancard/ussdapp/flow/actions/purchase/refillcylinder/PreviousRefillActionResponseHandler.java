@@ -51,7 +51,7 @@ public class PreviousRefillActionResponseHandler extends BotletActions {
 
             }
             case REFILL_DIGITAL_ADDRESS -> {
-                dispatchObject.getSession().getOrderDto().setShippingAddress(dispatchObject.getSession().getUser().getAddress().getGhanaPostGps());
+                dispatchObject.getSession().getOrderDto().setShippingAddress(dispatchObject.getSession().getUser().getAddress());
             }
         }
 

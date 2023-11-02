@@ -24,7 +24,7 @@ public class DataLoader implements CommandLineRunner {
             Variant small = Variant.builder()
                     .weight(2.5)
                     .height(2.5)
-                    .price(30D)
+                    .price(0.2D)
                     .build();
 
             Variant medium = Variant.builder()

@@ -69,5 +69,13 @@ public class AuthController {
     public void getRoles() {
         authService.getAllRoles();
     }
+
+
+    @GetMapping("/test/data")
+    public void setTestData() {
+        authService.setTestData();
+    }
+
+
 }
 

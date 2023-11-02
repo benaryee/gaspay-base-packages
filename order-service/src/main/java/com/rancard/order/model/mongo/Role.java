@@ -31,4 +31,10 @@ public class Role {
 
     @CreatedBy
     private String createdBy;
+
+    public Role(int code, String name, String description) {
+        this.code = code;
+        this.name = name;
+        this.description = description;
+    }
 }

@@ -3,6 +3,7 @@ package com.rancard.auth.service;
 import com.rancard.auth.exception.AuthException;
 import com.rancard.auth.exception.ServiceException;
 import com.rancard.auth.model.AgentRepository;
+import com.rancard.auth.model.RoleRepository;
 import com.rancard.auth.model.UserRepository;
 import com.rancard.auth.model.domain.AuthUserDetail;
 import com.rancard.auth.model.dto.*;
@@ -33,6 +34,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -48,6 +50,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final AgentRepository agentRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final KeycloakService keycloakService;
     private final UserService userService;
@@ -330,4 +333,31 @@ public class AuthService {
     }
 
 
+    public void setTestData() {
+        Role role  = Role.builder()
+                .code(300)
+                .name("AGENT")
+                .description("Agent")
+                .build();
+        HashSet<Role> roles = new HashSet<>();
+        roles.add(role);
+
+        Agent agent = Agent.builder()
+                .firstname("Nii")
+                .lastname("Ayi")
+                .msisdn("233548410151")
+                .outletName("Rancard")
+                .roles(roles)
+                .build();
+        agentRepository.save(agent);
+
+        if (roleRepository.count() < 1) {
+            roleRepository.saveAll(List.of(
+                    new Role(100, "USER", "User Role"),
+                    new Role(200,"VENDOR", "Vendor Role"),
+                    new Role(300, "AGENT", "Agent Role")
+            ));
+
+        }
+    }
 }

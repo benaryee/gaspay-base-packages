@@ -7,21 +7,10 @@ services:
     hostname: mongo
     restart: unless-stopped
     ports:
-      - $MONGO_HOST_PORT:27017
-    networks:
-      - main-network
-    command: ["--bind_ip","0.0.0.0"]
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=$MONGO_ROOT_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_ROOT_PASSWORD
-      - MONGO_INITDB_DATABASE=$MONGO_DB
-      - MONGO_DB_USERNAME=$MONGO_DB_USERNAME
-      - MONGO_DB_PASSWORD=$MONGO_DB_PASSWORD
+      - "27017:27017"
     volumes:
-      #        - ./mongo_product_data:/data/db
-      - $MONGO_INITDB_SCRIPTS_HOST_PATH:/docker-entrypoint-initdb.d/
-      - $MONGO_DATA_HOST_PATH:/data/db
-      - $MONGO_LOG_HOST_PATH:/var/log/mongodb
+      - ./mongodb/data:/data/db
+      - ./mongodb/log:/var/log/mongodb
 
 
 
@@ -81,8 +70,6 @@ services:
       - "9092:9092"
     depends_on:
       - zookeeper
-    networks:
-      - main-network
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
@@ -91,29 +78,23 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-
   ## Zipkin
   zipkin:
     image: openzipkin/zipkin
     container_name: zipkin
     ports:
       - "9411:9411"
-    networks:
-      - main-network
-
   ## Eureka Server
   discovery-server:
     image: bernardaryee/discovery-server:latest
     container_name: discovery-server
     ports:
       - "8761:8761"
-    networks:
-      - main-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - zipkin
-#
+  #
   api-gateway:
     image: bernardaryee/api-gateway:latest
     container_name: api-gateway
@@ -121,8 +102,6 @@ services:
       - "8181:8080"
     expose:
       - "8181"
-    networks:
-        - main-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
@@ -137,14 +116,6 @@ services:
     image: bernardaryee/product-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=product
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=product-service
-    networks:
-        - main-network
     depends_on:
       - mongo
       - discovery-server
@@ -154,16 +125,8 @@ services:
   payment-service:
     container_name: payment-service
     image: bernardaryee/payment-service:latest
-    networks:
-      - main-network
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=payment
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=payment-service
     depends_on:
       - mongo
       - discovery-server
@@ -173,8 +136,6 @@ services:
     container_name: redis
     image: redis:6.2-alpine
     restart: always
-    networks:
-      - main-network
     ports:
       - '6378:6379'
     expose:
@@ -188,16 +149,8 @@ services:
     image: bernardaryee/ussd:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=ussd
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=ussd
     ports:
       - "18080:8080"
-    networks:
-      - main-network
     depends_on:
       - mongo
       - api-gateway
@@ -209,20 +162,12 @@ services:
     image: bernardaryee/order-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=order
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=order-service
     depends_on:
       - mongo
       - broker
       - zipkin
       - discovery-server
       - api-gateway
-    networks:
-      - main-network
 
   ## Inventory-Service Docker Compose Config
   inventory-service:
@@ -230,18 +175,10 @@ services:
     image: bernardaryee/inventory-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=inventory
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=inventory-service
     depends_on:
       - mongo
       - discovery-server
       - api-gateway
-    networks:
-      - main-network
 
   ## Notification-Service Docker Compose Config
   notification-service:
@@ -254,29 +191,17 @@ services:
       - broker
       - discovery-server
       - api-gateway
-    networks:
-      - main-network
-
   ## Notification-Service Docker Compose Config
   reporting-service:
     container_name: reporting-service
     image: bernardaryee/reporting-service:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=reporting
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=reporting-database
     depends_on:
       - zipkin
       - broker
       - discovery-server
       - api-gateway
-      - mongo
-    networks:
-      - main-network
 
   ## Auth-Service Docker Compose Config
   auth:
@@ -286,24 +211,16 @@ services:
       - "8082:8082"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
-      - SPRING_DATA_MONGODB_USERNAME=auth
-      - SPRING_DATA_MONGODB_PASSWORD=password
-      - SPRING_DATA_MONGODB_HOST=mongo
-      - SPRING_DATA_MONGODB_PORT=27017
-      - SPRING_DATA_MONGODB_DATABASE=auth
     depends_on:
       - keycloak
       - mongo
-    networks:
-      - main-network
 
   base-package:
     container_name: base-package
     image: bernardaryee/base-package:latest
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-#
+  #
   ## Prometheus
   prometheus:
     image: prom/prometheus:latest
@@ -320,15 +237,11 @@ services:
       - notification-service
       - payment-service
       - ussd
-    networks:
-      - main-network
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     restart: always
-    networks:
-      - main-network
     ports:
       - "3000:3000"
     links:
@@ -340,8 +253,3 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=password
 volumes:
   grafana_data: {}
-
-networks:
-    main-network:
-        driver: bridge
-

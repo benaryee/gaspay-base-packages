@@ -159,22 +159,23 @@ public class RefillCylinderActionRouter extends BotletActions {
 
                     ApiResponse<OrderDto> orderDtoApiResponse = orderService.placeOrder(dispatchObject.getSession().getOrderDto(),sessionId);
 
-                    if(orderDtoApiResponse.getCode() != 200){
+                    if(orderDtoApiResponse.getCode() != 0){
                         paymentService.creditWallet(dispatchObject.getSession().getUser().getWalletId(),
                                 dispatchObject.getSession().getOrderDto().getTotalAmount(),sessionId);
                     }else{
+                        response.setContinueSession(false);
+                        response.setMessage("Your order has been placed successfully. You will receive a confirmation SMS shortly.");
+
+                        log.info("[{}] Purchase main menu submenuLevel response : {}", sessionId, response);
+                        return response;
 
                     }
-                    //Place order
-                    //If order fails, refund wallet
-                    //If order succeeds, send sms to user
-                    //Send sms to admin
-                    //Send sms to delivery agent
-                    //Send sms to vendor
 
-                    //Place order
                 }else{
 
+                   response.setContinueSession(true);
+                   response.setMessage("Sorry!, you have entered an incorrect password.");
+                   return response;
                 }
             }
 

@@ -5,9 +5,11 @@ import com.rancard.order.dto.OrderRequest;
 import com.rancard.order.model.Order;
 import com.rancard.order.model.response.ApiResponse;
 import com.rancard.order.service.OrderService;
+import com.rancard.order.util.ApiUtils;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,12 +28,11 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
-    @TimeLimiter(name = "inventory")
-    @Retry(name = "inventory")
-    public CompletableFuture<Order> placeOrder(@RequestBody OrderRequest orderRequest) {
+    public ApiResponse<?> placeOrder(@RequestBody OrderRequest orderRequest, HttpServletRequest request) {
+        String sessionId = request.getSession().getId();
         log.info("Placing Order");
-        return CompletableFuture.supplyAsync(() -> orderService.placeOrder(orderRequest));
+        Order order = orderService.placeOrder(orderRequest);
+        return ApiUtils.wrapInApiResponse(order, sessionId);
     }
 
     public CompletableFuture<String> fallbackMethod(OrderRequest orderRequest, RuntimeException runtimeException) {
