@@ -3,7 +3,7 @@ services:
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
-    image: mongo:6-jammy
+    image: mongo:latest
     hostname: mongo
     restart: unless-stopped
     ports:
