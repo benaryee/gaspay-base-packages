@@ -12,6 +12,9 @@ import java.io.Serializable;
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto implements Serializable {
     private String id;
     private String email;

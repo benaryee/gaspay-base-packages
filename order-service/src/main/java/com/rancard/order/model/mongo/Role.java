@@ -18,23 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Role {
 
     private int code;
-
     private String name;
-
     private String description;
 
-    @CreatedDate
-    private DateTime _created;
-
-    @LastModifiedDate
-    private DateTime _modified;
-
-    @CreatedBy
-    private String createdBy;
-
-    public Role(int code, String name, String description) {
-        this.code = code;
-        this.name = name;
-        this.description = description;
-    }
 }

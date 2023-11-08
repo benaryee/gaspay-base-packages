@@ -34,7 +34,7 @@ public class ApiClientService {
 
             logger.info("[ " + sessionId + " ] about to call url with payload: " + requestParams);
 
-            RestTemplate restTemplate = new RestTemplate(HttpUtils.getTrustAllRequestFactory());
+            RestTemplate restTemplate = new RestTemplate();
 
             HttpEntity<Object> entity = new HttpEntity<>(headers);
             logger.info("Request Params : " + requestParams);

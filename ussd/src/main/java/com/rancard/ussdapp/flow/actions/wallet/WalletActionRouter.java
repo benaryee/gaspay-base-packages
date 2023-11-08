@@ -2,8 +2,10 @@ package com.rancard.ussdapp.flow.actions.wallet;
 
 
 import com.rancard.ussdapp.flow.actions.BotletActions;
+import com.rancard.ussdapp.model.dto.WalletResponseDto;
 import com.rancard.ussdapp.model.enums.SubMenuLevel;
 import com.rancard.ussdapp.model.response.UssdResponse;
+import com.rancard.ussdapp.services.PaymentService;
 import com.rancard.ussdapp.utils.MenuUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -21,8 +23,10 @@ import static com.rancard.ussdapp.model.enums.SubMenuLevel.*;
 public class WalletActionRouter extends BotletActions {
 
 
-    public WalletActionRouter(BeanFactory beanFactory, MenuUtils menuUtils) {
+    private final PaymentService paymentService;
+    public WalletActionRouter(BeanFactory beanFactory, MenuUtils menuUtils, PaymentService paymentService) {
         super(beanFactory, menuUtils);
+        this.paymentService = paymentService;
     }
 
     public UssdResponse call() {
@@ -33,11 +37,29 @@ public class WalletActionRouter extends BotletActions {
         previousEnquiryActionResponseHandler.call();
 
 
-
         log.info("[{}] enquiry request router received request to route enquiry request : {} ", sessionId, dispatchObject.toString());
         switch (dispatchObject.getSession().getSubMenuLevel()) {
             case WALLET_MAIN_MENU -> {
+               switch (dispatchObject.getUssdRequest().getMessage()){
+                   case "1" ->{
+                       response.setContinueSession(false);
+                       response.setMessage("Your current Gaspay Wallet balance is GHS " + getBalanceString(dispatchObject.getSession().getUser().getWalletId()));
+                       log.info("[{}] Wallet balance submenuLevel response : {}", sessionId , response);
+                       dispatchObject.getSession().setSubMenuLevel(WALLET_MAIN_MENU);
+                       dispatchObject.getSession().setPreviousSubMenuLevel(WALLET_MAIN_MENU);
+                       return response;
 
+                   }
+                   default -> {
+                       response.setContinueSession(false);
+                       response.setMessage("The select option is not available yet. Please try again later");
+                       log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
+                       dispatchObject.getSession().setSubMenuLevel(SubMenuLevel.MAIN_MENU_RESPONSE);
+                       dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
+                       return response;
+
+                   }
+               }
             }
 
             case TOPUP_AMOUNT -> {
@@ -79,4 +101,16 @@ public class WalletActionRouter extends BotletActions {
         return null;
     }
 
+    private String getBalanceString(String walletId) {
+        log.info("[{}] getting balance for walletId : {}", sessionId, walletId);
+        WalletResponseDto walletResponseDto = paymentService.getBalance(walletId,sessionId);
+        if (walletResponseDto == null){
+            log.info("[{}] wallet with id {} not found", sessionId, walletId);
+            return "0.00";
+        }else {
+            dispatchObject.getSession().setWallet(walletResponseDto);
+            return String.valueOf(walletResponseDto.getBalance());
+        }
+    }
 }
+

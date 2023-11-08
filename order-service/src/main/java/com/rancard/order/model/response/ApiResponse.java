@@ -1,5 +1,6 @@
 package com.rancard.order.model.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.order.model.payload.BaseError;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> implements Serializable {
 
     private int code;

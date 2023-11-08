@@ -1,6 +1,7 @@
 package com.rancard.order.controller;
 
 
+import com.rancard.order.dto.OrderDto;
 import com.rancard.order.dto.OrderRequest;
 import com.rancard.order.model.Order;
 import com.rancard.order.model.response.ApiResponse;
@@ -40,10 +41,12 @@ public class OrderController {
         return CompletableFuture.supplyAsync(() -> "Oops! Something went wrong, please order after some time!");
     }
 
-    @GetMapping()
-    public CompletableFuture<List<Order>> getOrders() {
+    @GetMapping("/agent/{agentId}")
+    public ApiResponse<?> getOrders(@PathVariable String agentId,HttpServletRequest request) {
+        String sessionId = request.getSession().getId();
         log.info("Getting Orders");
-        return CompletableFuture.supplyAsync(orderService::getOrders);
+        List<OrderDto> orders = orderService.getOrders(agentId);
+        return ApiUtils.wrapInApiResponse(orders,sessionId);
     }
 
     @GetMapping("/{orderId}")

@@ -2,6 +2,7 @@ package com.rancard.order.service;
 
 
 
+import com.rancard.order.dto.OrderDto;
 import com.rancard.order.dto.OrderItemDto;
 import com.rancard.order.dto.OrderRequest;
 import com.rancard.order.event.OrderPlacedEvent;
@@ -96,6 +97,18 @@ public class OrderService {
         orderLineItems.setSkuCode(orderLineItemsDto.getSkuCode());
         return orderLineItems;
     }
+    private OrderDto mapOrderToDto(Order order) {
+        return OrderDto.builder()
+                .createdAt(order.getCreated())
+                .items(order.getItems())
+                .orderId(order.getOrderId())
+                .orderStatus(order.getOrderStatus())
+                .shippingAddress(order.getShippingAddress())
+                .totalAmount(order.getTotalAmount())
+                .customerMsisdn(order.getCustomerMsisdn())
+                .agentId(order.getAgentId())
+                .build();
+    }
 
     public ApiResponse<?> getOrdersByCustomer(String customerMsisdn) {
         log.info("Getting Orders By Customer");
@@ -112,9 +125,14 @@ public class OrderService {
         return orderRepository.findById(orderId).orElseThrow();
     }
 
-    public List<Order> getOrders() {
+    public List<OrderDto> getOrders(String agentId) {
         log.info("Getting Order");
-        return orderRepository.findAll();
+        List<Order> orders = orderRepository.findByAgentId(agentId);
+        List<OrderDto> orderDtos = orders
+                .stream()
+                .map(this::mapOrderToDto)
+                .toList();
+        return orderDtos;
     }
 
     public Agent getAgent(){

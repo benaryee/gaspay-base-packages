@@ -16,6 +16,7 @@ import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
 import com.rancard.auth.model.response.response.ApiResponse;
+import com.rancard.auth.model.response.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.StringUtils;
@@ -119,6 +120,9 @@ public class AuthService {
         UserRepresentation keycloakUser = keycloakService.registerUser(signUpUserDto);
 
         if(signUpUserDto.getChannel() != Channel.USSD && signUpUserDto.getAddress() != null && signUpUserDto.getAddress().getGhanaPostGps() != null){
+
+            log.info("[{}] about to add address", signUpUserDto.toString());
+
             Address address = userService.getUserAddressByGps(signUpUserDto.getAddress().getGhanaPostGps());
 
             if(address != null){
@@ -127,6 +131,8 @@ public class AuthService {
         }
 
         if(signUpUserDto.getChannel().equals(Channel.USSD) || signUpUserDto.getChannel().equals(Channel.APP)) {
+            log.info("[{}] about to create user", signUpUserDto.toString());
+
             User user = new User();
             user.setUsername(signUpUserDto.getUsername());
             user.setEmail(signUpUserDto.getEmail());
@@ -154,6 +160,9 @@ public class AuthService {
             log.info("user: {}", user);
             return userRepository.save(user);
         }else if(signUpUserDto.getChannel().equals(Channel.WEB)){
+
+            log.info("[{}] about to create agent", signUpUserDto.toString());
+
             Agent agent = new Agent();
             agent.setUsername(signUpUserDto.getUsername());
             agent.setEmail(signUpUserDto.getEmail());
@@ -300,8 +309,31 @@ public class AuthService {
         return userRepository.count();
     }
 
-    public AccessTokenResponse signInUser(SignInDto signInDto) {
-        return keycloakService.authenticateUser(signInDto);
+    public AuthResponse signInUser(SignInDto signInDto) {
+        AccessTokenResponse accessTokenResponse = keycloakService.authenticateUser(signInDto);
+
+        AuthResponse authResponse = new AuthResponse();
+
+        if(accessTokenResponse.getToken() != null){
+            Agent user = agentRepository.findByMsisdn(signInDto.getUsername()).orElse(null);
+            if(user != null){
+                user.setLastLogin(LocalDateTime.now());
+                agentRepository.save(user);
+
+                UserDto userDto = UserDto.builder()
+                        .firstname(user.getFirstname())
+                        .lastname(user.getLastname())
+                        .email(user.getEmail())
+                        .phone(user.getMsisdn())
+                        .build();
+
+                authResponse.setUser(userDto);
+                authResponse.setToken(accessTokenResponse.getToken());
+                return authResponse;
+            }
+        }
+        throw new ServiceException(USER_NOT_FOUND);
+
     }
 
     private WalletDto createWallet(SignupDto signupDto) {

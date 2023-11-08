@@ -94,6 +94,16 @@ public class MainMenuActionRouter extends BotletActions {
                         return response;
                     }
 
+                    case "6" -> {
+                        response.setContinueSession(true);
+                        response.setMessage("Select an option\n\n1. Wallet Balance\n2. Top up\n3. Withdraw\n4. Statement \n5. Change PIN");
+                        log.info("[{}] Main menu submenuLevel response : {}", sessionId, response);
+                        dispatchObject.getSession().setMenuLevel(WALLET);
+                        dispatchObject.getSession().setSubMenuLevel(WALLET_MAIN_MENU);
+                        dispatchObject.getSession().setPreviousSubMenuLevel(SubMenuLevel.MAIN);
+                        return response;
+                    }
+
                 }
             }
         }

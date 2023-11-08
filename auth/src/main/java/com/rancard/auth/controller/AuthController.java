@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/auth")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AuthController {
     private final AuthService authService;
     private final ModelMapper modelMapper;
@@ -45,23 +46,21 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public AccessTokenResponse signIn(@RequestBody SignInDto signInDto,
+    public ApiResponse<?> signIn(@RequestBody SignInDto signInDto,
                                            HttpServletRequest httpServletRequest) {
 
         String sessionId = httpServletRequest.getSession().getId();
 
         log.info("[{}] http request: signInUser with details :{}",sessionId, signInDto);
 
-        AccessTokenResponse authResponse = authService.signInUser(signInDto);
+        AuthResponse authResponse = authService.signInUser(signInDto);
 
         if(authResponse == null){
             throw  HttpClientErrorException.Unauthorized.create(HttpStatus.UNAUTHORIZED, "Invalid credentials", null, null, null);
         }
 //
-//        AccessTokenResponse apiResponse= ApiUtils.wrapInApiResponse(authResponse, sessionId);
-
         log.info("[{}] http response: signInUser: {}",sessionId, authResponse);
-        return authResponse;
+        return ApiUtils.wrapInApiResponse(authResponse, sessionId);
     }
 
 

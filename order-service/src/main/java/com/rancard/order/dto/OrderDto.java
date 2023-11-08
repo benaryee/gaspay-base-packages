@@ -1,28 +1,24 @@
-package com.rancard.order.model;
+package com.rancard.order.dto;
 
-
+import com.rancard.order.model.OrderItem;
 import com.rancard.order.model.enums.OrderStatus;
 import com.rancard.order.model.mongo.Address;
-import com.rancard.order.model.mongo.BaseMongoModel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
-
-
+import java.util.Locale;
 
 @Data
-
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@SuperBuilder
-@Document
-public class Order extends BaseMongoModel {
+@Builder
+public class OrderDto implements Serializable {
 
     private String orderId;
     private List<OrderItem> items;
@@ -31,4 +27,5 @@ public class Order extends BaseMongoModel {
     private OrderStatus orderStatus;
     private Address shippingAddress;
     private String agentId;
+    private LocalDateTime createdAt;
 }
