@@ -15,6 +15,7 @@ import com.rancard.auth.model.mongo.Agent;
 import com.rancard.auth.model.mongo.Role;
 import com.rancard.auth.model.mongo.User;
 import com.rancard.auth.model.payload.Address;
+import com.rancard.auth.model.response.response.AccessTokenResponseDto;
 import com.rancard.auth.model.response.response.ApiResponse;
 import com.rancard.auth.model.response.response.AuthResponse;
 import lombok.RequiredArgsConstructor;
@@ -310,27 +311,43 @@ public class AuthService {
     }
 
     public AuthResponse signInUser(SignInDto signInDto) {
-        AccessTokenResponse accessTokenResponse = keycloakService.authenticateUser(signInDto);
-
+        AccessTokenResponseDto accessTokenResponse = keycloakService.authenticateUser(signInDto);
         AuthResponse authResponse = new AuthResponse();
+        UserDto userDto = null;
 
         if(accessTokenResponse.getToken() != null){
-            Agent user = agentRepository.findByMsisdn(signInDto.getUsername()).orElse(null);
-            if(user != null){
-                user.setLastLogin(LocalDateTime.now());
-                agentRepository.save(user);
 
-                UserDto userDto = UserDto.builder()
-                        .firstname(user.getFirstname())
-                        .lastname(user.getLastname())
-                        .email(user.getEmail())
-                        .phone(user.getMsisdn())
-                        .build();
 
-                authResponse.setUser(userDto);
-                authResponse.setToken(accessTokenResponse.getToken());
-                return authResponse;
+            if(accessTokenResponse.getRoles().contains("USER")){
+                User user = userRepository.findByMsisdn(signInDto.getUsername()).orElse(null);
+                if (user != null) {
+                    user.setLastLogin(LocalDateTime.now());
+                    userRepository.save(user);
+
+                    userDto = UserDto.builder()
+                            .firstname(user.getFirstname())
+                            .lastname(user.getLastname())
+                            .email(user.getEmail())
+                            .phone(user.getMsisdn())
+                            .build();
+
+                }
+            }else if(accessTokenResponse.getToken().contains("VENDOR") || accessTokenResponse.getToken().contains("AGENT")){
+                Agent user = agentRepository.findByMsisdn(signInDto.getUsername()).orElse(null);
+                if (user != null) {
+                    user.setLastLogin(LocalDateTime.now());
+                    agentRepository.save(user);
+                    userDto = UserDto.builder()
+                            .firstname(user.getFirstname())
+                            .lastname(user.getLastname())
+                            .email(user.getEmail())
+                            .phone(user.getMsisdn())
+                            .build();
+                }
             }
+            authResponse.setUser(userDto);
+            authResponse.setToken(accessTokenResponse.getToken());
+            return authResponse;
         }
         throw new ServiceException(USER_NOT_FOUND);
 
@@ -354,14 +371,14 @@ public class AuthService {
             HttpEntity<CreateWalletDto> requestEntity = new HttpEntity<>(createWalletDto, headers);
             ResponseEntity<ApiResponse<WalletDto>> createWalletResponseEntity = restTemplate
                     .exchange("https://api.gaspayapp.com/api/payment/wallet",
-                        HttpMethod.POST,
+                            HttpMethod.POST,
                             requestEntity,
                             responseType);
             createWalletResponse =  createWalletResponseEntity.getBody();
         }catch(Exception e){
             e.printStackTrace();
         }
-       return Objects.requireNonNull(createWalletResponse).getData();
+        return Objects.requireNonNull(createWalletResponse).getData();
     }
 
 

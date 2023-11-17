@@ -7,6 +7,7 @@ import com.rancard.auth.model.dto.SignInDto;
 import com.rancard.auth.model.dto.SignupDto;
 import com.rancard.auth.model.enums.Channel;
 import com.rancard.auth.model.payload.OAuthTokenResponse;
+import com.rancard.auth.model.response.response.AccessTokenResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.OAuth2Constants;
@@ -115,15 +116,15 @@ public class KeycloakService {
     }
 
 
-    public AccessTokenResponse authenticateUser(SignInDto signInDto) {
+    public AccessTokenResponseDto authenticateUser(SignInDto signInDto) {
 
         Keycloak keycloak = KeycloakManager.createKeycloakUserInstance(signInDto.getUsername() , signInDto.getPassword());
+        AccessTokenResponseDto tokenResponseDto = new AccessTokenResponseDto();
 
-        AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
-        log.info("Token Response: {}", tokenResponse);
 
         try {
-            tokenResponse = keycloak.tokenManager().getAccessToken();
+            AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
+            log.info("Token Response: {}", tokenResponse);
 
             if(tokenResponse != null){
                 UserRepresentation userRepresentation = KeycloakManager.getRealm(adminKc).users().search(signInDto.getUsername()).get(0);
@@ -131,7 +132,7 @@ public class KeycloakService {
                 List<RoleRepresentation> userRoles = KeycloakManager.getRealm(adminKc).users().get(userId).roles().realmLevel().listAll();
 
                 for (RoleRepresentation role : userRoles) {
-                    System.out.println("User has role: " + role.getName());
+                    tokenResponseDto.getRoles().add(role.getName());
                 }
             }
 
@@ -140,10 +141,7 @@ public class KeycloakService {
             throw new UnauthorizedException("Invalid Credentials");
         }
 
-        if(tokenResponse != null) {
-            return tokenResponse;
-        }
+        return tokenResponseDto;
 
-        throw new UsernameNotFoundException("User not found");
     }
 }
