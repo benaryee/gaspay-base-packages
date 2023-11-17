@@ -1,6 +1,7 @@
 package com.rancard.auth.service;
 
 
+import com.rancard.auth.config.KeycloakManager;
 import com.rancard.auth.exception.UnauthorizedException;
 import com.rancard.auth.model.dto.SignInDto;
 import com.rancard.auth.model.dto.SignupDto;
@@ -40,24 +41,12 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class KeycloakService {
-    @Value("${keycloak.auth-server-url}")
-    private String keycloakServerUrl;
-    @Value("${keycloak.realm}")
-    private String realm;
-    @Value("${keycloak.resource}")
-    private String clientId;
-//    @Value("${keycloak.credentials.secret}")
-//    private String clientSecret;
+
+    Keycloak adminKc = KeycloakManager.createKeycloakAdminInstance();
+
+
     public UserRepresentation registerUser(SignupDto signupDto) {
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl(keycloakServerUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .username("app-admin")
-                .password("9@$$w0rD")
-                .grantType(OAuth2Constants.PASSWORD)
-                .build();
-        // Create a new UserRepresentation
+
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
         user.setUsername(signupDto.getUsername());
@@ -65,15 +54,15 @@ public class KeycloakService {
         RoleRepresentation userRealmRole = null;
         switch (signupDto.getChannel()){
             case APP, USSD -> {
-                userRealmRole = keycloak.realm(realm).roles()
+                userRealmRole = KeycloakManager.getRealm(adminKc).roles()
                         .get("USER").toRepresentation();
                 user.setUsername(signupDto.getPhone());
             }
             case WEB -> {
-                userRealmRole = keycloak.realm(realm).roles()
+                userRealmRole = KeycloakManager.getRealm(adminKc).roles()
                         .get("VENDOR").toRepresentation();
             }case INVITE -> {
-                userRealmRole = keycloak.realm(realm).roles()
+                userRealmRole = KeycloakManager.getRealm(adminKc).roles()
                         .get("AGENT").toRepresentation();
             }
 
@@ -83,7 +72,7 @@ public class KeycloakService {
         user.setFirstName(signupDto.getFirstName());
         user.setLastName(signupDto.getLastName());
 
-        RealmResource realmResource = keycloak.realm(realm);
+        RealmResource realmResource = KeycloakManager.getRealm(adminKc);
         UsersResource usersRessource = realmResource.users();
 
         log.info("Creating user: {}", user);
@@ -122,57 +111,30 @@ public class KeycloakService {
     }
     //Testing Function
     public List<RoleRepresentation> getRoles() {
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl(keycloakServerUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .username("app-admin")
-                .password("9@$$w0rD")
-                .grantType(OAuth2Constants.PASSWORD)
-                .build();
-        return keycloak.realm(realm).roles().list();
-    }
-
-    public UserRepresentation authenticateUser2(SignInDto signInDto) {
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl(keycloakServerUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .username("app-admin")
-                .password("9@$$w0rD")
-                .grantType(OAuth2Constants.PASSWORD)
-                .build();
-
-        AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
-        log.info("Token Response: {}", tokenResponse);
-        UserRepresentation user = keycloak.realm(realm).users().search(signInDto.getUsername()).get(0);
-        log.info("User Representation: {}", user);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
+        return KeycloakManager.getRealm(adminKc).roles().list();
     }
 
 
     public AccessTokenResponse authenticateUser(SignInDto signInDto) {
 
-        Keycloak keycloak = KeycloakBuilder.builder()
-                .serverUrl(keycloakServerUrl)
-                .realm(realm)
-                .clientId(clientId)
-                .username(signInDto.getUsername())
-                .password(signInDto.getPassword())
-                .grantType(OAuth2Constants.PASSWORD)
-                .build();
-
+        Keycloak keycloak = KeycloakManager.createKeycloakUserInstance(signInDto.getUsername() , signInDto.getPassword());
 
         AccessTokenResponse tokenResponse = keycloak.tokenManager().getAccessToken();
         log.info("Token Response: {}", tokenResponse);
 
         try {
             tokenResponse = keycloak.tokenManager().getAccessToken();
+
+            if(tokenResponse != null){
+                UserRepresentation userRepresentation = KeycloakManager.getRealm(adminKc).users().search(signInDto.getUsername()).get(0);
+                String userId = userRepresentation.getId();
+                List<RoleRepresentation> userRoles = KeycloakManager.getRealm(adminKc).users().get(userId).roles().realmLevel().listAll();
+
+                for (RoleRepresentation role : userRoles) {
+                    System.out.println("User has role: " + role.getName());
+                }
+            }
+
             log.info("Token Response: {}", tokenResponse);
         }catch(NotAuthorizedException notAuthorizedException){
             throw new UnauthorizedException("Invalid Credentials");
