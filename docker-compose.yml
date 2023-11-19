@@ -160,9 +160,9 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
     ports:
-      - "18080:8080"
+      - "8083:8080"
     expose:
-      - "18080"
+      - "8083"
     depends_on:
       - mongo_db
       - api-gateway
