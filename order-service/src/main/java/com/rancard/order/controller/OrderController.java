@@ -50,7 +50,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public CompletableFuture<Order> getOrder(@PathVariable String orderId) {
+    public CompletableFuture<OrderDto> getOrder(@PathVariable String orderId) {
         log.info("Getting Order");
         return CompletableFuture.supplyAsync(() -> orderService.getOrder(orderId));
     }

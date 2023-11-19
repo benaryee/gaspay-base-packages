@@ -113,16 +113,22 @@ public class OrderService {
     public ApiResponse<?> getOrdersByCustomer(String customerMsisdn) {
         log.info("Getting Orders By Customer");
         List<Order> orders = orderRepository.findByCustomerMsisdn(customerMsisdn);
+        List<OrderDto> orderDtos = orders
+                .stream()
+                .map(this::mapOrderToDto)
+                .toList();
+
         return ApiResponse.builder()
-                .data(orders)
+                .data(orderDtos)
                 .message("Orders Retrieved Successfully")
                 .code(200)
                 .build();
     }
 
-    public Order getOrder(String orderId) {
+    public OrderDto getOrder(String orderId) {
         log.info("Getting Order");
-        return orderRepository.findById(orderId).orElseThrow();
+         Order order  = orderRepository.findByOrderId(orderId);
+         return mapOrderToDto(order);
     }
 
     public List<OrderDto> getOrders(String agentId) {

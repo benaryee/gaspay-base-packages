@@ -160,10 +160,13 @@ services:
       SPRING_APPLICATION_JSON: '{
              "spring.data.mongodb.uri" : "mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongo_db:$MONGODB_DOCKER_PORT/$MONGODB_USSD_DATABASE?authSource=admin",
              "management.zipkin.tracing.endpoint":"http://zipkin:9411",
-              "eureka.client.serviceUrl.defaultZone":"http://discovery-server:8761/eureka"
-           }'
+              "eureka.client.serviceUrl.defaultZone":"http://discovery-server:8761/eureka",
+           }',
+        SPRING_PROFILES_ACTIVE: "docker"
     ports:
       - "18080:8080"
+    expose:
+      - "18080"
     depends_on:
       - mongo_db
       - api-gateway
