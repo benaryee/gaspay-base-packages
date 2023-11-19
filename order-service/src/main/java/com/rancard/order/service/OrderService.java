@@ -2,13 +2,14 @@ package com.rancard.order.service;
 
 
 
-import com.rancard.order.dto.OrderDto;
-import com.rancard.order.dto.OrderItemDto;
-import com.rancard.order.dto.OrderRequest;
+import com.rancard.basepackages.enums.OrderStatus;
+import com.rancard.basepackages.event.OrderEvent;
+
+import com.rancard.basepackages.dto.OrderItemDto;
+import com.rancard.basepackages.dto.OrderRequest;
+import com.rancard.basepackages.payload.OrderItem;
 import com.rancard.order.event.OrderPlacedEvent;
-import com.rancard.order.model.Order;
-import com.rancard.order.model.OrderItem;
-import com.rancard.order.model.enums.OrderStatus;
+import com.rancard.basepackages.mongo.Order;
 import com.rancard.order.model.mongo.Agent;
 import com.rancard.order.model.response.ApiResponse;
 import com.rancard.order.repository.OrderRepository;
@@ -24,6 +25,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.rancard.basepackages.enums.OrderStatus.PENDING;
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +84,7 @@ public class OrderService {
             if (allProductsInStock) {
                 orderRepository.save(order);
                 // publish Order Placed Event
-                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, order));
+                applicationEventPublisher.publishEvent(new OrderPlacedEvent(this, new OrderEvent("New Order Event Received", PENDING, order.toDto())));
                 return order;
             } else {
                 throw new IllegalArgumentException("Product is not in stock, please try again later");
@@ -97,49 +100,8 @@ public class OrderService {
         orderLineItems.setSkuCode(orderLineItemsDto.getSkuCode());
         return orderLineItems;
     }
-    private OrderDto mapOrderToDto(Order order) {
-        return OrderDto.builder()
-                .createdAt(order.getCreated())
-                .items(order.getItems())
-                .orderId(order.getOrderId())
-                .orderStatus(order.getOrderStatus())
-                .shippingAddress(order.getShippingAddress())
-                .totalAmount(order.getTotalAmount())
-                .customerMsisdn(order.getCustomerMsisdn())
-                .agentId(order.getAgentId())
-                .build();
-    }
 
-    public ApiResponse<?> getOrdersByCustomer(String customerMsisdn) {
-        log.info("Getting Orders By Customer");
-        List<Order> orders = orderRepository.findByCustomerMsisdn(customerMsisdn);
-        List<OrderDto> orderDtos = orders
-                .stream()
-                .map(this::mapOrderToDto)
-                .toList();
 
-        return ApiResponse.builder()
-                .data(orderDtos)
-                .message("Orders Retrieved Successfully")
-                .code(200)
-                .build();
-    }
-
-    public OrderDto getOrder(String orderId) {
-        log.info("Getting Order");
-         Order order  = orderRepository.findByOrderId(orderId);
-         return mapOrderToDto(order);
-    }
-
-    public List<OrderDto> getOrders(String agentId) {
-        log.info("Getting Order");
-        List<Order> orders = orderRepository.findByAgentId(agentId);
-        List<OrderDto> orderDtos = orders
-                .stream()
-                .map(this::mapOrderToDto)
-                .toList();
-        return orderDtos;
-    }
 
     public Agent getAgent(){
 

@@ -1,6 +1,6 @@
 package com.rancard;
 
-import com.rancard.reportingservice.model.OrderPlacedEvent;
+import com.rancard.basepackages.event.OrderEvent;
 import com.rancard.reportingservice.service.OrderReportService;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -27,12 +27,12 @@ public class ReportingServiceApplication {
 
 
     @KafkaListener(topics = "orderTopic")
-    public void orderPlacedMessage(OrderPlacedEvent orderPlacedEvent) {
+    public void orderPlacedMessage(OrderEvent orderEvent) {
         Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
-            log.info("Got message <{}>", orderPlacedEvent);
+            log.info("Got message <{}>", orderEvent);
             log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
-                    orderPlacedEvent.getOrder());
-            orderReportService.saveOrder(orderPlacedEvent.getOrder());
+                    orderEvent.getOrderDto());
+            orderReportService.saveOrder(orderEvent.getOrderDto());
         });
 
         // send out an email notification

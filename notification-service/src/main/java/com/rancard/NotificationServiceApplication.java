@@ -1,6 +1,7 @@
 package com.rancard;
 
 import com.pusher.rest.Pusher;
+import com.rancard.basepackages.event.OrderEvent;
 import com.rancard.util.MailUtils;
 import com.rancard.util.SmsUtils;
 import io.micrometer.observation.Observation;
@@ -30,46 +31,46 @@ public class NotificationServiceApplication {
     }
 
     @KafkaListener(topics = "notificationTopic")
-    public void handleNotification(OrderPlacedEvent orderPlacedEvent) {
+    public void handleNotification(OrderEvent orderEvent) {
         Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
-            log.info("Got message <{}>", orderPlacedEvent);
+            log.info("Got message <{}>", orderEvent);
             log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
-                    orderPlacedEvent.getOrder());
+                    orderEvent.getOrderDto());
         });
 
     }
 
     @KafkaListener(topics = "orderTopic")
-    public void handleOrder(OrderPlacedEvent orderPlacedEvent) {
+    public void handleOrder(OrderEvent orderEvent) {
         Observation.createNotStarted("on-message", this.observationRegistry).observe(() -> {
-            log.info("Got message <{}>", orderPlacedEvent);
+            log.info("Got message <{}>", orderEvent);
 
             //Send Agent SMS
-            smsUtils.sendSms(orderPlacedEvent.getOrder().getAgentId(), "You have received a new order");
+            smsUtils.sendSms(orderEvent.getOrderDto().getAgentId(), "You have received a new order");
             //Send User SMS
-            smsUtils.sendSms(orderPlacedEvent.getOrder().getAgentId(), "Your order has been received. An agent will contact you shortly");
+            smsUtils.sendSms(orderEvent.getOrderDto().getAgentId(), "Your order has been received. An agent will contact you shortly");
             //Push to Portal
             //Use pusher to push to portal
             Pusher pusher = new Pusher("951394", "bed5f50e8d6138946013", "05091c00189a606dc1ac");
             pusher.setCluster("ap3");
             pusher.setEncrypted(true);
 
-            pusher.trigger(orderPlacedEvent.getOrder().getAgentId(), "new-order", Collections.singletonMap("message", "hello world"));
+            pusher.trigger(orderEvent.getOrderDto().getAgentId(), "new-order", Collections.singletonMap("message", orderEvent.getOrderDto()));
 
 
             //Send Email
             String htmlContent = getOrderEmail()
-                    .replace("{{orderId}}", orderPlacedEvent.getOrder().getOrderId())
+                    .replace("{{orderId}}", orderEvent.getOrderDto().getOrderId())
                     .replace("{{date}}", new Date().toString())
-                    .replace("{{amount}}", String.valueOf(orderPlacedEvent.getOrder().getTotalAmount()))
-                            .replace("{{contact}}", orderPlacedEvent.getOrder().getCustomerMsisdn())
-                                    .replace("{{street}}", orderPlacedEvent.getOrder().getShippingAddress().getStreet())
-                                            .replace("{{gps}}", orderPlacedEvent.getOrder().getShippingAddress().getGhanaPostGps());
+                    .replace("{{amount}}", String.valueOf(orderEvent.getOrderDto().getTotalAmount()))
+                            .replace("{{contact}}", orderEvent.getOrderDto().getCustomerMsisdn())
+                                    .replace("{{street}}", orderEvent.getOrderDto().getShippingAddress().getStreet())
+                                            .replace("{{gps}}", orderEvent.getOrderDto().getShippingAddress().getGhanaPostGps());
 
             MailUtils.sendNotification("bernard.aryee@rancard.com", "New Order", htmlContent);
 
             log.info("TraceId- {}, Received Notification for Order - {}", this.tracer.currentSpan().context().traceId(),
-                    orderPlacedEvent.getOrder());
+                    orderEvent.getOrderDto());
         });
 
     }

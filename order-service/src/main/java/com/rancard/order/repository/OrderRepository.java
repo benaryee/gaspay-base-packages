@@ -1,6 +1,6 @@
 package com.rancard.order.repository;
 
-import com.rancard.order.model.Order;
+import com.rancard.basepackages.mongo.Order;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

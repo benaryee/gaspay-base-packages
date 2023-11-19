@@ -1,14 +1,21 @@
-package com.rancard.basepackages.model.mongo;
+package com.rancard.basepackages.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rancard.basepackages.model.enums.UserStatus;
+import com.rancard.basepackages.enums.UserStatus;
+import com.rancard.basepackages.payload.Address;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Document
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User extends BaseMongoModel {

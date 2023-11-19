@@ -1,4 +1,4 @@
-package com.rancard;
+package com.rancard.basepackages.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

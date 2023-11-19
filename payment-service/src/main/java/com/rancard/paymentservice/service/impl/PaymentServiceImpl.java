@@ -48,11 +48,9 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment makePayment(TopupupRequestDto topupupRequestDto, String sessionId) {
         log.info("[{}] about to topup wallet with payload : {}", sessionId, topupupRequestDto);
 
-        //Make API call to Zeepay
         HttpMethod method = HttpMethod.POST;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setBearerAuth(zeepayOAuth2Config.getAccessTokenObject().getAccessToken());
 
         ZeepayApiRequest requestBody = ZeepayApiRequest.builder()
                 .description("Topup for "+ topupupRequestDto.getUser().getPhone())
@@ -73,7 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         log.info("[{}] request body to zeepay ::: {}",sessionId,requestBody.toString());
 
-        ZeepayApiResponse response = webClientService.makeApiCall(BASE_URL+"/api/debits", method, null, headers, requestBody, responseType);
+        ZeepayApiResponse response = webClientService.makeZeepayApiCall(BASE_URL+"/api/debits", method, null, headers, requestBody, responseType);
 
         log.info("[{}] response from ZEEPAY : {} ", sessionId , response);
 

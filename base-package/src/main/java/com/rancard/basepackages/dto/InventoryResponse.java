@@ -1,4 +1,4 @@
-package com.rancard.order.dto;
+package com.rancard.basepackages.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

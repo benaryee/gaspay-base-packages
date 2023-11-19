@@ -1,6 +1,7 @@
-package com.rancard.order.dto;
+package com.rancard.basepackages.dto;
 
-import com.rancard.order.model.mongo.Address;
+
+import com.rancard.basepackages.payload.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

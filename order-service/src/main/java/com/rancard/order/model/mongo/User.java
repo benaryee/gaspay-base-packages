@@ -1,7 +1,7 @@
 package com.rancard.order.model.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rancard.order.model.enums.UserStatus;
+import com.rancard.basepackages.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;

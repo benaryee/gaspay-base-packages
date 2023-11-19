@@ -1,4 +1,4 @@
-package com.rancard.order.model.enums;
+package com.rancard.basepackages.enums;
 
 public enum UserStatus {
     CLEARED,

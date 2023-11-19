@@ -1,4 +1,4 @@
-package com.rancard.model.enums;
+package com.rancard.basepackages.enums;
 
 public enum OrderStatus {
     PENDING,

@@ -1,4 +1,4 @@
-package com.rancard.basepackages.model.mongo;
+package com.rancard.basepackages.mongo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
