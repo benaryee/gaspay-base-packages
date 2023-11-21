@@ -1,0 +1,42 @@
+package com.gaspay.auth.model.dto;
+
+
+import lombok.*;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+public class EditUserDto implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -4549766876017551019L;
+
+    @NotNull
+    @NotEmpty
+    private String id;
+
+    @NotNull
+    @NotEmpty
+    private String phone;
+
+    @NotNull
+    @NotEmpty
+    private String firstName;
+
+    @NotNull
+    @NotEmpty
+    private String lastName;
+
+    private String otherNames;
+
+    @NotNull
+    private Set<RoleDto> roles = new HashSet<>();
+}

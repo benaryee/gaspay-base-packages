@@ -1,0 +1,44 @@
+package com.gaspay.ussdapp.model.dto;
+
+import com.gaspay.ussdapp.model.enums.Channel;
+import com.gaspay.ussdapp.model.payload.Address;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class SignupDto implements Serializable {
+
+        private String username;
+
+        private String email;
+
+        private String phone;
+        private String firstName;
+        private String lastName;
+        private String otherNames;
+
+
+        private String password;
+        private String confirmPassword;
+
+        private String street;
+        private String city;
+        private String state;
+        private String postalCode;
+        private String currentFuelSource;
+        private Address address = new Address();
+        private String familySize;
+        private Channel channel;
+
+        private List<RoleDto> roles = new ArrayList<>();
+
+}

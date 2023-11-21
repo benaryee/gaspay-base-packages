@@ -1,0 +1,69 @@
+package com.gaspay.ussdapp.model.redis;
+
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.gaspay.ussdapp.model.dto.CreateOrderDto;
+import com.gaspay.ussdapp.model.dto.UserDto;
+import com.gaspay.ussdapp.model.dto.Variant;
+import com.gaspay.ussdapp.model.dto.WalletResponseDto;
+import com.gaspay.ussdapp.model.enums.MenuKey;
+import com.gaspay.ussdapp.model.enums.MenuLevel;
+import com.gaspay.ussdapp.model.enums.SubMenuLevel;
+import com.gaspay.ussdapp.model.mongo.Enquiry;
+
+import com.gaspay.ussdapp.model.payload.GenericValueMap;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
+
+import java.io.Serializable;
+import java.util.HashMap;
+
+@RedisHash
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Session implements Serializable {
+
+    private String id;
+    private UserDto user;
+    private Enquiry enquiry;
+    private WalletResponseDto wallet;
+    private CreateOrderDto orderDto;
+    private MenuLevel menuLevel;
+    private SubMenuLevel subMenuLevel;
+    private SubMenuLevel previousSubMenuLevel;
+    private MenuKey menuKey;
+    private String pendingCode;
+    private String uniqueCode;
+    private String previousSelection;
+    private String starCode;
+    private String topUpAmount;
+
+    private String itemPrice;
+    private boolean initialRequest;
+    private GenericValueMap<?> options = new GenericValueMap<>();
+    private HashMap<Integer, Variant> variantOptions = new HashMap<>();
+    private GenericValueMap<?> previousOptions = new GenericValueMap<>();
+    private boolean hasNext;
+    private boolean hasBack;
+
+    private boolean throwPreviousMenuError;
+
+    private int optionsCurrentPage;
+    private int pageSize;
+    private int optionsSize;
+    private int pageLimit = 5;
+
+    private boolean continueSession;
+
+    public Session(String id, MenuLevel menuLevel) {
+        this.id = id;
+        this.menuLevel = menuLevel;
+    }
+
+
+
+}

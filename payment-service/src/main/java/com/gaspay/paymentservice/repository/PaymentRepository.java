@@ -1,0 +1,12 @@
+package com.gaspay.paymentservice.repository;
+
+import com.gaspay.paymentservice.model.mongo.Payment;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface PaymentRepository extends MongoRepository<Payment, String> {
+    Optional<Payment> findByPaymentId(String s);
+}

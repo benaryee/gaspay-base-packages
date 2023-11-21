@@ -70,8 +70,6 @@
         <dependency>
             <groupId>com.rancard</groupId>
             <artifactId>base-package</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
