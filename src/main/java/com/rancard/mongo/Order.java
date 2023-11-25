@@ -41,6 +41,7 @@ public class Order extends BaseMongoModel {
                 .customerMsisdn(customerMsisdn)
                 .orderStatus(orderStatus)
                 .shippingAddress(shippingAddress)
+                .createdAt(created)
                 .agentId(agentId)
                 .build();
     }
@@ -53,6 +54,7 @@ public class Order extends BaseMongoModel {
                 .customerMsisdn(orderDto.getCustomerMsisdn())
                 .orderStatus(orderDto.getOrderStatus())
                 .shippingAddress(orderDto.getShippingAddress())
+                .created(orderDto.getCreatedAt())
                 .agentId(orderDto.getAgentId())
                 .build();
     }
