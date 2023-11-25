@@ -22,6 +22,18 @@ Before you start, ensure you have the following:
 
 1. **Clone the Repository:**
 
-   ```bash
-   git clone https://github.com/your-username/spring-boot-nexus-repo.git
-   cd spring-boot-nexus-repo
+If you are using Maven, run the following command:
+
+```bash
+   mvn clean install
+```
+
+If you are using Gradle, run the following command:
+
+```bash
+   gradle clean build
+``` 
+
+2. **Configure Nexus Repository:**
+   - Open Nexus Repository Manager in your browser.
+   - Configure a new repository to host your packages.
