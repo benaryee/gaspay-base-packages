@@ -1,10 +1,10 @@
-package com.rancard.basepackages.mongo;
+package com.rancard.mongo;
 
 
-import com.rancard.basepackages.dto.OrderDto;
-import com.rancard.basepackages.enums.OrderStatus;
-import com.rancard.basepackages.payload.Address;
-import com.rancard.basepackages.payload.OrderItem;
+import com.rancard.dto.OrderDto;
+import com.rancard.enums.OrderStatus;
+import com.rancard.payload.Address;
+import com.rancard.payload.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

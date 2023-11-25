@@ -1,4 +1,4 @@
-package com.rancard.basepackages.mongo;
+package com.rancard.mongo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,22 +18,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 
-
-@Data
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @SuperBuilder
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class BaseMongoModel {
-    @Id
-    @Field("_id")
-    @Indexed
-    @JsonIgnore
     protected ObjectId id;
 
-    @JsonIgnore
-    @Version
     protected Long version;
 
     @JsonIgnore

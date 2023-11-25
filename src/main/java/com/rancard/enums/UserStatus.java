@@ -1,4 +1,4 @@
-package com.rancard.basepackages.enums;
+package com.rancard.enums;
 
 public enum UserStatus {
     CLEARED,

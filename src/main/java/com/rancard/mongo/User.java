@@ -1,8 +1,8 @@
-package com.rancard.basepackages.mongo;
+package com.rancard.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rancard.basepackages.enums.UserStatus;
-import com.rancard.basepackages.payload.Address;
+import com.rancard.enums.UserStatus;
+import com.rancard.payload.Address;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

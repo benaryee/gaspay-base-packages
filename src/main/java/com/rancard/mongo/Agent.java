@@ -1,4 +1,4 @@
-package com.rancard.basepackages.mongo;
+package com.rancard.mongo;
 
 import lombok.Data;
 
