@@ -103,7 +103,7 @@ public class DataLoader implements CommandLineRunner {
                             new Option(1, "Confirm"),
                             new Option(2, "Enter New Location")
                     )),
-                    new UssdMenu(PURCHASE_ORDER_CONFIRMATION_RESPONSE, "Order Summary\n[size] Cylidner\nSub Total : GHS[price]\nDelivery : GHS [delivery]\nTotal : GHS[total]", Arrays.asList(
+                    new UssdMenu(PURCHASE_ORDER_CONFIRMATION_RESPONSE, "Order Summary\n[size] Cylinder\nSub Total : GHS[price]\nDelivery : GHS [delivery]\nTotal : GHS[total]", Arrays.asList(
                             new Option(1, "Confirm"),
                             new Option(2, "Go Back")
                     )),
@@ -111,12 +111,7 @@ public class DataLoader implements CommandLineRunner {
                             new Option(1, "GasPay Wallet - GHS[balance]"),
                             new Option(2, "MoMo Wallet")
                     )),
-                    new UssdMenu(WALLET_PASSWORD_RESPONSE, "Enter your PIN"),
-                    new UssdMenu(MY_ACCOUNT_MAIN_MENU_RESPONSE, "My Account", Arrays.asList(
-                            new Option(1, "Change My Name"),
-                            new Option(2, "Change My Location"),
-                            new Option(3, "Change My Pin")
-                    ))
+                    new UssdMenu(WALLET_PASSWORD_RESPONSE, "Enter your PIN")
             ));
 
         }

@@ -126,6 +126,42 @@ services:
       - discovery-server
       - api-gateway
 
+
+  ## Campaign-Service Docker Compose Config
+  campaign-service:
+    container_name: campaign-service
+    image: bernardaryee/campaign-service:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+             "spring.data.mongodb.uri" : "mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongo_db:$MONGODB_DOCKER_PORT/$MONGODB_CAMPAIGN_DATABASE?authSource=admin",
+             "management.zipkin.tracing.endpoint":"http://zipkin:9411",
+              "eureka.client.serviceUrl.defaultZone":"http://discovery-server:8761/eureka"
+           }'
+    depends_on:
+      - mongo_db
+      - discovery-server
+      - api-gateway
+
+
+
+  ## Payment-Financing-Service Docker Compose Config
+  hire-purchase-service:
+    container_name: hire-purchase-service
+    image: bernardaryee/hire-purchase-service:latest
+    environment:
+      SPRING_APPLICATION_JSON: '{
+             "spring.data.mongodb.uri" : "mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongo_db:$MONGODB_DOCKER_PORT/$MONGODB_HIRE_PURCHASE_DATABASE?authSource=admin",
+             "management.zipkin.tracing.endpoint":"http://zipkin:9411",
+              "eureka.client.serviceUrl.defaultZone":"http://discovery-server:8761/eureka"
+           }'
+    depends_on:
+      - mongo_db
+      - discovery-server
+      - api-gateway
+
+
+
+
   ## Payment-Service Docker Compose Config
   payment-service:
     container_name: payment-service

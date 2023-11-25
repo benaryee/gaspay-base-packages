@@ -25,12 +25,15 @@
         <module>inventory-service</module>
         <module>payment-service</module>
         <module>reporting-service</module>
+        <module>hire-purchase-service</module>
+        <module>campaign-service</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
+        <base-packages-version>1.1.10</base-packages-version>
         <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
 
@@ -53,7 +56,7 @@
             <dependency>
                 <groupId>com.rancard</groupId>
                 <artifactId>base-package</artifactId>
-                <version>1.1.6</version>
+                <version>${base-packages-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -70,6 +73,11 @@
         <repository>
             <id>central</id>
             <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>gaspay-nexsu</id>
+            <name>releases</name>
+            <url>https://nexus.gaspayapp.com/repository/gaspay-maven-releases</url>
         </repository>
     </repositories>
 

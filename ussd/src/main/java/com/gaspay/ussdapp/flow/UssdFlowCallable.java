@@ -142,15 +142,6 @@ public class UssdFlowCallable implements Callable<UssdResponse> {
                 return walletActionRouter.call();
             }
 
-            case ORDER_HISTORY -> {
-                MainMenuActionRouter mainMenuAction = beanFactory.getBean(MainMenuActionRouter.class);
-                mainMenuAction.setDispatchObject(dispatchObject);
-                mainMenuAction.setSessionId(sessionId);
-                mainMenuAction.setResponse(response);
-                mainMenuAction.setUser(dispatchObject.getSession().getUser());
-                return mainMenuAction.call();
-            }
-
             case ACCOUNT -> {
                 MyAccountActionRouter myAccountActionRouter = beanFactory.getBean(MyAccountActionRouter.class);
                 myAccountActionRouter.setDispatchObject(dispatchObject);

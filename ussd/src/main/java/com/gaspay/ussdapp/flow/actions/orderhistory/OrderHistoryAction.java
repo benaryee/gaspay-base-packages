@@ -80,7 +80,7 @@ public class OrderHistoryAction extends BotletActions {
 
         //Call order service to get user order history
         return webClientBuilder.build().get()
-                .uri("lb://order-service/api/order/customer/{msisdn}", dispatchObject.getUssdRequest().getMsisdn())
+                .uri("lb://reporting-service/api/report/customer/{msisdn}", dispatchObject.getUssdRequest().getMsisdn())
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<ApiResponse<List<OrderDto>>>() {})
                 .block();
