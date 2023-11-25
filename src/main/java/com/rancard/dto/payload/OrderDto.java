@@ -1,4 +1,4 @@
-package com.rancard.dto;
+package com.rancard.dto.payload;
 
 import com.rancard.enums.OrderStatus;
 import com.rancard.payload.Address;

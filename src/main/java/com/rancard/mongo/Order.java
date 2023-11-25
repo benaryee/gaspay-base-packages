@@ -1,7 +1,7 @@
 package com.rancard.mongo;
 
 
-import com.rancard.dto.OrderDto;
+import com.rancard.dto.payload.OrderDto;
 import com.rancard.enums.OrderStatus;
 import com.rancard.payload.Address;
 import com.rancard.payload.OrderItem;

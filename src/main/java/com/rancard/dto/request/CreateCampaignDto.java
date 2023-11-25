@@ -1,4 +1,4 @@
-package com.rancard.dto;
+package com.rancard.dto.request;
 
 
 import com.rancard.enums.CampaignType;

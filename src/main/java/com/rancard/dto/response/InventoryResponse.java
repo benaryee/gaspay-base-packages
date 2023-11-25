@@ -1,7 +1,10 @@
-package com.rancard.dto;
+package com.rancard.dto.response;
+
+import lombok.Data;
 
 import java.util.Objects;
 
+@Data
 public class InventoryResponse {
     private String skuCode;
     private boolean isInStock;

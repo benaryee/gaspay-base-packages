@@ -1,4 +1,4 @@
-package com.rancard.dto;
+package com.rancard.dto.payload;
 
 import java.math.BigDecimal;
 import java.util.Objects;
