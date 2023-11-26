@@ -1,9 +1,13 @@
 package com.rancard.dto.payload;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.rancard.enums.OrderStatus;
 import com.rancard.payload.Address;
 import com.rancard.payload.OrderItem;
 import lombok.Builder;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,6 +23,8 @@ public class OrderDto implements Serializable {
     private OrderStatus orderStatus;
     private Address shippingAddress;
     private String agentId;
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdAt;
 
     public OrderDto() {
