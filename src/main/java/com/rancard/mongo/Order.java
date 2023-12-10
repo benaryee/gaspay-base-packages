@@ -32,6 +32,7 @@ public class Order extends BaseMongoModel {
     private OrderStatus orderStatus;
     private Address shippingAddress;
     private String agentId;
+    private String paymentId;
 
     public OrderDto toDto() {
         return OrderDto.builder()
