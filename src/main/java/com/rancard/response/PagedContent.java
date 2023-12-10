@@ -1,6 +1,8 @@
 package com.rancard.response;
 
 
+import org.springframework.data.domain.Page;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -17,17 +19,17 @@ public class PagedContent<T> {
     private boolean isLast;
     private List<T> data;
 
-//    public PagedContent(Page pagedData, List<T> data) {
-//        this.setData(data);
-//        this.setTotalElements(pagedData.getTotalElements());
-//        this.setTotalPages(pagedData.getTotalPages());
-//        this.setPage(pagedData.getPageable().getPageNumber());
-//        this.setSize(pagedData.getPageable().getPageSize());
-//        this.setHasNextPage(pagedData.hasNext());
-//        this.setHasPreviousPage(pagedData.hasPrevious());
-//        this.setFirst(pagedData.isFirst());
-//        this.setLast(pagedData.isLast());
-//    }
+    public PagedContent(Page pagedData, List<T> data) {
+        this.setData(data);
+        this.setTotalElements(pagedData.getTotalElements());
+        this.setTotalPages(pagedData.getTotalPages());
+        this.setPage(pagedData.getPageable().getPageNumber());
+        this.setSize(pagedData.getPageable().getPageSize());
+        this.setHasNextPage(pagedData.hasNext());
+        this.setHasPreviousPage(pagedData.hasPrevious());
+        this.setFirst(pagedData.isFirst());
+        this.setLast(pagedData.isLast());
+    }
 
     public long getTotalElements() {
         return totalElements;
