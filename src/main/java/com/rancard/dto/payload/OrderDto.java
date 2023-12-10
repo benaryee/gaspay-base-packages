@@ -8,6 +8,7 @@ import com.rancard.payload.OrderItem;
 import lombok.Builder;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.joda.time.DateTime;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -23,14 +24,13 @@ public class OrderDto implements Serializable {
     private OrderStatus orderStatus;
     private Address shippingAddress;
     private String agentId;
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime createdAt;
+
+    private DateTime createdAt;
 
     public OrderDto() {
     }
 
-    public OrderDto(String orderId, List<OrderItem> items, double totalAmount, String customerMsisdn, OrderStatus orderStatus, Address shippingAddress, String agentId, LocalDateTime createdAt) {
+    public OrderDto(String orderId, List<OrderItem> items, double totalAmount, String customerMsisdn, OrderStatus orderStatus, Address shippingAddress, String agentId, DateTime createdAt) {
         this.orderId = orderId;
         this.items = items;
         this.totalAmount = totalAmount;
@@ -97,11 +97,11 @@ public class OrderDto implements Serializable {
         this.agentId = agentId;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public DateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(DateTime createdAt) {
         this.createdAt = createdAt;
     }
 
