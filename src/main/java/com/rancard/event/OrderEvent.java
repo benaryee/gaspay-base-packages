@@ -1,13 +1,13 @@
 package com.rancard.event;
 
 import com.rancard.dto.payload.OrderEventData;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.ApplicationEvent;
 
 
 @Getter
 @Setter
+@Builder
 public class OrderEvent extends ApplicationEvent {
     private OrderEventData orderEventData;
 

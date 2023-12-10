@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PaymentEventData {
+public class OrderEventData {
     private String message;
     private OrderStatus status;
     private OrderDto orderDto;
