@@ -23,4 +23,6 @@ public class PaymentDto {
     private PaymentStatus status;
     private PaymentType paymentType;
     private String sessionId;
+    private String senderId;
+    private String recipientId;
 }

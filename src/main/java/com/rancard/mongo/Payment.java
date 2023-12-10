@@ -23,6 +23,8 @@ public class Payment extends BaseMongoModel {
         private String currency;
         private PaymentStatus status;
         private PaymentType paymentType;
+        private String senderId;
+        private String recipientId;
         private String sessionId;
 
         public PaymentDto toDto() {
@@ -31,6 +33,8 @@ public class Payment extends BaseMongoModel {
                         .walletId(walletId)
                         .amount(amount)
                         .currency(currency)
+                        .senderId(senderId)
+                        .recipientId(recipientId)
                         .status(status)
                         .paymentType(paymentType)
                         .sessionId(sessionId)

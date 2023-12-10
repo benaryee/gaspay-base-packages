@@ -1,6 +1,7 @@
 package com.rancard.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rancard.dto.payload.UserDto;
 import com.rancard.enums.UserStatus;
 import com.rancard.payload.Address;
 import lombok.AllArgsConstructor;
@@ -44,4 +45,17 @@ public class User extends BaseMongoModel {
     private String keycloakUserId;
     private Address address = new Address();
     private Set<Role> roles;
+
+
+    public UserDto toDto() {
+        return UserDto.builder()
+                .id(this.getIdString())
+                .email(email)
+                .phone(msisdn)
+                .firstname(firstname)
+                .lastname(lastname)
+                .othernames(othernames)
+                .walletId(walletId)
+                .build();
+    }
 }
