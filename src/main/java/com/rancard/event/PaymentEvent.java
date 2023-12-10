@@ -1,23 +1,23 @@
 package com.rancard.event;
 
-import com.rancard.dto.payload.OrderDto;
-import com.rancard.dto.payload.PaymentDto;
-import com.rancard.enums.OrderStatus;
-import com.rancard.enums.PaymentStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Objects;
+import com.rancard.dto.payload.PaymentEventData;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.context.ApplicationEvent;
 
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class PaymentEvent {
-    private String message;
-    private PaymentStatus status;
-    private PaymentDto paymentDto;
+@Getter
+@Setter
+public class PaymentEvent extends ApplicationEvent {
+    private PaymentEventData paymentEventData;
+
+    public PaymentEvent(Object source, PaymentEventData paymentEventData) {
+        super(source);
+        this.paymentEventData = paymentEventData;
+    }
+
+    public PaymentEvent(PaymentEventData orderEventData) {
+        super(orderEventData);
+        this.paymentEventData = orderEventData;
+    }
 }

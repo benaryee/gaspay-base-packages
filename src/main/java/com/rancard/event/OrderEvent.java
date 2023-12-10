@@ -1,20 +1,23 @@
 package com.rancard.event;
 
-import com.rancard.dto.payload.OrderDto;
-import com.rancard.enums.OrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.rancard.dto.payload.OrderEventData;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.context.ApplicationEvent;
 
-import java.util.Objects;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class OrderEvent {
-    private String message;
-    private OrderStatus status;
-    private OrderDto orderDto;
+@Getter
+@Setter
+public class OrderEvent extends ApplicationEvent {
+    private OrderEventData orderEventData;
+
+    public OrderEvent(Object source, OrderEventData orderEventData) {
+        super(source);
+        this.orderEventData = orderEventData;
+    }
+
+    public OrderEvent(OrderEventData orderEventData) {
+        super(orderEventData);
+        this.orderEventData = orderEventData;
+    }
 }
