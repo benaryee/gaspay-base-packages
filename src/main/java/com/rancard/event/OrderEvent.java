@@ -11,6 +11,11 @@ import org.springframework.context.ApplicationEvent;
 public class OrderEvent extends ApplicationEvent {
     private OrderEventData orderEventData;
 
+    public OrderEvent() {
+        super(new Object());
+    }
+
+
     public OrderEvent(Object source, OrderEventData orderEventData) {
         super(source);
         this.orderEventData = orderEventData;
@@ -20,4 +25,5 @@ public class OrderEvent extends ApplicationEvent {
         super(orderEventData);
         this.orderEventData = orderEventData;
     }
+
 }

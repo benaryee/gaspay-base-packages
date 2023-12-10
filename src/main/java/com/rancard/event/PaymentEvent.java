@@ -13,6 +13,9 @@ import org.springframework.context.ApplicationEvent;
 public class PaymentEvent extends ApplicationEvent {
     private PaymentEventData paymentEventData;
 
+    public PaymentEvent() {
+        super(new Object());
+    }
     public PaymentEvent(Object source, PaymentEventData paymentEventData) {
         super(source);
         this.paymentEventData = paymentEventData;

@@ -40,4 +40,18 @@ public class Payment extends BaseMongoModel {
                         .sessionId(sessionId)
                         .build();
         }
+
+        public static Payment fromDto(PaymentDto paymentDto) {
+                return Payment.builder()
+                        .paymentId(paymentDto.getPaymentId())
+                        .walletId(paymentDto.getWalletId())
+                        .amount(paymentDto.getAmount())
+                        .currency(paymentDto.getCurrency())
+                        .senderId(paymentDto.getSenderId())
+                        .recipientId(paymentDto.getRecipientId())
+                        .status(paymentDto.getStatus())
+                        .paymentType(paymentDto.getPaymentType())
+                        .sessionId(paymentDto.getSessionId())
+                        .build();
+        }
 }
