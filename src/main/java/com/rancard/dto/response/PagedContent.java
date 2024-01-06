@@ -1,11 +1,9 @@
-package com.rancard.response;
-
-
-import org.springframework.data.domain.Page;
+/*(C) Gaspay App 2023 */
+package com.rancard.dto.response;
 
 import java.util.List;
 import java.util.Objects;
-
+import org.springframework.data.domain.Page;
 
 public class PagedContent<T> {
 
@@ -108,26 +106,52 @@ public class PagedContent<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PagedContent<?> that = (PagedContent<?>) o;
-        return totalElements == that.totalElements && totalPages == that.totalPages && page == that.page && size == that.size && hasNextPage == that.hasNextPage && hasPreviousPage == that.hasPreviousPage && isFirst == that.isFirst && isLast == that.isLast && Objects.equals(data, that.data);
+        return totalElements == that.totalElements
+                && totalPages == that.totalPages
+                && page == that.page
+                && size == that.size
+                && hasNextPage == that.hasNextPage
+                && hasPreviousPage == that.hasPreviousPage
+                && isFirst == that.isFirst
+                && isLast == that.isLast
+                && Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(totalElements, totalPages, page, size, hasNextPage, hasPreviousPage, isFirst, isLast, data);
+        return Objects.hash(
+                totalElements,
+                totalPages,
+                page,
+                size,
+                hasNextPage,
+                hasPreviousPage,
+                isFirst,
+                isLast,
+                data);
     }
 
     @Override
     public String toString() {
-        return "PagedContent{" +
-                "totalElements=" + totalElements +
-                ", totalPages=" + totalPages +
-                ", page=" + page +
-                ", size=" + size +
-                ", hasNextPage=" + hasNextPage +
-                ", hasPreviousPage=" + hasPreviousPage +
-                ", isFirst=" + isFirst +
-                ", isLast=" + isLast +
-                ", data=" + data +
-                '}';
+        return "PagedContent{"
+                + "totalElements="
+                + totalElements
+                + ", totalPages="
+                + totalPages
+                + ", page="
+                + page
+                + ", size="
+                + size
+                + ", hasNextPage="
+                + hasNextPage
+                + ", hasPreviousPage="
+                + hasPreviousPage
+                + ", isFirst="
+                + isFirst
+                + ", isLast="
+                + isLast
+                + ", data="
+                + data
+                + '}';
     }
 }

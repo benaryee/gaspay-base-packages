@@ -4,5 +4,5 @@ public enum UserStatus {
     CLEARED,
     SUSPENDED,
     BLOCKED,
-    EXPIRED;
+    EXPIRED
 }

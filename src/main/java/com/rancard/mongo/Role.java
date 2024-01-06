@@ -1,5 +1,7 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.mongo;
 
+import com.rancard.dto.payload.RoleDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,12 +25,21 @@ public class Role {
 
     private String description;
 
-    @CreatedDate
-    private DateTime _created;
+    @CreatedDate private DateTime _created;
 
-    @LastModifiedDate
-    private DateTime _modified;
+    @LastModifiedDate private DateTime _modified;
 
-    @CreatedBy
-    private String createdBy;
+    @CreatedBy private String createdBy;
+
+    public RoleDto toDto() {
+        return RoleDto.builder().code(code).name(name).description(description).build();
+    }
+
+    public static Role fromDto(RoleDto roleDto) {
+        return Role.builder()
+                .code(roleDto.getCode())
+                .name(roleDto.getName())
+                .description(roleDto.getDescription())
+                .build();
+    }
 }

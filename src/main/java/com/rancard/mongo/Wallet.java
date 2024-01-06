@@ -1,20 +1,26 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.mongo;
 
 import com.rancard.dto.payload.WalletDto;
+import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.math.BigDecimal;
 
 @Data
 @Document
 @EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Wallet extends BaseMongoModel {
 
-    private String walletId;
     private BigDecimal balance;
     private BigDecimal promoBalance;
+    private double promoPoints;
     private BigDecimal hirePurchaseBalance;
     private BigDecimal topupBalance;
     private String currency;
@@ -23,13 +29,28 @@ public class Wallet extends BaseMongoModel {
 
     public WalletDto toDto() {
         return WalletDto.builder()
-                .walletId(walletId)
-                .promoBalance(String.valueOf(promoBalance))
-                .balance(String.valueOf(balance))
-                .hirePurchaseBalance(String.valueOf(hirePurchaseBalance))
-                .topupBalance(String.valueOf(topupBalance))
+                .id(getIdString())
+                .balance(balance)
+                .promoBalance(promoBalance)
+                .promoPoints(promoPoints)
+                .hirePurchaseBalance(hirePurchaseBalance)
+                .topupBalance(topupBalance)
                 .currency(currency)
                 .status(status)
+                .password(password)
+                .build();
+    }
+
+    public static Wallet fromDto(WalletDto dto) {
+        return Wallet.builder()
+                .balance(dto.getBalance())
+                .promoBalance(dto.getPromoBalance())
+                .promoPoints(dto.getPromoPoints())
+                .hirePurchaseBalance(dto.getHirePurchaseBalance())
+                .topupBalance(dto.getTopupBalance())
+                .currency(dto.getCurrency())
+                .status(dto.getStatus())
+                .password(dto.getPassword())
                 .build();
     }
 }

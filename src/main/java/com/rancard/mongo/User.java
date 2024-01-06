@@ -1,31 +1,39 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.mongo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rancard.dto.payload.Address;
 import com.rancard.dto.payload.UserDto;
 import com.rancard.enums.UserStatus;
-import com.rancard.payload.Address;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @Document
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@CompoundIndex(def = "{'msisdn': 1, 'roles': 1 }", unique = true)
 public class User extends BaseMongoModel {
-    private String username;
+
+    @Indexed private String username;
     private String firstname;
     private String othernames;
     private UserStatus userStatus;
+
     private String lastname;
-    private String email;
+    @Indexed private String email;
     private String familySize;
     private String currentFuelSource;
     private String password;
@@ -34,9 +42,11 @@ public class User extends BaseMongoModel {
     private String city;
     private String state;
     private String postalCode;
-    private String msisdn;
+
+    @Indexed private String msisdn;
     private int successiveFailedAttempts;
-    private String walletId;
+
+    @Indexed private String walletId;
 
     private boolean resetPassword;
     private LocalDateTime lastLogin;
@@ -46,16 +56,37 @@ public class User extends BaseMongoModel {
     private Address address = new Address();
     private Set<Role> roles;
 
-
     public UserDto toDto() {
         return UserDto.builder()
                 .id(this.getIdString())
                 .email(email)
-                .phone(msisdn)
+                .msisdn(msisdn)
                 .firstname(firstname)
                 .lastname(lastname)
+                .address(address)
+                .roles(
+                        !roles.isEmpty()
+                                ? roles.stream()
+                                        .map(Role::getName)
+                                        .collect(java.util.stream.Collectors.toSet())
+                                : new HashSet<>())
+                .lastLogin(lastLogin)
                 .othernames(othernames)
                 .walletId(walletId)
+                .build();
+    }
+
+    public static User fromDto(UserDto userDto) {
+        return User.builder()
+                .username(userDto.getEmail())
+                .firstname(userDto.getFirstname())
+                .lastname(userDto.getLastname())
+                .othernames(userDto.getOthernames())
+                .email(userDto.getEmail())
+                .msisdn(userDto.getMsisdn())
+                .address(userDto.getAddress())
+                .lastLogin(userDto.getLastLogin())
+                .walletId(userDto.getWalletId())
                 .build();
     }
 }

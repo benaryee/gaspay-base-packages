@@ -1,7 +1,10 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+
+import java.math.BigDecimal;
 
 @Builder
 @Data
@@ -11,11 +14,11 @@ import lombok.*;
 public class WalletDto {
 
     private String id;
-    private String walletId;
-    private String balance;
-    private String promoBalance;
-    private String hirePurchaseBalance;
-    private String topupBalance;
+    private BigDecimal balance;
+    private BigDecimal promoBalance;
+    private double promoPoints;
+    private BigDecimal hirePurchaseBalance;
+    private BigDecimal topupBalance;
     private String currency;
     private String password;
     private String status;

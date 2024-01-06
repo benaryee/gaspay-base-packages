@@ -1,20 +1,19 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.mongo;
 
-
+import com.rancard.dto.payload.Address;
 import com.rancard.dto.payload.OrderDto;
+import com.rancard.dto.payload.OrderItem;
+import com.rancard.dto.payload.OrderStateHistory;
 import com.rancard.enums.OrderStatus;
-import com.rancard.payload.Address;
-import com.rancard.payload.OrderItem;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
-
-
 
 @Data
 @NoArgsConstructor
@@ -24,14 +23,21 @@ import java.util.List;
 @Document
 public class Order extends BaseMongoModel {
 
-    private String orderId;
+    @Indexed private String orderId;
     private List<OrderItem> items;
     private double totalAmount;
-    private String customerMsisdn;
-    private OrderStatus orderStatus;
+
+    @Indexed private String customerMsisdn;
+    @Indexed private OrderStatus orderStatus;
+
+    private List<OrderStateHistory> stateHistory;
     private Address shippingAddress;
-    private String agentId;
-    private String paymentId;
+
+    @Indexed private String agentId;
+
+    @Indexed private String outletId;
+
+    @Indexed private String paymentId;
 
     public OrderDto toDto() {
         return OrderDto.builder()
@@ -41,7 +47,9 @@ public class Order extends BaseMongoModel {
                 .customerMsisdn(customerMsisdn)
                 .orderStatus(orderStatus)
                 .shippingAddress(shippingAddress)
+                .paymentId(paymentId)
                 .createdAt(created)
+                .stateHistory(stateHistory)
                 .agentId(agentId)
                 .build();
     }
@@ -53,8 +61,10 @@ public class Order extends BaseMongoModel {
                 .totalAmount(orderDto.getTotalAmount())
                 .customerMsisdn(orderDto.getCustomerMsisdn())
                 .orderStatus(orderDto.getOrderStatus())
+                .paymentId(orderDto.getPaymentId())
                 .shippingAddress(orderDto.getShippingAddress())
                 .created(orderDto.getCreatedAt())
+                .stateHistory(orderDto.getStateHistory())
                 .agentId(orderDto.getAgentId())
                 .build();
     }

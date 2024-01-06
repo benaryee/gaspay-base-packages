@@ -1,11 +1,10 @@
-package com.rancard.response;
+/*(C) Gaspay App 2023 */
+package com.rancard.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rancard.payload.BaseError;
-
+import com.rancard.dto.payload.BaseError;
 import java.io.Serializable;
 import java.util.Objects;
-
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> implements Serializable {
@@ -16,9 +15,11 @@ public class ApiResponse<T> implements Serializable {
     private long duration;
     private String requestId;
     private BaseError error;
-    public ApiResponse() {
-    }
-    public ApiResponse(int code, String message, T data, long duration, String requestId, BaseError error) {
+
+    public ApiResponse() {}
+
+    public ApiResponse(
+            int code, String message, T data, long duration, String requestId, BaseError error) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -80,7 +81,12 @@ public class ApiResponse<T> implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ApiResponse<?> that = (ApiResponse<?>) o;
-        return code == that.code && duration == that.duration && Objects.equals(message, that.message) && Objects.equals(data, that.data) && Objects.equals(requestId, that.requestId) && Objects.equals(error, that.error);
+        return code == that.code
+                && duration == that.duration
+                && Objects.equals(message, that.message)
+                && Objects.equals(data, that.data)
+                && Objects.equals(requestId, that.requestId)
+                && Objects.equals(error, that.error);
     }
 
     @Override
@@ -90,13 +96,21 @@ public class ApiResponse<T> implements Serializable {
 
     @Override
     public String toString() {
-        return "ApiResponse{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                ", data=" + data +
-                ", duration=" + duration +
-                ", requestId='" + requestId + '\'' +
-                ", error=" + error +
-                '}';
+        return "ApiResponse{"
+                + "code="
+                + code
+                + ", message='"
+                + message
+                + '\''
+                + ", data="
+                + data
+                + ", duration="
+                + duration
+                + ", requestId='"
+                + requestId
+                + '\''
+                + ", error="
+                + error
+                + '}';
     }
 }

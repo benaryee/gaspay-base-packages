@@ -1,16 +1,14 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.dto.payload;
-
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.enums.CampaignType;
-import com.rancard.payload.CampaignTarget;
-import lombok.Builder;
-import lombok.Data;
-import org.joda.time.DateTime;
-
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.List;
+import lombok.Builder;
+import lombok.Data;
+import org.joda.time.DateTime;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

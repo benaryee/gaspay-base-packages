@@ -1,8 +1,8 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.dto.request;
 
-
+import com.rancard.dto.payload.CampaignTarget;
 import com.rancard.enums.CampaignType;
-import com.rancard.payload.CampaignTarget;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

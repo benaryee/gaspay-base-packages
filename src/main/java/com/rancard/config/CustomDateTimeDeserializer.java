@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class CustomDateTimeDeserializer extends StdDeserializer<DateTime> {
     private static final long serialVersionUID = 1L;
-    private static DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public CustomDateTimeDeserializer() {
         this(null);
@@ -24,7 +24,7 @@ public class CustomDateTimeDeserializer extends StdDeserializer<DateTime> {
 
     @Override
     public DateTime deserialize(JsonParser parser, DeserializationContext context)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         String date = parser.getText();
 

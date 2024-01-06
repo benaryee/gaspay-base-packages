@@ -1,8 +1,8 @@
-package com.rancard.payload;
+/*(C) Gaspay App 2023 */
+package com.rancard.dto.payload;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-
 
 public class OrderItem {
 
@@ -11,8 +11,7 @@ public class OrderItem {
     private BigDecimal price;
     private Integer quantity;
 
-    public OrderItem() {
-    }
+    public OrderItem() {}
 
     public OrderItem(Long id, String skuCode, BigDecimal price, Integer quantity) {
         this.id = id;
@@ -20,6 +19,7 @@ public class OrderItem {
         this.price = price;
         this.quantity = quantity;
     }
+
     public Long getId() {
         return id;
     }
@@ -57,7 +57,10 @@ public class OrderItem {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(id, orderItem.id) && Objects.equals(skuCode, orderItem.skuCode) && Objects.equals(price, orderItem.price) && Objects.equals(quantity, orderItem.quantity);
+        return Objects.equals(id, orderItem.id)
+                && Objects.equals(skuCode, orderItem.skuCode)
+                && Objects.equals(price, orderItem.price)
+                && Objects.equals(quantity, orderItem.quantity);
     }
 
     @Override
@@ -67,11 +70,16 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", skuCode='" + skuCode + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
+        return "OrderItem{"
+                + "id="
+                + id
+                + ", skuCode='"
+                + skuCode
+                + '\''
+                + ", price="
+                + price
+                + ", quantity="
+                + quantity
+                + '}';
     }
 }

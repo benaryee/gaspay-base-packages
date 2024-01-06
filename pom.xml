@@ -14,7 +14,7 @@
 
     <groupId>com.rancard</groupId>
     <artifactId>base-package</artifactId>
-    <version>1.1.29</version>
+    <version>1.1.96</version>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -24,6 +24,12 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.15.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -45,9 +51,20 @@
             <version>4.0.3</version>
         </dependency>
         <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
             <version>2.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -69,4 +86,52 @@
             <url>https://nexus.gaspayapp.com/repository/gaspay-maven-snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
+
+    <build>
+        <plugins>
+        <plugin>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <version>2.41.1</version>
+            <configuration>
+                <!-- optional: limit format enforcement to just the files changed by this feature branch -->
+                <ratchetFrom>origin/main</ratchetFrom>
+                <formats>
+                    <!-- you can define as many formats as you want, each is independent -->
+                    <format>
+                        <!-- define the files to apply to -->
+                        <includes>
+                            <include>.gitattributes</include>
+                            <include>.gitignore</include>
+                        </includes>
+                        <!-- define the steps to apply to those files -->
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                        <indent>
+                            <tabs>true</tabs>
+                            <spacesPerTab>4</spacesPerTab>
+                        </indent>
+                    </format>
+                </formats>
+                <!-- define a language-specific format -->
+                <java>
+                    <!-- no need to specify files, inferred automatically, but you can if you want -->
+
+                    <!-- apply a specific flavor of google-java-format and reflow long strings -->
+                    <googleJavaFormat>
+                        <version>1.19.1</version>
+                        <style>AOSP</style>
+                        <reflowLongStrings>true</reflowLongStrings>
+                        <formatJavadoc>false</formatJavadoc>
+                    </googleJavaFormat>
+
+                    <licenseHeader>
+                        <content>/*(C) Gaspay App $YEAR */</content>
+                    </licenseHeader>
+                </java>
+            </configuration>
+        </plugin>
+    </plugins>
+    </build>
 </project>

@@ -1,57 +1,63 @@
+/*(C) Gaspay App 2023 */
 package com.rancard.mongo;
-
 
 import com.rancard.dto.payload.PaymentDto;
 import com.rancard.enums.PaymentStatus;
 import com.rancard.enums.PaymentType;
-import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.math.BigDecimal;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document
 @EqualsAndHashCode(callSuper = true)
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Payment extends BaseMongoModel {
 
-        private String paymentId;
-        private String walletId;
-        private BigDecimal amount;
-        private String currency;
-        private PaymentStatus status;
-        private PaymentType paymentType;
-        private String senderId;
-        private String recipientId;
-        private String sessionId;
+    @Indexed private String paymentId;
 
-        public PaymentDto toDto() {
-                return PaymentDto.builder()
-                        .paymentId(paymentId)
-                        .walletId(walletId)
-                        .amount(amount)
-                        .currency(currency)
-                        .senderId(senderId)
-                        .recipientId(recipientId)
-                        .status(status)
-                        .paymentType(paymentType)
-                        .sessionId(sessionId)
-                        .build();
-        }
+    @Indexed private String extPaymentId;
 
-        public static Payment fromDto(PaymentDto paymentDto) {
-                return Payment.builder()
-                        .paymentId(paymentDto.getPaymentId())
-                        .walletId(paymentDto.getWalletId())
-                        .amount(paymentDto.getAmount())
-                        .currency(paymentDto.getCurrency())
-                        .senderId(paymentDto.getSenderId())
-                        .recipientId(paymentDto.getRecipientId())
-                        .status(paymentDto.getStatus())
-                        .paymentType(paymentDto.getPaymentType())
-                        .sessionId(paymentDto.getSessionId())
-                        .build();
-        }
+    @Indexed private String walletId;
+    private BigDecimal amount;
+    private String currency;
+    private PaymentStatus status;
+    private PaymentType paymentType;
+
+    @Indexed private String senderId;
+
+    @Indexed private String recipientId;
+    private String sessionId;
+
+    public PaymentDto toDto() {
+        return PaymentDto.builder()
+                .paymentId(paymentId)
+                .walletId(walletId)
+                .amount(amount)
+                .currency(currency)
+                .senderId(senderId)
+                .recipientId(recipientId)
+                .status(status)
+                .paymentType(paymentType)
+                .sessionId(sessionId)
+                .build();
+    }
+
+    public static Payment fromDto(PaymentDto paymentDto) {
+        return Payment.builder()
+                .paymentId(paymentDto.getPaymentId())
+                .walletId(paymentDto.getWalletId())
+                .amount(paymentDto.getAmount())
+                .currency(paymentDto.getCurrency())
+                .senderId(paymentDto.getSenderId())
+                .recipientId(paymentDto.getRecipientId())
+                .status(paymentDto.getStatus())
+                .paymentType(paymentDto.getPaymentType())
+                .sessionId(paymentDto.getSessionId())
+                .build();
+    }
 }
