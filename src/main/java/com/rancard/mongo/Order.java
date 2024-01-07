@@ -51,6 +51,7 @@ public class Order extends BaseMongoModel {
                 .createdAt(created)
                 .stateHistory(stateHistory)
                 .agentId(agentId)
+                .outletId(outletId)
                 .build();
     }
 
@@ -66,6 +67,7 @@ public class Order extends BaseMongoModel {
                 .created(orderDto.getCreatedAt())
                 .stateHistory(orderDto.getStateHistory())
                 .agentId(orderDto.getAgentId())
+                .outletId(orderDto.getOutletId())
                 .build();
     }
 }
