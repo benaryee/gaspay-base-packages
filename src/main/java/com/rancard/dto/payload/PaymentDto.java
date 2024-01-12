@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -25,4 +26,5 @@ public class PaymentDto {
     private String sessionId;
     private String senderId;
     private String recipientId;
+    private LocalDateTime createdAt;
 }

@@ -43,6 +43,7 @@ public class Payment extends BaseMongoModel {
                 .recipientId(recipientId)
                 .status(status)
                 .paymentType(paymentType)
+                .createdAt(created)
                 .sessionId(sessionId)
                 .build();
     }

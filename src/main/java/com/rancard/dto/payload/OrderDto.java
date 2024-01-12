@@ -13,15 +13,15 @@ import lombok.*;
 @Data
 @EqualsAndHashCode
 public class OrderDto implements Serializable {
-    private String orderId;
-    private List<OrderItem> items;
-    private double totalAmount;
-    private String customerMsisdn;
-    private OrderStatus orderStatus;
-    private Address shippingAddress;
-    private String agentId;
-    private List<OrderStateHistory> stateHistory;
-    private String outletId;
-    private String paymentId;
-    private LocalDateTime createdAt;
+    public String orderId;
+    public List<OrderItem> items;
+    public double totalAmount;
+    public String customerMsisdn;
+    public OrderStatus orderStatus;
+    public Address shippingAddress;
+    public String agentId;
+    public List<OrderStateHistory> stateHistory;
+    public String outletId;
+    public String paymentId;
+    public LocalDateTime createdAt;
 }
