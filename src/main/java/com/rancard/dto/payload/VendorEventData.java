@@ -1,15 +1,12 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.payload;
 
 import com.rancard.enums.Action;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Data
 public class VendorEventData {
     private String message;

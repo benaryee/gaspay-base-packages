@@ -1,8 +1,7 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.rancard.utils.MsisdnUtils;
 import java.io.Serializable;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -20,8 +19,8 @@ public class OutletDto implements Serializable {
     private String id;
     private String name;
     private Address address;
-    private String msisdn;
     private String email;
+    private String msisdn;
     private String website;
     private String logo;
     private String description;
@@ -32,7 +31,6 @@ public class OutletDto implements Serializable {
     private String created;
     private String modified;
     private String vendorId;
-    private String vendorName;
 
     @DBRef private Set<UserDto> managers;
     @DBRef private Set<UserDto> agents;
@@ -41,8 +39,4 @@ public class OutletDto implements Serializable {
     private Set<UserDto> auditors;
     private Set<UserDto> accountants;
     private Set<UserDto> customerServicePersonnel;
-
-    public String getMsisdn() {
-        return MsisdnUtils.phoneNumberFormat(msisdn);
-    }
 }

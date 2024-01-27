@@ -2,8 +2,7 @@
 package com.rancard.dto.request;
 
 import com.rancard.enums.PaymentType;
-import com.rancard.mongo.Outlet;
-import com.rancard.mongo.Vendor;
+import com.rancard.mongo.User;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
@@ -16,11 +15,11 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransferMoneyDto implements Serializable {
+public class WithdrawMoneyDto implements Serializable {
 
-    @DBRef private Outlet sender;
+    @DBRef private User sender;
 
-    @DBRef private Vendor recipient;
+    @DBRef private User recipient;
 
     private BigDecimal amount;
     private PaymentType paymentType;

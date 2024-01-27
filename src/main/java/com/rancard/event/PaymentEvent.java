@@ -1,28 +1,29 @@
+/*(C) Gaspay App 2024 */
 package com.rancard.event;
 
 import com.rancard.dto.payload.PaymentEventData;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.context.ApplicationEvent;
 
-
+@EqualsAndHashCode(callSuper = true)
 @Getter
 @Setter
 @Builder
-public class PaymentEvent extends ApplicationEvent {
-    private PaymentEventData paymentEventData;
+@Data
+public class PaymentEvent<S, R> extends ApplicationEvent {
+    private PaymentEventData<S, R> paymentEventData;
 
     public PaymentEvent() {
         super(new Object());
     }
-    public PaymentEvent(Object source, PaymentEventData paymentEventData) {
+
+    public PaymentEvent(Object source, PaymentEventData<S, R> paymentEventData) {
         super(source);
         this.paymentEventData = paymentEventData;
     }
 
-    public PaymentEvent(PaymentEventData orderEventData) {
-        super(orderEventData);
-        this.paymentEventData = orderEventData;
+    public PaymentEvent(PaymentEventData<S, R> paymentEventData) {
+        super(paymentEventData);
+        this.paymentEventData = paymentEventData;
     }
 }

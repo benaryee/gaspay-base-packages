@@ -1,8 +1,9 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.request;
 
 import com.rancard.dto.payload.Address;
 import com.rancard.dto.payload.OrderItemDto;
+import com.rancard.enums.Channel;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +17,7 @@ public class CreateOrderDto {
     private Address shippingAddress;
 
     private BigDecimal totalAmount;
-
-    private String outletId;
+    private Channel channel;
+    @NotNull private String outletId;
     private List<OrderItemDto> orderItemsDtoList;
 }

@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.request;
 
 import com.rancard.dto.payload.Address;
@@ -30,11 +30,16 @@ public class EditUserDto implements Serializable {
 
     private String otherNames;
 
+    private String currentFuelSource;
+    private String familySize;
+
     private Address address;
 
     @NotNull private Set<RoleDto> roles = new HashSet<>();
 
     public String getMsisdn() {
-        return MsisdnUtils.phoneNumberFormat(msisdn);
+        if (msisdn != null && MsisdnUtils.isValidPhoneNumber(msisdn))
+            return MsisdnUtils.phoneNumberFormat(msisdn);
+        return null;
     }
 }

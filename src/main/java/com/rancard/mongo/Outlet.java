@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.mongo;
 
 import com.rancard.dto.payload.Address;
@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -36,13 +37,13 @@ public class Outlet extends BaseMongoModel {
     private Set<User> accountants;
     @Indexed private String walletId;
     private Set<User> customerServicePersonnel;
+    @Indexed private String vendorId;
 
     public OutletDto toDto() {
         return OutletDto.builder()
                 .id(getIdString())
                 .name(name)
                 .address(address)
-                .msisdn(msisdn)
                 .email(email)
                 .website(website)
                 .logo(logo)
@@ -66,17 +67,20 @@ public class Outlet extends BaseMongoModel {
                                         .map(User::toDto)
                                         .collect(java.util.stream.Collectors.toSet())
                                 : new HashSet<>())
+                .vendorId(vendorId)
                 .build();
     }
 
     public static Outlet fromDto(OutletDto outletDto) {
         return Outlet.builder()
+                .id(new ObjectId(outletDto.getId()))
                 .name(outletDto.getName())
                 .address(outletDto.getAddress())
-                .msisdn(outletDto.getMsisdn())
                 .email(outletDto.getEmail())
                 .website(outletDto.getWebsite())
+                .walletId(outletDto.getWalletId())
                 .logo(outletDto.getLogo())
+                .vendorId(outletDto.getVendorId())
                 .active(outletDto.isActive())
                 .managers(
                         (outletDto.getManagers() != null && !outletDto.getManagers().isEmpty())
@@ -91,7 +95,8 @@ public class Outlet extends BaseMongoModel {
                                         .collect(java.util.stream.Collectors.toSet())
                                 : new HashSet<>())
                 .customerServicePersonnel(
-                        (outletDto.getCustomerServicePersonnel() != null && !outletDto.getCustomerServicePersonnel().isEmpty())
+                        (outletDto.getCustomerServicePersonnel() != null
+                                        && !outletDto.getCustomerServicePersonnel().isEmpty())
                                 ? outletDto.getCustomerServicePersonnel().stream()
                                         .map(User::fromDto)
                                         .collect(java.util.stream.Collectors.toSet())

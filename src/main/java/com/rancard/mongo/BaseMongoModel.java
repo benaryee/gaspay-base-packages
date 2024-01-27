@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.mongo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,7 +42,7 @@ public abstract class BaseMongoModel {
     @Indexed
     protected LocalDateTime modified;
 
-    @JsonProperty("idString")
+    @JsonProperty("id")
     public String getIdString() {
         return (id != null) ? id.toHexString() : null;
     }

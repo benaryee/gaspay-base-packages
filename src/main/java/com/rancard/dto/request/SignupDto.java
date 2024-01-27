@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.request;
 
 import com.rancard.dto.payload.Address;
@@ -29,6 +29,7 @@ public class SignupDto implements Serializable {
 
     private String password;
     private String confirmPassword;
+    private String inviteToken;
 
     private Address address = new Address();
 

@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.enums;
 
 public enum Action {
@@ -8,4 +8,5 @@ public enum Action {
     DELETE,
     CREDIT,
     DEBIT,
+    INVITE
 }

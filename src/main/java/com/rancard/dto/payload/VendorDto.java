@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -6,15 +6,12 @@ import com.rancard.mongo.Outlet;
 import com.rancard.utils.MsisdnUtils;
 import java.io.Serializable;
 import java.util.Set;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VendorDto implements Serializable {
@@ -36,6 +33,7 @@ public class VendorDto implements Serializable {
     private String walletId;
 
     public String getMsisdn() {
-        return MsisdnUtils.phoneNumberFormat(msisdn);
+        if (msisdn != null) return MsisdnUtils.phoneNumberFormat(msisdn);
+        return null;
     }
 }

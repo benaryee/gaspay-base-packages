@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.mongo;
 
 import com.rancard.dto.payload.WalletDto;
@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -43,6 +44,7 @@ public class Wallet extends BaseMongoModel {
 
     public static Wallet fromDto(WalletDto dto) {
         return Wallet.builder()
+                .id(new ObjectId(dto.getId()))
                 .balance(dto.getBalance())
                 .promoBalance(dto.getPromoBalance())
                 .promoPoints(dto.getPromoPoints())

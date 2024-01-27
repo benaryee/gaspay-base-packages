@@ -1,15 +1,14 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-
 import java.math.BigDecimal;
+import lombok.*;
 
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WalletDto {
 

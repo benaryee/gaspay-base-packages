@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.request;
 
 import com.rancard.utils.MsisdnUtils;
@@ -14,7 +14,7 @@ public class SignInDto implements Serializable {
     private String password;
 
     public String getUsername() {
-        if (MsisdnUtils.isValidPhoneNumber(username)) {
+        if (username != null && MsisdnUtils.isValidPhoneNumber(username)) {
             return MsisdnUtils.phoneNumberFormat(username);
         }
         return username;

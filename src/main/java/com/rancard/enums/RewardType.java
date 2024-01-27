@@ -1,16 +1,16 @@
+/*(C) Gaspay App 2024 */
 package com.rancard.enums;
 
 import java.util.Arrays;
 
 public enum RewardType {
-
-    CASH("CASH",1),
+    CASH("CASH", 1),
     MOMO("MOMO", 2),
-    AIRTIME("AIRTIME",3),
-    LOYALTY_POINTS("LOYALTY_POINTS",4),
-    GIFT_VOUCHER("GIFT_VOUCHER",5),
-    ITEM("ITEM",6),
-    FREE_DELIVERY("FREE_DELIVERY" , 7);
+    AIRTIME("AIRTIME", 3),
+    POINTS("POINTS", 4),
+    GIFT_VOUCHER("GIFT_VOUCHER", 5),
+    ITEM("ITEM", 6),
+    FREE_DELIVERY("FREE_DELIVERY", 7);
 
     private final String id;
     private final int rewardId;
@@ -36,10 +36,14 @@ public enum RewardType {
     public static RewardType fromId(String id) {
         RewardType rewardType = null;
         if ((!id.isBlank())) {
-            rewardType = Arrays.stream(RewardType.values()).filter(r -> {
-                        return id.equalsIgnoreCase(r.id);
-                    })
-                    .findFirst().orElse(null);
+            rewardType =
+                    Arrays.stream(RewardType.values())
+                            .filter(
+                                    r -> {
+                                        return id.equalsIgnoreCase(r.id);
+                                    })
+                            .findFirst()
+                            .orElse(null);
         }
         return rewardType;
     }

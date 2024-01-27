@@ -1,10 +1,11 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.mongo;
 
 import com.rancard.dto.payload.Address;
 import com.rancard.dto.payload.OrderDto;
 import com.rancard.dto.payload.OrderItem;
 import com.rancard.dto.payload.OrderStateHistory;
+import com.rancard.enums.Channel;
 import com.rancard.enums.OrderStatus;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,9 @@ public class Order extends BaseMongoModel {
     private Address shippingAddress;
 
     @Indexed private String agentId;
+    @Indexed private String pickupCode;
+
+    @Indexed private Channel channel;
 
     @Indexed private String outletId;
 
@@ -46,11 +50,13 @@ public class Order extends BaseMongoModel {
                 .totalAmount(totalAmount)
                 .customerMsisdn(customerMsisdn)
                 .orderStatus(orderStatus)
+                .pickupCode(pickupCode)
                 .shippingAddress(shippingAddress)
                 .paymentId(paymentId)
                 .createdAt(created)
                 .stateHistory(stateHistory)
                 .agentId(agentId)
+                .channel(channel)
                 .outletId(outletId)
                 .build();
     }
@@ -67,6 +73,8 @@ public class Order extends BaseMongoModel {
                 .created(orderDto.getCreatedAt())
                 .stateHistory(orderDto.getStateHistory())
                 .agentId(orderDto.getAgentId())
+                .pickupCode(orderDto.getPickupCode())
+                .channel(orderDto.getChannel())
                 .outletId(orderDto.getOutletId())
                 .build();
     }

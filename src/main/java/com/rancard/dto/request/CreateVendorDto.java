@@ -1,4 +1,4 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,6 +32,7 @@ public class CreateVendorDto implements Serializable {
     private String walletId;
 
     public String getMsisdn() {
-        return MsisdnUtils.phoneNumberFormat(msisdn);
+        if (msisdn != null) return MsisdnUtils.phoneNumberFormat(msisdn);
+        return null;
     }
 }

@@ -1,17 +1,14 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.request;
 
 import com.rancard.utils.MsisdnUtils;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class CreateAgentDto implements Serializable {
     private String username;
     private String password;
@@ -21,6 +18,7 @@ public class CreateAgentDto implements Serializable {
     private String keycloakUserId;
 
     public String getMsisdn() {
-        return MsisdnUtils.phoneNumberFormat(msisdn);
+        if (msisdn != null) return MsisdnUtils.phoneNumberFormat(msisdn);
+        return null;
     }
 }

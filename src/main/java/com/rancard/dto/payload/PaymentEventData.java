@@ -1,18 +1,16 @@
+/*(C) Gaspay App 2024 */
 package com.rancard.dto.payload;
 
-import com.rancard.enums.PaymentStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import com.rancard.enums.Action;
+import lombok.*;
 
 @Data
-@NoArgsConstructor
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PaymentEventData {
+@SuppressWarnings("unchecked")
+public class PaymentEventData<S, R> {
     private String message;
-    private PaymentStatus status;
-    private PaymentDto paymentDto;
+    private Action status;
+    private PaymentDto<S, R> paymentDto;
 }

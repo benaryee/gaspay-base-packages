@@ -1,6 +1,7 @@
-/*(C) Gaspay App 2023 */
+/*(C) Gaspay App 2023-2024 */
 package com.rancard.dto.payload;
 
+import com.rancard.enums.Channel;
 import com.rancard.enums.OrderStatus;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -8,8 +9,8 @@ import java.util.List;
 import lombok.*;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 @Data
 @EqualsAndHashCode
 public class OrderDto implements Serializable {
@@ -22,6 +23,8 @@ public class OrderDto implements Serializable {
     public String agentId;
     public List<OrderStateHistory> stateHistory;
     public String outletId;
+    private Channel channel;
     public String paymentId;
+    private String pickupCode;
     public LocalDateTime createdAt;
 }
