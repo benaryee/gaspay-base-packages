@@ -28,6 +28,22 @@ public class Wallet extends BaseMongoModel {
     private String status;
     private String password;
 
+
+
+    public WalletDto toProtectedDto() {
+        return WalletDto.builder()
+                .id(getIdString())
+                .balance(balance)
+                .promoBalance(promoBalance)
+                .promoPoints(promoPoints)
+                .hirePurchaseBalance(hirePurchaseBalance)
+                .topupBalance(topupBalance)
+                .currency(currency)
+                .status(status)
+                .build();
+    }
+
+
     public WalletDto toDto() {
         return WalletDto.builder()
                 .id(getIdString())

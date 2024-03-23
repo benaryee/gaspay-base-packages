@@ -37,6 +37,7 @@ public class Reward extends BaseMongoModel {
     private Integer limitPerWeek;
     private Integer limitPerMonth;
     private RewardConfiguration rewardConfiguration;
+    private String description;
     private int limit;
     private boolean status;
 
@@ -61,6 +62,7 @@ public class Reward extends BaseMongoModel {
                         .rewardConfiguration(rewardDto.getRewardConfiguration())
                         .pointConversionRate(rewardDto.getPointConversionRate())
                         .status(rewardDto.isStatus())
+                        .description(rewardDto.getDescription())
                         .build()
                 : null;
     }
@@ -84,6 +86,7 @@ public class Reward extends BaseMongoModel {
                 .rewardConfiguration(rewardConfiguration)
                 .pointConversionRate(pointConversionRate)
                 .limit(limit)
+                .description(description)
                 .status(status)
                 .build();
     }

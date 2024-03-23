@@ -4,6 +4,7 @@ package com.rancard.mongo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.dto.payload.Address;
 import com.rancard.dto.payload.UserDto;
+import com.rancard.enums.Channel;
 import com.rancard.enums.UserStatus;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -40,6 +42,7 @@ public class User extends BaseMongoModel {
     private String currentFuelSource;
     private String password;
     private boolean isActive;
+    private Channel registrationChannel;
     private String street;
     private String city;
     private String state;
@@ -53,7 +56,9 @@ public class User extends BaseMongoModel {
     private LocalDateTime lastSeen;
     private String keycloakUserId;
     private Address address = new Address();
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
+    @DBRef(db = "payment-service")
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
     public UserDto toDto() {
         log.info("User toDto {} :", this);
@@ -66,9 +71,15 @@ public class User extends BaseMongoModel {
                 .address(address)
                 .inviteToken(inviteToken)
                 .roles(
-                        !roles.isEmpty()
+                        (roles != null && !roles.isEmpty())
                                 ? roles.stream()
                                         .map(Role::toDto)
+                                        .collect(java.util.stream.Collectors.toSet())
+                                : new HashSet<>())
+                .paymentMethods(
+                        (paymentMethods != null && !paymentMethods.isEmpty())
+                                ? paymentMethods.stream()
+                                        .map(PaymentMethod::toDto)
                                         .collect(java.util.stream.Collectors.toSet())
                                 : new HashSet<>())
                 .lastLogin(lastLogin)
@@ -79,7 +90,7 @@ public class User extends BaseMongoModel {
 
     public static User fromDto(UserDto userDto) {
         return User.builder()
-                .id(new ObjectId(userDto.getId()))
+                .id(userDto.getId() != null ?  new ObjectId(userDto.getId()) : null)
                 .username(userDto.getEmail())
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())

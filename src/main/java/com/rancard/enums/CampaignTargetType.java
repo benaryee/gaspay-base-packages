@@ -25,4 +25,8 @@ public enum CampaignTargetType {
     NUMBER_OF_TRANSFERS,
     NUMBER_OF_TRANSACTIONS,
     NUMBER_OF_BILLS,
+
+    USER_IDS,
+    USER_MSISDNS
+
 }

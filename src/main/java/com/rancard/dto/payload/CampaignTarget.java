@@ -41,4 +41,8 @@ public class CampaignTarget {
     private String targetNumberOfDeposits;
     private String targetNumberOfWithdrawals;
     private String targetNumberOfTransfers;
+    private List<String> targetUserIds;
+    private List<String> targetUserMsisdns;
+
+
 }

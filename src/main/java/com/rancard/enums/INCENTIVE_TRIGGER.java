@@ -1,0 +1,20 @@
+package com.rancard.enums;
+
+public enum INCENTIVE_TRIGGER {
+
+    PURCHASE,
+    REGISTRATION,
+    REGISTER,
+    REFERRAL,
+    DOWNLOAD,
+    ANNIVERSARY,
+    DEPOSIT,
+    WITHDRAWAL,
+    TRANSFER,
+    BILL_PAYMENT,
+    HP_APPLICATION,
+    HP_PAYMENT,
+
+    SAVING,
+
+}

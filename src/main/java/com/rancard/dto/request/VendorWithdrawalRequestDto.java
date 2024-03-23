@@ -2,6 +2,7 @@
 package com.rancard.dto.request;
 
 import com.rancard.enums.PaymentType;
+import com.rancard.mongo.PaymentMethod;
 import com.rancard.mongo.User;
 import com.rancard.mongo.Vendor;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,7 @@ public class VendorWithdrawalRequestDto implements Serializable {
 
     @DBRef private Vendor sender;
 
-    @DBRef private User recipient;
+    @DBRef private PaymentMethod recipient;
 
     private BigDecimal amount;
     private PaymentType paymentType;

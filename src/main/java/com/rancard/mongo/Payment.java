@@ -2,6 +2,7 @@
 package com.rancard.mongo;
 
 import com.rancard.dto.payload.PaymentDto;
+import com.rancard.enums.Channel;
 import com.rancard.enums.PaymentStatus;
 import com.rancard.enums.PaymentType;
 import java.math.BigDecimal;
@@ -29,6 +30,7 @@ public class Payment<S, R> extends BaseMongoModel {
     private String currency;
     private PaymentStatus status;
     private PaymentType paymentType;
+    private Channel channel;
 
     @Indexed @DBRef private S sender;
 

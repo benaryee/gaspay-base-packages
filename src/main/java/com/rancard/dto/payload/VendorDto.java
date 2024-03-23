@@ -3,8 +3,10 @@ package com.rancard.dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.mongo.Outlet;
+import com.rancard.mongo.PaymentMethod;
 import com.rancard.utils.MsisdnUtils;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -29,7 +31,10 @@ public class VendorDto implements Serializable {
     private String created;
     private String modified;
 
-    @DBRef private Set<Outlet> outlets;
+    @DBRef private Set<Outlet> outlets = new HashSet<>();
+
+    @DBRef(db = "payment-service")
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
     private String walletId;
 
     public String getMsisdn() {

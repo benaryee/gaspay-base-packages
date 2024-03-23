@@ -36,4 +36,5 @@ public class RewardDto {
     private int limit;
     private boolean status;
     private RewardConfiguration rewardConfiguration;
+    private String description;
 }

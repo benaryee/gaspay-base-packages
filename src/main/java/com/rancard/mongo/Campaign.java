@@ -61,7 +61,7 @@ public class Campaign extends BaseMongoModel {
                 .startDate(startDate)
                 .endDate(endDate)
                 .rewardId(rewardId)
-                .active(active || (startDate.isBefore(LocalDateTime.now()) && endDate.isAfter(LocalDateTime.now())) || !paused )
+                .active(active)
                 .ussdCode(ussdCode)
                 .campaignType(campaignType)
                 .balance(balance)

@@ -25,6 +25,7 @@ public class UserDto {
     private String othernames;
     private String walletId;
     private Set<RoleDto> roles = new HashSet<>();
+    private Set<PaymentMethodDto> paymentMethods = new HashSet<>();
     private String familySize;
     private String currentFuelSource;
     private String inviteToken;

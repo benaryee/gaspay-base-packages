@@ -3,6 +3,9 @@ package com.rancard.mongo;
 
 import com.rancard.dto.payload.Address;
 import com.rancard.dto.payload.VendorDto;
+
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +36,8 @@ public class Vendor extends BaseMongoModel {
     private String createdBy;
     private String modifiedBy;
     private String walletId;
+    @DBRef(db = "payment-service")
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
     @DBRef private Set<Outlet> outlets;
 
     public static Vendor fromDto(VendorDto vendor) {
@@ -47,8 +52,10 @@ public class Vendor extends BaseMongoModel {
                         .website(vendor.getWebsite())
                         .logo(vendor.getLogo())
                         .status(vendor.getStatus())
+                        .paymentMethods(vendor.getPaymentMethods())
                         .walletId(vendor.getWalletId())
                         .createdBy(vendor.getCreatedBy())
+                        .paymentMethods(vendor.getPaymentMethods())
                         .modifiedBy(vendor.getModifiedBy())
                         .outlets(vendor.getOutlets())
                         .build()
@@ -67,6 +74,10 @@ public class Vendor extends BaseMongoModel {
                 .logo(logo)
                 .walletId(walletId)
                 .status(status)
+                .paymentMethods(
+                        (paymentMethods != null && !paymentMethods.isEmpty())
+                                ? paymentMethods
+                                : new HashSet<>())
                 .createdBy(createdBy)
                 .modifiedBy(modifiedBy)
                 .outlets(outlets)

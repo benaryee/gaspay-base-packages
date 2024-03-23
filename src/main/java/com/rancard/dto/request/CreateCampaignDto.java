@@ -4,16 +4,15 @@ package com.rancard.dto.request;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.dto.payload.CampaignTarget;
 import com.rancard.enums.CampaignType;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.List;
-
+import com.rancard.enums.INCENTIVE_TRIGGER;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CreateCampaignDto implements Serializable {
     private String name;
     private CampaignType campaignType;
+    private INCENTIVE_TRIGGER incentiveTrigger;
     private List<String> agentIds;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
