@@ -6,6 +6,8 @@ import com.rancard.enums.PaymentStatus;
 import com.rancard.enums.PaymentType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.rancard.mongo.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,4 +30,20 @@ public class PaymentDto<S, R> {
     private S sender;
     private R recipient;
     private LocalDateTime createdAt;
+    
+    public static <S, R> PaymentDto<S, R> from(Payment<S, R> payment) {
+        return PaymentDto.<S, R>builder()
+                .id(payment.getIdString())
+                .paymentId(payment.getPaymentId())
+                .walletId(payment.getWalletId())
+                .amount(payment.getAmount())
+                .currency(payment.getCurrency())
+                .sender(payment.getSender())
+                .recipient(payment.getRecipient())
+                .status(payment.getStatus())
+                .paymentType(payment.getPaymentType())
+                .createdAt(payment.getCreated())
+                .sessionId(payment.getSessionId())
+                .build();
+    }
 }

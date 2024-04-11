@@ -29,6 +29,7 @@ public class Campaign extends BaseMongoModel {
     private boolean paused;
     private String ussdCode;
     private CampaignType campaignType;
+    private String couponCode;
     private String rewardId;
     private Double balance;
     private Double allocation;

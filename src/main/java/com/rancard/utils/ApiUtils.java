@@ -37,4 +37,21 @@ public class ApiUtils {
         }
         return response;
     }
+
+
+    public static <T> ApiResponse<T> wrapInApiResponse(T data, String requestId, String message, int code, long... start) {
+        ApiResponse<T> response = new ApiResponse<>();
+        response.setCode(code);
+        response.setMessage(message);
+        response.setRequestId(requestId);
+        response.setData(data);
+        return response;
+    }
+
+    public static <T> ApiResponse<T> wrapInApiResponse(ApiResponse<T> apiResponse, long... start) {
+        if (start.length > 0) {
+            apiResponse.setDuration(System.currentTimeMillis() - start[0]);
+        }
+        return apiResponse;
+    }
 }

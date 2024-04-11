@@ -7,10 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @Slf4j
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GaspayGlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -18,7 +20,7 @@ public class GlobalExceptionHandler {
         log.error("error occurred {}", e.getMessage());
         log.error("error occurred {}", e);
         ServiceExceptionResponse response = new ServiceExceptionResponse(e.getCode(), e.getMessage());
-        return new ResponseEntity<>(response , HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response , e.getHttpStatus() != null ? e.getHttpStatus() : HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(BadRequestCustomExceptionHandler.class)

@@ -2,6 +2,7 @@
 package com.rancard.dto.payload;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rancard.mongo.User;
 import com.rancard.utils.MsisdnUtils;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -33,5 +34,21 @@ public class UserDto {
     public String getMsisdn() {
         if (msisdn != null) return MsisdnUtils.phoneNumberFormat(msisdn);
         return null;
+    }
+
+    public static UserDto from(User user) {
+        return UserDto.builder()
+                .id(user.getIdString())
+                .email(user.getEmail())
+                .msisdn(user.getMsisdn())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .lastLogin(user.getLastLogin())
+                .othernames(user.getOthernames())
+                .walletId(user.getWalletId())
+                .familySize(user.getFamilySize())
+                .currentFuelSource(user.getCurrentFuelSource())
+                .inviteToken(user.getInviteToken())
+                .build();
     }
 }

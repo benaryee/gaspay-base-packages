@@ -3,10 +3,17 @@ package com.rancard.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.dto.payload.BaseError;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Data
+@Builder
 public class ApiResponse<T> implements Serializable {
 
     private int code;

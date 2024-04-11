@@ -18,4 +18,6 @@ import java.math.BigDecimal;
 public class HirePurchaseAgreement extends BaseMongoModel{
 
     private BigDecimal amount;
+    private boolean isActive;
+    private String couponCode;
 }

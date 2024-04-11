@@ -40,4 +40,6 @@ public class CreateCampaignDto implements Serializable {
 
     @NotNull
     private String rewardId;
+
+    private boolean generateCouponForGroup;
 }

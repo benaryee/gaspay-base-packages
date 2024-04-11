@@ -14,7 +14,7 @@
 
     <groupId>com.rancard</groupId>
     <artifactId>base-package</artifactId>
-    <version>1.2.87</version>
+    <version>1.2.96</version>
     <packaging>jar</packaging>
 
     <dependencies>

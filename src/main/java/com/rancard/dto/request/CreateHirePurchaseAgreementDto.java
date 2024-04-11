@@ -1,15 +1,17 @@
-package com.rancard.mongo;
+package com.rancard.dto.request;
 
 import com.rancard.dto.payload.ReminderSetting;
 import com.rancard.dto.payload.TimeFrame;
 import com.rancard.enums.AppAction;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.Period;
 import java.util.Map;
 
@@ -17,14 +19,22 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document
-@EqualsAndHashCode(callSuper = true)
-public class HirePurchaseAgreementConfiguration extends BaseMongoModel {
+public class CreateHirePurchaseAgreementDto implements Serializable {
+
+    @NotNull
     private String name;
-    private String agreementId;
-    private Map<TimeFrame,Double> serviceChargePercentageByTimeFrame;
+
+    @NotNull
+    private BigDecimal amount;
+
+    @NotEmpty
+    private Map<TimeFrame, Double> serviceChargePercentageByTimeFrame;
+
     private Map<AppAction, Object> eligibilityCriteria;
+
     private ReminderSetting reminderSetting;
+
+    @NotNull
     private Period maxHirePurchaseTenure;
-    
+    private boolean generateCouponForGroup;
 }

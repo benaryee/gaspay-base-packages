@@ -19,9 +19,7 @@ import lombok.*;
 public class SignupDto implements Serializable {
 
     private String username;
-
     private String email;
-
     private String msisdn;
     private String firstName;
     private String lastName;
@@ -30,6 +28,7 @@ public class SignupDto implements Serializable {
     private String password;
     private String confirmPassword;
     private String inviteToken;
+    private String couponCode;
 
     private Address address = new Address();
 
