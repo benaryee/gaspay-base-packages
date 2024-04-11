@@ -1,6 +1,6 @@
 package com.rancard.enums;
 
-public enum CampaignTargetType {
+public enum TargetType {
     AGE_ON_PLATFORM,
     LOCATION,
     REGION,

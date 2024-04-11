@@ -5,9 +5,7 @@ import com.rancard.dto.payload.TimeFrame;
 import com.rancard.enums.AppAction;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
@@ -15,8 +13,10 @@ import java.math.BigDecimal;
 import java.time.Period;
 import java.util.Map;
 
-@SuperBuilder
-@Data
+
+@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateHirePurchaseAgreementDto implements Serializable {

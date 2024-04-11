@@ -1,11 +1,9 @@
 package com.rancard.enums;
 
-import lombok.Getter;
-
 import java.util.List;
 
 
-public enum CampaignTargetDefinition {
+public enum TargetDefinition {
 
     IN(List.class),
     GREATER_THAN(Integer.class),
@@ -21,7 +19,7 @@ public enum CampaignTargetDefinition {
 
     private final Class<?> valueType;
 
-    CampaignTargetDefinition(Class<?> valueType) {
+    TargetDefinition(Class<?> valueType) {
         this.valueType = valueType;
     }
 
