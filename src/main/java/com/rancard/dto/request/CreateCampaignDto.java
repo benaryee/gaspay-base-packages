@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rancard.dto.payload.CampaignTarget;
 import com.rancard.enums.CampaignType;
 import com.rancard.enums.INCENTIVE_TRIGGER;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,12 +21,23 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CreateCampaignDto implements Serializable {
+
+    @NotNull
     private String name;
+
+    @NotNull
     private CampaignType campaignType;
     private INCENTIVE_TRIGGER incentiveTrigger;
     private List<String> agentIds;
+
+    @NotNull
     private LocalDateTime startDate;
+
+    @NotNull
     private LocalDateTime endDate;
-    private CampaignTarget campaignTarget;
+
+    private List<CampaignTarget> campaignTargetList;
+
+    @NotNull
     private String rewardId;
 }

@@ -1,6 +1,7 @@
 /*(C) Gaspay App 2024 */
 package com.rancard.mongo;
 
+import com.rancard.dto.payload.DelayedRewardDistributorConfig;
 import com.rancard.dto.payload.PromoTransactionDto;
 import com.rancard.enums.TRANSACTION_RESULT;
 import com.rancard.enums.TRANSACTION_STATUS;
@@ -35,7 +36,7 @@ public class PromoTransaction extends BaseMongoModel {
     private String network;
     private String transactionId;
     private String campaignId;
-    private String station;
+    private String outlet;
     private String product;
     private String sku;
 
@@ -45,6 +46,8 @@ public class PromoTransaction extends BaseMongoModel {
     private String topupAccount;
     private String redisKey;
     private boolean drawWinner;
+
+    private DelayedRewardDistributorConfig delayedRewardDistributorConfig;
 
     public static PromoTransaction fromDto(PromoTransactionDto promoTransactionDto) {
         return promoTransactionDto != null
@@ -61,7 +64,7 @@ public class PromoTransaction extends BaseMongoModel {
                         .network(promoTransactionDto.getNetwork())
                         .transactionId(promoTransactionDto.getTransactionId())
                         .campaignId(promoTransactionDto.getCampaignId())
-                        .station(promoTransactionDto.getStation())
+                        .outlet(promoTransactionDto.getOutlet())
                         .product(promoTransactionDto.getProduct())
                         .sku(promoTransactionDto.getSku())
                         .sessionId(promoTransactionDto.getSessionId())
@@ -70,6 +73,7 @@ public class PromoTransaction extends BaseMongoModel {
                         .topupAccount(promoTransactionDto.getTopupAccount())
                         .redisKey(promoTransactionDto.getRedisKey())
                         .drawWinner(promoTransactionDto.isDrawWinner())
+                        .delayedRewardDistributorConfig(promoTransactionDto.getDelayedRewardDistributorConfig())
                         .build()
                 : null;
     }
@@ -88,7 +92,7 @@ public class PromoTransaction extends BaseMongoModel {
                 .network(network)
                 .transactionId(transactionId)
                 .campaignId(campaignId)
-                .station(station)
+                .outlet(outlet)
                 .product(product)
                 .sku(sku)
                 .sessionId(sessionId)
@@ -96,6 +100,7 @@ public class PromoTransaction extends BaseMongoModel {
                 .topupUrl(topupUrl)
                 .topupAccount(topupAccount)
                 .redisKey(redisKey)
+                .delayedRewardDistributorConfig(delayedRewardDistributorConfig)
                 .drawWinner(drawWinner)
                 .build();
     }

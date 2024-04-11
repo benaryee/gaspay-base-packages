@@ -5,7 +5,10 @@ import com.rancard.dto.payload.CampaignTarget;
 import com.rancard.dto.payload.MilestoneRewardConfig;
 import com.rancard.enums.CampaignType;
 import java.time.LocalTime;
+import java.time.Period;
 import java.util.List;
+
+import com.rancard.enums.INCENTIVE_TRIGGER;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,8 +24,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class CampaignConfiguration extends BaseMongoModel {
     private String campaignId;
-
-    private CampaignType campaignType;
     private Double balance;
     private Double allocation;
     private List<Integer> allowedDays;
@@ -32,8 +33,8 @@ public class CampaignConfiguration extends BaseMongoModel {
     private LocalTime saturdayCloseAt;
     private LocalTime sundayOpenAt;
     private LocalTime sundayCloseAt;
-    private CampaignTarget campaignTarget;
 
+    private INCENTIVE_TRIGGER incentiveTrigger;
     private boolean enforceDailyLimit;
     private double dailyLimit;
     private boolean enforceWeeklyLimit;
@@ -43,12 +44,15 @@ public class CampaignConfiguration extends BaseMongoModel {
     private boolean enforceCampaignLimit;
     private double campaignLimit;
 
+    private Period minimumSavingPeriod;
+    private boolean losePointsOnWithdrawal;
+
+
     private List<MilestoneRewardConfig> milestoneRewardConfigs;
 
     public static CampaignConfiguration fromDto(CampaignConfiguration dto) {
         return CampaignConfiguration.builder()
                 .campaignId(dto.getCampaignId())
-                .campaignType(dto.getCampaignType())
                 .balance(dto.getBalance())
                 .allocation(dto.getAllocation())
                 .allowedDays(dto.getAllowedDays())
@@ -58,7 +62,6 @@ public class CampaignConfiguration extends BaseMongoModel {
                 .saturdayCloseAt(dto.getSaturdayCloseAt())
                 .sundayOpenAt(dto.getSundayOpenAt())
                 .sundayCloseAt(dto.getSundayCloseAt())
-                .campaignTarget(dto.getCampaignTarget())
                 .enforceDailyLimit(dto.isEnforceDailyLimit())
                 .dailyLimit(dto.getDailyLimit())
                 .enforceWeeklyLimit(dto.isEnforceWeeklyLimit())
@@ -67,6 +70,7 @@ public class CampaignConfiguration extends BaseMongoModel {
                 .monthlyLimit(dto.getMonthlyLimit())
                 .enforceCampaignLimit(dto.isEnforceCampaignLimit())
                 .campaignLimit(dto.getCampaignLimit())
+                .incentiveTrigger(dto.getIncentiveTrigger())
                 .milestoneRewardConfigs(dto.getMilestoneRewardConfigs())
                 .build();
     }
@@ -74,7 +78,6 @@ public class CampaignConfiguration extends BaseMongoModel {
     public CampaignConfiguration toDto() {
         return CampaignConfiguration.builder()
                 .campaignId(campaignId)
-                .campaignType(campaignType)
                 .balance(balance)
                 .allocation(allocation)
                 .allowedDays(allowedDays)
@@ -84,8 +87,8 @@ public class CampaignConfiguration extends BaseMongoModel {
                 .saturdayCloseAt(saturdayCloseAt)
                 .sundayOpenAt(sundayOpenAt)
                 .sundayCloseAt(sundayCloseAt)
-                .campaignTarget(campaignTarget)
                 .enforceDailyLimit(enforceDailyLimit)
+                .incentiveTrigger(incentiveTrigger)
                 .dailyLimit(dailyLimit)
                 .enforceWeeklyLimit(enforceWeeklyLimit)
                 .weeklyLimit(weeklyLimit)

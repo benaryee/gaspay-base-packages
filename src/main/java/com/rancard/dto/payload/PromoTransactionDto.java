@@ -30,10 +30,10 @@ public class PromoTransactionDto {
     private String network;
     private String transactionId;
     private String campaignId;
-    private String station;
+    private String outlet;
     private String product;
     private String sku;
-
+    private DelayedRewardDistributorConfig delayedRewardDistributorConfig;
     private String sessionId;
     private String rewardType;
     private String topupUrl;

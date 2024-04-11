@@ -32,9 +32,10 @@ public class Payment<S, R> extends BaseMongoModel {
     private PaymentType paymentType;
     private Channel channel;
 
-    @Indexed @DBRef private S sender;
+    @Indexed @DBRef(db = "auth")
+    private S sender;
 
-    @Indexed @DBRef private R recipient;
+    @Indexed @DBRef(db = "auth") private R recipient;
 
     @Indexed private String sessionId;
 
